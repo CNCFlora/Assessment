@@ -1,0 +1,9 @@
+development:
+    couchdb: "http://localhost:5984/lilruby"
+    lang: "pt"
+test:
+    couchdb: "http://localhost:5984/lilruby"
+    lang: "pt"
+production:
+    couchdb: "http://localhost:5984/lilruby"
+    lang: "pt"

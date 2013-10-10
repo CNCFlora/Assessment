@@ -1,0 +1,68 @@
+GEM
+  remote: http://rubygems.org/
+  specs:
+    backports (3.3.4)
+    diff-lcs (1.2.4)
+    jruby-jars (1.7.5)
+    jruby-rack (1.1.13.2)
+    mime-types (1.25)
+    multi_json (1.8.0)
+    mustache (0.99.4)
+    rack (1.5.2)
+    rack-protection (1.5.0)
+      rack
+    rack-test (0.6.2)
+      rack (>= 1.0)
+    rake (10.1.0)
+    rest-client (1.6.7)
+      mime-types (>= 1.16)
+    rspec (2.14.1)
+      rspec-core (~> 2.14.0)
+      rspec-expectations (~> 2.14.0)
+      rspec-mocks (~> 2.14.0)
+    rspec-core (2.14.5)
+    rspec-expectations (2.14.3)
+      diff-lcs (>= 1.1.3, < 2.0)
+    rspec-mocks (2.14.3)
+    rubyzip (1.0.0)
+    sinatra (1.4.3)
+      rack (~> 1.4)
+      rack-protection (~> 1.4)
+      tilt (~> 1.3, >= 1.3.4)
+    sinatra-config-file (1.0)
+      sinatra-contrib
+    sinatra-contrib (1.4.1)
+      backports (>= 2.0)
+      multi_json
+      rack-protection
+      rack-test
+      sinatra (~> 1.4.0)
+      tilt (~> 1.3)
+    sinatra-mustache (0.1.0)
+      mustache (~> 0.99)
+      sinatra (~> 1)
+      tilt (~> 1.3, ~> 1.2)
+    tilt (1.4.1)
+    warbler (1.3.8)
+      jruby-jars (>= 1.5.6)
+      jruby-rack (>= 1.0.0)
+      rake (>= 0.9.6)
+      rubyzip (>= 0.9.8)
+    zip-zip (0.1)
+      rubyzip (>= 1.0.0)
+
+PLATFORMS
+  java
+  ruby
+
+DEPENDENCIES
+  multi_json
+  rack-test
+  rest-client
+  rspec
+  sinatra
+  sinatra-config-file
+  sinatra-contrib
+  sinatra-mustache
+  warbler
+  zip-zip
