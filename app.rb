@@ -31,3 +31,29 @@ post '/logout' do
     204
 end
     
+get "/families" do
+    families = ["ACANTHACEAE","RUBIACEAE"]
+    view :families, {:families => families}
+end
+
+get "/family/:family" do
+    species = [ {:scientificName => "name", :have => false, :scientificNameAuthorship => "L.", :_id => "123"},
+                {:scientificName => "other name", :have => true, :scientificNameAuthorship => "B.", :_id => "321"}]
+    view :species, {:species => species , :family => params[:family]}
+end
+
+get "/search" do
+    view :index,{}
+end
+
+get "/workflow" do
+    families = ["ACANTHACEAE","RUBIACEAE"]
+    view :workflow, {:families => families}
+end
+
+get "/workflow/:family/:status" do
+    list = [ {:taxon => {:scientificName => "name", :scientificNameAuthorship => "L."}, :_id => "123" },
+             {:taxon => {:scientificName => "other name", :scientificNameAuthorship => "B."}, :_id => "321"}]
+    content_type :json
+    MultiJson.dump list
+end

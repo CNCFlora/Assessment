@@ -1,0 +1,12 @@
+{{> header}}
+
+<div class="span12">
+    <h2>{{strings.risk-assessments}}</h2>
+    <ul>
+        {{#families}}
+            <li class='span5'><i class='icon-folder-open'></i><a href="/family/{{.}}">{{.}}</a></li>
+        {{/families}}
+    </ul>
+</div>
+
+{{> footer}}

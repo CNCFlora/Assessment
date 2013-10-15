@@ -5,5 +5,12 @@
     "logout":"Logout",
     "families":"Familias",
     "search":"Busca",
-    "workflow":"Workflow"
+    "workflow":"Workflow",
+    "no-result":"Sem resultados",
+    "not-started":"Não iniciadas",
+    "open":"Abertas",
+    "review":"Revisão",
+    "comments":"Comentar",
+    "comment":"Comentar",
+    "done":"Publicada"
 }
