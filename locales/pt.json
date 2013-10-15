@@ -1,3 +1,9 @@
 {
-    "hello":"Olá!"
+    "assessments":"Avaliações",
+    "risk-assessments":"Avaliações de risco de extinção",
+    "login":"Login",
+    "logout":"Logout",
+    "families":"Familias",
+    "search":"Busca",
+    "workflow":"Workflow"
 }

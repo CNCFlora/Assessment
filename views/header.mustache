@@ -2,16 +2,37 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>Little ruby web app</title>
+    <title>{{strings.risk-assessments}}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="css/bootstrap.min.css" rel="stylesheet" >
+    <link href="css/app.css" rel="stylesheet" >
+    <script type="text/javascript">
+        var couchdb = '{{{couchdb}}}';
+        var logged = {{{logged}}};
+    </script>
     <script src="http://code.jquery.com/jquery.min.js"></script>
+    <script src="{{connect}}/js/connect.js"></script>
     <script src="js/bootstrap.min.js"></script>
+    <script src="js/app.js"></script>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1></h1>
-            <h2></h2>
+            <h1>{{strings.risk-assessments}}</h1>
         </header>
+        <nav class="navbar">
+            <div class="navbar-inner">
+                <ul class="nav">
+                    <li><a href="/">{{strings.search}}</a></li>
+                    <li><a href="/families">{{strings.families}}</a></li>
+                    {{^logged}}
+                    <li id='login'><a href="#">{{strings.login}}</a></li>
+                    {{/logged}}
+                    {{#logged}}
+                    <li><a href="/work">{{strings.workflow}}</a></li>
+                    <li id='logout'><a href="#">{{strings.logout}}</a></li>
+                    {{/logged}}
+                </ul>
+            </div>
+        </nav>
 
