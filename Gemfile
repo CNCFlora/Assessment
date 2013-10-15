@@ -6,6 +6,7 @@ gem 'sinatra-mustache'
 gem 'sinatra-config-file'
 gem 'multi_json'
 gem 'rest-client'
+gem 'uri-handler'
 
 gem 'rspec'
 gem 'rack-test'
