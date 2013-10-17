@@ -13,8 +13,8 @@ Start with git, obviously:
 
 Now clone the app, and enter it's directory:
 
-    $ git clone git@github.com:diogok/lilruby.git 
-    $ cd lilruby
+    $ git clone git@github.com:CNCFlora/Assessment.git 
+    $ cd Assessment
 
 You will need ruby, as expected:
 
@@ -23,7 +23,7 @@ You will need ruby, as expected:
 Install RVM for ruby versions control, them install jRuby:
 
     $ curl -L https://get.rvm.io | bash -s stable
-    $ echo 'source /home/diogo/.rvm/scripts/rvm' >> ~/.bashrc
+    $ echo 'source $HOME/.rvm/scripts/rvm' >> ~/.bashrc
     $ rvm install jruby
     $ rvm use jruby
 
