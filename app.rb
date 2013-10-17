@@ -12,6 +12,11 @@ def view(page,data)
     @strings = MultiJson.load(File.read("locales/#{@config.lang}.json"),:symbolize_keys => true)
     @config_hash = {:connect => @config.connect, :lang => @config.lang, :couchdb => @config.couchdb}
     @session_hash = {:logged => session[:logged] || false, :user => session[:user] || '{}'}
+    if session[:logged] 
+        session[:user]['roles'].each do | role  |
+            @session_hash[ "role-#{role['role'].downcase}" ] = true
+        end
+    end
     mustache page, {}, {:strings => @strings}.merge(@config_hash).merge(@session_hash).merge(data)
 end
 
