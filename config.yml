@@ -1,12 +1,12 @@
 development:
-    couchdb: "http://localhost:5984/lilruby"
+    couchdb: "http://admin:852640sd@localhost:5984/cncflora"
     lang: "pt"
     connect: "http://localhost:3000"
 test:
-    couchdb: "http://localhost:5984/lilruby"
+    couchdb: "http://admin:852640sd@localhost:5984/cncflora"
     lang: "pt"
     connect: "http://localhost:3000"
 production:
-    couchdb: "http://localhost:5984/lilruby"
+    couchdb: "http://admin:852640sd@localhost:5984/cncflora"
     lang: "pt"
     connect: "http://localhost:3000"

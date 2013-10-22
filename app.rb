@@ -3,17 +3,25 @@ require 'sinatra/config_file'
 require 'sinatra/mustache'
 require "sinatra/reloader" if development?
 require 'multi_json'
+require 'time'
 require_relative 'model/couchdb'
+require_relative 'model/assessment'
 
 config_file 'config.yml'
 enable :sessions
 
-def getDb(user,password,dbname)
-    url = "http://#{user}:#{password}@localhost:5984/#{dbname}"
-    CouchDB.new url
-end
+also_reload "model/*.rb"
 
-db = getDb("bruno","Lam5pada","test_rb")
+db = CouchDB.new Sinatra::Application.settings.couchdb
+
+allows = []
+File.foreach("config/checklist.csv") do |csv_line|
+    r = /"([\w]*)";"([\w]*)";"([a-zA-Z-]*)";"([\w\.-]*)";"([\w\.-]*)"/
+    csv_row = r.match csv_line
+    allows.push csv_row[1]
+    allows.push [csv_row[2],csv_row[3],csv_row[4],csv_row[5]].join(' ')
+end
+allows = allows.uniq.map { | name | name.strip }
 
 def setMetadata(status='open')
     metadata = Metadata.new.shema    
@@ -24,15 +32,14 @@ def setMetadata(status='open')
     metadata
 end
 
-
 def view(page,data)
     @config = Sinatra::Application.settings;
     @strings = MultiJson.load(File.read("locales/#{@config.lang}.json"),:symbolize_keys => true)
     @config_hash = {:connect => @config.connect, :lang => @config.lang, :couchdb => @config.couchdb}
     @session_hash = {:logged => session[:logged] || false, :user => session[:user] || '{}'}
     if session[:logged] 
-        session[:user]['roles'].each do | role  |
-            @session_hash[ "role-#{role['role'].downcase}" ] = true
+        session[:user][:roles].each do | role |
+            @session_hash["role-#{role[:role].downcase}"] = true
         end
     end
     mustache page, {}, {:strings => @strings}.merge(@config_hash).merge(@session_hash).merge(data)
@@ -53,60 +60,97 @@ post '/logout' do
     session[:user] = false
     204
 end
-    
-get "/families" do
-    families = ["ACANTHACEAE","RUBIACEAE"]
-    view :families, {:families => families}
-end
-
-get "/family/:family" do
-    species = [ {:scientificName => "name", :have => false, :scientificNameAuthorship => "L.", :_id => "123"},
-                {:scientificName => "other name", :have => true, :scientificNameAuthorship => "B.", :_id => "321"}]
-    view :species, {:species => species , :family => params[:family]}
-end
 
 get "/search" do
     view :index,{}
 end
-
-get "/workflow" do
-    families = ["ACANTHACEAE","RUBIACEAE"]
-    view :workflow, {:families => families}
+    
+get "/families" do
+    docs = db.view('taxonomy','species_by_family',{:reduce=>true,:group=>true})
+    families = docs.map { | doc | doc[:key ] } 
+                   .select { | family | allows.include? family }
+    view :families, {:families => families}
 end
 
-get "/workflow/:family/:status" do
-    list = [ {:taxon => {:scientificName => "name", :scientificNameAuthorship => "L."}, :_id => "123" },
-             {:taxon => {:scientificName => "other name", :scientificNameAuthorship => "B."}, :_id => "321"}]
-    content_type :json
-    MultiJson.dump list
+get "/family/:family" do
+    assessments = db.view('assessments','by_family',{:key => params[:family], :reduce => false})
+                    .map { | doc | doc[:value][:taxon][:scientificName] }
+    docs = db.view('taxonomy','species_by_family', {:key => params[:family],:reduce => false})
+    species = docs.map { | doc | doc[:value] } 
+                  .select { | spp | allows.include? spp[:scientificName] }
+                  .map { | doc | doc[:have] = assessments.include? doc[:scientificName]; doc}
+    view :species, {:species => species , :family => params[:family]}
 end
 
-get "/assessments/:id" do
-    content_type :json
-    db.get(params[:id]).to_json
+get "/specie/:lsid" do
+    spp = db.get(params[:lsid])
+    assessments = db.view('assessments','by_taxon_lsid',{:key=>params[:lsid],:reduce=>false})
+    if assessments.length >= 1
+        redirect to("/assessment/#{assessments.last[:id]}")
+    else
+        view :new, {:specie => spp}
+    end
 end
 
-post "/assessments" do    
-    params[:metadata][:creator] = session[:user][:name]
-    params[:metadata][:contributor] = session[:user][:name]
-    params[:metadata][:contact] = session[:user][:email]
-    assessment = db.create( params )
-    [201, "/assessments/#{assessment[:_id]}"]    
-end
+post "/assessment" do    
+    spp = db.get(params[:lsid])
+    profile = db.view('species_profiles','by_taxon_lsid',{:key => params[:lsid],:reduce=>false}).last[:id]
 
-put "/assessments/:id" do    
-    assessment = db.get(params[:id])
+    assessment = Assessment.new.schema
+
+    assessment[:profile] = profile
+
+    assessment[:taxon][:lsid] = spp[:_id]
+    assessment[:taxon][:family] = spp[:family]
+    assessment[:taxon][:scientificName] = spp[:scientificName]
+    assessment[:taxon][:scientificNameAuthorship] = spp[:scientificNameAuthorship]
+
+    assessment[:metadata][:creator] = session[:user][:name]
     assessment[:metadata][:contributor] = session[:user][:name]
     assessment[:metadata][:contact] = session[:user][:email]
+    assessment[:metadata][:description] = "Assessment for #{spp[:scientificName]}"
+    assessment[:metadata][:title] = "Assessment for #{spp[:scientificName]}"
+
+    assessment = db.create(assessment)
+
+    redirect to("/assessment/#{assessment[:_id]}")
+end
+
+get "/assessment/:id" do
+    assessment = db.get(params[:id])
+    assessment[:metadata][:created_date] = Time.at(assessment[:metadata][:created]).to_s[0..9]
+    assessment[:metadata][:modified_date] = Time.at(assessment[:metadata][:modified]).to_s[0..9]
+
+    schema = MultiJson.load(db.get("_design/assessments")[:schema][:assessment][27..-4], :symbolize_keys=>true)
+    schema[:properties].delete(:metadata)
+    schema[:properties].delete(:taxon)
+    schema[:properties].delete(:profile)
+    schema[:properties].delete(:dateOfAssessment)
+
+    view :edit, {:assessment => assessment,:schema=>schema.to_json,:data => assessment.to_json}
+end
+
+post "/assessment/:id" do    
+    assessment = db.get(params[:id])
+    contributors = assessment[:metadata][:contributor].split(" ; ")
+    contributors = [session[:user][:name]].concat(contributors).uniq()
+    assessment[:metadata][:contributor] = contributors.join(" ; ")
+    contacts = assessment[:metadata][:contact].split(" ; ")
+    contacts = [session[:user][:email]].concat(contributors).uniq()
+    assessment[:metadata][:contact] = contributors.join(" ; ")
+
     assessment[:metadata][:modified] = Time.now.to_i
-    params[:metadata] = assessment[:metadata]
-    params[:taxon] = assessment[:taxon]
-    params[:profile] = assessment[:profile]
-    assessment.each{ |key, value|
-        assessment[key] = params[key]        
+
+    data  = MultiJson.load(params[:data], :symbolize_keys=>true)
+    puts data
+    data.each{ |key, value|
+        assessment[key] = value
     }
+
     db.update(assessment)
-    204
+
+    content_type :json
+    assessment.to_json
 end
 
 put "/assessments/:id/status/:status" do
@@ -124,4 +168,16 @@ put "/assessments/:id/status/:status" do
     db.update(assessment)
     204
     # Como retornar
+end
+
+get "/workflow" do
+    families = ["ACANTHACEAE","RUBIACEAE"]
+    view :workflow, {:families => families}
+end
+
+get "/workflow/:family/:status" do
+    list = [ {:taxon => {:scientificName => "name", :scientificNameAuthorship => "L."}, :_id => "123" },
+             {:taxon => {:scientificName => "other name", :scientificNameAuthorship => "B."}, :_id => "321"}]
+    content_type :json
+    MultiJson.dump list
 end

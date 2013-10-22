@@ -1,6 +1,7 @@
+
 class Metadata
 
-	def initialize
+	def initialize()
 		@schema = {
 			:bibliographicCitation => "",
 			:contributor => "",
@@ -9,8 +10,8 @@ class Metadata
 			:creator => "",
 			:description => "",
 			:identifier => "",
-			:type => "",
-			:modified => 0,
+			:type => "assessment",
+			:modified => Time.now.to_i,
 			:language => "",
 			:source => "",
 			:subject => "",
@@ -19,10 +20,10 @@ class Metadata
 			:status => 'open'
 		}
 	end
-
 	
 	def schema
 		@schema
 	end
 
 end
+

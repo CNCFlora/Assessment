@@ -1,9 +1,10 @@
+
 class Change
 
-	def inilialize
+	def initialize()
 		@schema = {
-			:reasonsForChange => 'ddf',
-			:genuineChangeRecent => false
+			:reasonsForChange => '',
+			:genuineChangeRecent => false,
 			:genuineChangeSinceFirstTime => false,
 			:noChangeSameCategoryAndCriteria => false,
 			:noChangeSameCategoryAndDifferentCriteria => false,

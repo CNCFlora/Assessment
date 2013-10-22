@@ -1,5 +1,7 @@
+
 class Information
-	def inilialize
+
+	def initialize()
 		@schema = {
 			:currentPopulationTrend => '',
 			:dateLastSeen => 0,
@@ -12,7 +14,7 @@ class Information
 			:timePeriodOfFutureDecline => '',
 			:possiblyExtinctCandidate => false,
 			:possiblyExtinct => false,
-			:severelyFragmented => ''
+			:severelyFragmented => 'unkown'
 		}
 	end
 

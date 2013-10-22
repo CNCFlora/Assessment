@@ -1,0 +1,32 @@
+{{> header}}
+
+{{#assessment}}
+<div class="span8">
+    <h3><i>{{taxon.scientificName}}</i> {{taxon.scientificNameAuthorship}}</h3>
+    <p><a href="/assessment/{{_id}}">{{strings.assessment}}</a></p>
+    <form id="data" action="/assessment/{{_id}}" method="POST">
+        <fieldset>
+            <div class="onde-panel"></div>
+            <p class="actions"><button class="btn btn-success">{{strings.save}}</button></p>
+        </fieldset>
+    </form>
+</div>
+
+<div class="span4">
+    <h4>{{strings.metadata}}</h4>
+    {{#metadata}}
+    {{> metadata}}
+    {{/metadata}}
+    <form action="/assessment/{{_id}}/send/review" method="POST" class='send-to'>
+        <button class="btn btn-success">{{strings.send-to-review}}</button>
+    </form>
+</div>
+{{/assessment}}
+
+<script type="text/javascript">
+    var schema = {{{schema}}};
+    var data = {{{data}}};
+</script>
+
+{{> footer}}
+

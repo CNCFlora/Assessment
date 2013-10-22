@@ -37,8 +37,11 @@ class CouchDB
 
     def get(id)
         begin
-            _get "/#{id}"
+            _get "/#{id.to_uri}"
         rescue RestClient::ResourceNotFound
+            nil
+        rescue RestClient::BadRequest => e
+            puts e.response.to_str
             nil
         end
     end
@@ -53,6 +56,14 @@ class CouchDB
         if args.has_key?(:key)
             key = MultiJson.dump(args[:key]).to_uri
             url << "&key=#{key}"
+        end
+        if args.has_key?(:group)
+            key = MultiJson.dump(args[:group]).to_uri
+            url << "&group=#{key}"
+        end
+        if args.has_key?(:reduce)
+            key = MultiJson.dump(args[:reduce]).to_uri
+            url << "&reduce=#{key}"
         end
         _get(url)[:rows]
     end

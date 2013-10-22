@@ -26,7 +26,6 @@ $(function(){
         return confirm("Confirm?");
     });
 
-
     $("select.families").change(function(evt){
         var el = $(evt.target),family = el.val(), status = el.parent().attr("id") ;
         if(family != "---") {
@@ -45,4 +44,18 @@ $(function(){
             });
         }
     });
+
+    if (schema) {
+        var form = new onde.Onde($("#data"));
+        form.render(schema,data,{collapsedCollapsibles: true});
+        $("#data").submit(function(e){
+            e.preventDefault();
+            $("#data .actions button").attr("disabled",true).addClass("disabled").text("Wait...");
+            var data = form.getData().data;
+            $.post($("#data").attr("action"),{'data': JSON.stringify(data) } ,function(){
+                location.href=$("#data").attr("action");
+            });
+            return false;
+        });
+    }
 });
