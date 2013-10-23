@@ -9,6 +9,7 @@ gem 'rest-client'
 gem 'uri-handler'
 
 gem 'rspec'
+gem 'rspec-html-matchers'
 gem 'rack-test'
 
 gem 'zip-zip'
