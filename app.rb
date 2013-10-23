@@ -1,7 +1,7 @@
 require 'sinatra'
 require 'sinatra/config_file'
 require 'sinatra/mustache'
-require "sinatra/reloader" if development?
+require "sinatra/reloader" if development? || test?
 require 'multi_json'
 require 'time'
 require_relative 'model/couchdb'
@@ -10,7 +10,9 @@ require_relative 'model/assessment'
 config_file 'config.yml'
 enable :sessions
 
-also_reload "model/*.rb"
+if development? || test? 
+    also_reload "model/*.rb"
+end
 
 db = CouchDB.new Sinatra::Application.settings.couchdb
 
@@ -22,15 +24,6 @@ File.foreach("config/checklist.csv") do |csv_line|
     allows.push [csv_row[2],csv_row[3],csv_row[4],csv_row[5]].join(' ')
 end
 allows = allows.uniq.map { | name | name.strip }
-
-def setMetadata(status='open')
-    metadata = Metadata.new.shema    
-    metadata[:contributor] = session[:user][:name]
-    metadata[:contact] = session[:user][:email]
-    metadata[:modified] = Time.now.to_i
-    metadata[:status] = status
-    metadata
-end
 
 def view(page,data)
     @config = Sinatra::Application.settings;
@@ -142,7 +135,6 @@ post "/assessment/:id" do
     assessment[:metadata][:modified] = Time.now.to_i
 
     data  = MultiJson.load(params[:data], :symbolize_keys=>true)
-    puts data
     data.each{ |key, value|
         assessment[key] = value
     }
