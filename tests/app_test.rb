@@ -1,8 +1,12 @@
+ENV['RACK_ENV'] = 'test'
+
 require_relative '../app'
 require_relative '../model/assessment'
 require_relative '../model/couchdb'
+
 require 'rspec'
 require 'rack/test'
+require 'rspec-html-matchers'
 
 include Rack::Test::Methods
 
@@ -12,49 +16,74 @@ end
 
 describe "Web app" do
 
-    before(:each) do
-        url = "http://bruno:senha@localhost:5984/test_rb"
-        @couch = CouchDB.new url
-        @assessment = Assessment.new.schema
-        post "/login", {:user => '{"name":"Bruno","email":"bruno@cncflora.net"}'}        
+    before(:all) do
+        @couch = CouchDB.new Sinatra::Application.settings.couchdb
+        post "/login", {:user => '{"name":"Bruno","email":"bruno@cncflora.net","roles":[{"role":"assessor"}]}'}        
+
+        # remember to push the datahub...
+
+        @taxon_id = "taxon1"
+        @couch.create({:metadata=>{:type=>"taxon",:contributor=>"test",:created=>0,:valid=>true,:identifier=>@taxon_id},
+                       :_id => @taxon_id, :taxonID => @taxon_id,
+                       :kingdom=> "", :order=> "", :phylum=> "", :class=> "",
+                       :family=> "ACANTHACEAE", :genus=>"Justicia",
+                       :scientificName=>"Justicia clivalis",
+                       :scientificNameAuthorship=>"S.Profice",
+                       :taxonRank=>"species", :taxonomicStatus=>"accepted"})
+        @profile_id = "profile1"
+        @couch.create({:metadata=>{:type=>"profile",:contributor=>"test",:created=>0,:valid=>true,:identifier=>@profile_id},
+                       :taxon=>{:family=>"ACANTHACEAE",:scientificName=>"Justicia clivalis",:scientificNameAuthorship=>"S.Profice",:lsid=>@taxon_id},
+                       :_id=> @profile_id})
     end
 
-    # it "Can render the template with data" do
-    #     get "/"
-    #     print last_response.body
-    #     last_response.should be_ok
-    #     last_response.body.should include( "Ola, bar!" )
-    # end
+    after(:all) do
+        @couch.delete(@couch.get(@profile_id))
+        @couch.delete(@couch.get(@taxon_id))
+    end
+
     it "Can list families and species" do
+        get "/families"
+        last_response.body.should have_tag(:a,:text => 'ACANTHACEAE')
+
+        get "/family/ACANTHACEAE"
+        last_response.body.should have_tag(:a,:text => 'Justicia clivalis')
     end
 
-    it "Can list families for given user" do
-    end
+    it "Can create assessment for specie" do
+        get "/specie/#{@taxon_id}"
+        last_response.status.should be(200)
+        last_response.body.should have_tag(:form)
 
-    it "Can create assessment for profile" do
-        assessment = Assessment.new.schema
-        assessment[:profile] = "profileTestCreate" 
-        post "/assessments", assessment
-        last_response.status.should == 201
+        post "/assessment", {:lsid=>@taxon_id}
+        last_response.status.should eq(302)
+        id = last_response.headers["location"].split("/").last
+        follow_redirect!
+        last_response.body.should have_tag("h3 i",:text => "Justicia clivalis")
 
-        # id = last_response.body.split("/").last
-        # puts "id = #{id}"
-        # get "/assessments/#{id}"
-        # doc = JSON.parse(last_response.body)
-        # puts "doc = #{doc[:profile]}"
-        # expect(doc[:profile]).to eq('profileTestCreate')
+        get "/specie/#{@taxon_id}"
+        last_response.status.should eq(302)
+        follow_redirect!
+        last_response.body.should have_tag("h3 i",:text => "Justicia clivalis")
+
+        @couch.delete(@couch.get(id))
     end
 
     it "Can edit assessment" do
-        doc = Assessment.new.schema
-        assessment = @couch.create doc
-        id = assessment[:_id] 
-        assessment[:criteria] = 'criteriaTestUpdate'
-        assessment[:category] = 'categoryTestUpdate'
-        put "/assessments/#{id}", assessment
-        last_response.status.should == 204
+        post "/assessment", {:lsid=>@taxon_id}
+        id = last_response.headers["location"].split("/").last
+
+        assmnt = @couch.get(id)
+
+        post "/assessment/#{id}", {:data=>{:assessor=>"Test assessor"}.to_json}
+        response = MultiJson.load(last_response.body,:symbolize_keys =>true)
+        response[:assessor].should eq('Test assessor')
+
+        # TODO:test metadata update...
+
+        @couch.delete(@couch.get(id))
     end
 
+=begin
     it "Can review assessment" do        
         assessment = @couch.create @assessment
         id = assessment[:_id]
@@ -93,5 +122,6 @@ describe "Web app" do
 
     it "Can move assessments in workflow" do
     end
+=end
 
 end
