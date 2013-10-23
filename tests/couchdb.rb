@@ -4,8 +4,7 @@ require 'rspec'
 describe "CouchDB abstraction layer" do
 
     before(:each) do
-        # @url = "http://admin:852640sd@localhost:5984/test_rb"
-        @url = "http://bruno:Lam5pada@localhost:5984/test_rb"
+        @url = "http://tester:tester@localhost:5984/test_rb"
         @couch = CouchDB.new @url
     end
 
@@ -15,8 +14,7 @@ describe "CouchDB abstraction layer" do
     end
 
     it "Connect to database" do
-        # db = @couch.db
-        db = CouchDB.new "http://bruno:Lam5pada@localhost:5984/test_rb"
+        db = CouchDB.new @url
         expect(db[:db_name]).to eq('test_rb')
     end
 
