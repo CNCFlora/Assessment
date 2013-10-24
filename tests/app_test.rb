@@ -18,7 +18,7 @@ describe "Web app" do
 
     before(:all) do
         @couch = CouchDB.new Sinatra::Application.settings.couchdb
-        post "/login", {:user => '{"name":"Bruno","email":"bruno@cncflora.net","roles":[{"role":"assessor"}]}'}        
+        post "/login", {:user => '{"name":"Bruno","email":"bruno@cncflora.net","roles":[{"role":"assessor"}]}'}
 
         # remember to push the datahub...
 
@@ -79,6 +79,14 @@ describe "Web app" do
         response[:assessor].should eq('Test assessor')
 
         # TODO:test metadata update...
+        post "/logout"
+        post "/login", {:user => '{"name":"Diogo","email":"diogok@cncflora.net","roles":[{"role":"assessor"}]}'}
+        post "/assessment/#{id}", {:data=>{:assessor=>"Test assessor2"}.to_json}
+        response = MultiJson.load(last_response.body,:symbolize_keys =>true)
+        response[:assessor].should eq('Test assessor2')
+        
+        doc = @couch.get(id)
+        doc[:metadata][:contributor].split(" ; ").should =~ ['Bruno','Diogo']
 
         @couch.delete(@couch.get(id))
     end
