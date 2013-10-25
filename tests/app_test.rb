@@ -99,24 +99,30 @@ describe "Web app" do
         expect(assessment[:metadata][:status]).to eq("open")
         post "/assessment/#{id}/status/review", {}
         assessment = @couch.get(id)
-        expect(assessment[:metadata][:status]).to eq("review")
-        @couch.delete(@couch.get(id))
+        expect(assessment[:metadata][:status]).to eq("review")        
+        @couch.delete(assessment)
     end
 
-=begin
+
     it "Can comment assessment" do
-        assessment = @couch.create @assessment
-        id = assessment[:_id]
-        put "/assessments/#{id}/status/comment", assessment
-        last_response.status.should == 204
+        post "/assessment", {:lsid=>@taxon_id}
+        id = last_response.headers["location"].split("/").last
+        post "/assessment/#{id}/status/comment", {}
+        assessment = @couch.get(id)
+        expect(assessment[:metadata][:status]).to eq("comment")
+        @couch.delete(assessment)
     end
 
     it "Can publish assessment" do
-        assessment = @couch.create @assessment
-        id = assessment[:_id]
-        put "/assessments/#{id}/status/publish", assessment
-        last_response.status.should == 204
+        post "/assessment", {:lsid=>@taxon_id}
+        id = last_response.headers["location"].split("/").last
+        post "/assessment/#{id}/status/publish", {}
+        assessment = @couch.get(id)
+        expect(assessment[:metadata][:status]).to eq("publish")
+        @couch.delete(assessment)
     end
+
+=begin    
 
     it "Can list species without assessment for given family" do        
     end
