@@ -23,5 +23,15 @@
     "modified":"Modificado",
     "contact":"Contato",
     "status":"Status",
-    "edit":"Editar"
+    "edit":"Editar",
+    "send-to-open":"Re-enviar para avaliação",
+    "send-to-comments":"Avançar para comentários",
+    "send-to-published":"Publicar",
+    "species-profile":"Dados sobre a espécie",
+    "comments":"Comentários",
+    "rationale":"Justificativa",
+    "assessor":"Avaliador",
+    "evaluator":"Revisor",
+    "category":"Categoria",
+    "criteria":"Critério"
 }

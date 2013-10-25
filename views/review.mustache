@@ -1,0 +1,47 @@
+{{> header}}
+
+{{#assessment}}
+<div class="span8">
+    {{> assessment}}
+    <form action="/assessment/{{_id}}/review" method='POST'>
+        <fieldset>
+            <p>
+                <label for="reviewStatus">Review Status</label>
+                <select id="reviewStatus" name="reviewStatus">
+                    <option value="consistent">Consistent</option>
+                    <option value="inconsistent">Inconsistent</option>
+                    <option value="rationale">Inconsistent rationale</option>
+                </select>
+            </p>
+            <p>
+                <label for="reviewComments">Comments</label>
+                <textarea name="reviewComments" rows="10" cols="30"></textarea>
+            </p>
+            <p>
+                <label for="reviewRationale">Rewrite Rationale</label>
+                <textarea name="reviewRationale" rows="10" cols="30"></textarea>
+            </p>
+            <p>
+                <button type="submit">Save</button>
+            </p>
+        </fieldset>
+    </form>
+</div>
+
+<div class="span4">
+    <h4>{{strings.metadata}}</h4>
+    {{#metadata}}
+    {{> metadata}}
+    {{/metadata}}
+    <form action="/assessment/{{_id}}/send/open" method="POST" class='send-to'>
+        <button class="btn btn-success">{{strings.send-to-open}}</button>
+    </form>
+    <form action="/assessment/{{_id}}/send/comments" method="POST" class='send-to'>
+        <button class="btn btn-success">{{strings.send-to-comments}}</button>
+    </form>
+</div>
+{{/assessment}}
+
+{{> footer}}
+
+

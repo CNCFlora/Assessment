@@ -1,0 +1,24 @@
+<h3><i>{{taxon.scientificName}}</i> {{taxon.scientificNameAuthorship}}</h3>
+
+<p>
+    <strong>{{strings.category}}</strong>:{{category}}
+</p>
+<p>
+    <strong>{{strings.criteria}}</strong>:{{criteria}}
+</p>
+<p>
+    <strong>{{strings.assessor}}</strong>:{{assessor}}
+</p>
+<p>
+    <strong>{{strings.evaluator}}</strong>:{{evaluator}}
+</p>
+<p>
+    <strong>{{strings.rationale}}</strong>:{{rationale}}
+</p>
+
+<p><a href="{{profiles}}/">{{string.specie-profile}}</a></p>
+
+<h4>{{strings.comments}}</h4>
+{{#comments}}
+<p><strong>{{creator}}</strong>:{{comment}}</p>
+{{/comments}}
