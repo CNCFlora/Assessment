@@ -1,0 +1,29 @@
+{{> header}}
+
+{{#assessment}}
+<div class="span8">
+    {{> assessment}}
+    <form action="/assessment/{{_id}}/comment" method="POST">
+        <p><textarea name="comment" rows="10" cols="30"></textarea></p>
+        <p><button type='submit'>Send</button></p>
+    </form>
+</div>
+
+<div class="span4">
+    <h4>{{strings.metadata}}</h4>
+    {{#metadata}}
+    {{> metadata}}
+    {{/metadata}}
+    {{#role-assessor}}
+    <form action="/assessment/{{_id}}/send/open" method="POST" class='send-to'>
+        <button class="btn btn-success">{{strings.send-to-open}}</button>
+    </form>
+    <form action="/assessment/{{_id}}/send/published" method="POST" class='send-to'>
+        <button class="btn btn-success">{{strings.send-to-published}}</button>
+    </form>
+    {{/role-assessor}}
+</div>
+{{/assessment}}
+
+{{> footer}}
+
