@@ -91,14 +91,19 @@ describe "Web app" do
         @couch.delete(@couch.get(id))
     end
 
-=begin
+
     it "Can review assessment" do        
-        assessment = @couch.create @assessment
-        id = assessment[:_id]
-        put "/assessments/#{id}/status/review", assessment
-        last_response.status.should == 204
+        post "/assessment", {:lsid=>@taxon_id}
+        id = last_response.headers["location"].split("/").last
+        assessment = @couch.get(id)
+        expect(assessment[:metadata][:status]).to eq("open")
+        post "/assessment/#{id}/status/review", {}
+        assessment = @couch.get(id)
+        expect(assessment[:metadata][:status]).to eq("review")
+        @couch.delete(@couch.get(id))
     end
 
+=begin
     it "Can comment assessment" do
         assessment = @couch.create @assessment
         id = assessment[:_id]

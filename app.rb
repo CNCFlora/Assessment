@@ -86,7 +86,7 @@ get "/specie/:lsid" do
 end
 
 post "/assessment" do    
-    spp = db.get(params[:lsid])
+    spp = db.get(params[:lsid])    
     profile = db.view('species_profiles','by_taxon_lsid',{:key => params[:lsid],:reduce=>false}).last[:id]
 
     assessment = Assessment.new.schema
@@ -145,21 +145,19 @@ post "/assessment/:id" do
     assessment.to_json
 end
 
-put "/assessments/:id/status/:status" do
+post "/assessment/:id/status/:status" do    
     assessment = db.get(params[:id])
-    assessment[:metadata][:contributor] = session[:user][:name]
-    assessment[:metadata][:contact] = session[:user][:email]
-    assessment[:metadata][:modified] = Time.now.to_i
+    contributors = assessment[:metadata][:contributor].split(" ; ")
+    contributors = [session[:user][:name]].concat(contributors).uniq()
+    assessment[:metadata][:contributor] = contributors.join(" ; ")
+    contacts = assessment[:metadata][:contact].split(" ; ")
+    contacts = [session[:user][:email]].concat(contributors).uniq()
+    assessment[:metadata][:contact] = contributors.join(" ; ")
     assessment[:metadata][:status] = params[:status]
-    params[:metadata] = assessment[:metadata]
-    params[:taxon] = assessment[:taxon]
-    params[:profile] = assessment[:profile]
-    assessment.each{|key,value|
-        assessment[key] = params[key]        
-    }
+    assessment[:metadata][:modified] = Time.now.to_i
+
     db.update(assessment)
-    204
-    # Como retornar
+    redirect to("/assessment/#{assessment[:_id]}")
 end
 
 get "/workflow" do
