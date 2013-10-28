@@ -18,12 +18,14 @@
     {{> metadata}}
     {{/metadata}}
     {{#role-assessor}}
-    <form action="/assessment/{{_id}}/send/open" method="POST" class='send-to'>
+    {{#owner}}
+    <form action="/assessment/{{_id}}/status/open" method="POST" class='send-to'>
         <button class="btn btn-success">{{strings.send-to-open}}</button>
     </form>
-    <form action="/assessment/{{_id}}/send/published" method="POST" class='send-to'>
+    <form action="/assessment/{{_id}}/status/published" method="POST" class='send-to'>
         <button class="btn btn-success">{{strings.send-to-published}}</button>
     </form>
+    {{/owner}}
     {{/role-assessor}}
 </div>
 {{/assessment}}

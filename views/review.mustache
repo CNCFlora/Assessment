@@ -34,10 +34,10 @@
     {{#metadata}}
     {{> metadata}}
     {{/metadata}}
-    <form action="/assessment/{{_id}}/send/open" method="POST" class='send-to'>
+    <form action="/assessment/{{_id}}/status/open" method="POST" class='send-to'>
         <button class="btn btn-success">{{strings.send-to-open}}</button>
     </form>
-    <form action="/assessment/{{_id}}/send/comments" method="POST" class='send-to'>
+    <form action="/assessment/{{_id}}/status/comments" method="POST" class='send-to'>
         <button class="btn btn-success">{{strings.send-to-comments}}</button>
     </form>
 </div>

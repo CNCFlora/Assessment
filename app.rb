@@ -118,6 +118,15 @@ get "/assessment/:id" do
     assessment[:metadata][:created_date] = Time.at(assessment[:metadata][:created]).to_s[0..9]
     assessment[:metadata][:modified_date] = Time.at(assessment[:metadata][:modified]).to_s[0..9]
 
+    assessment["status-#{assessment[:metadata][:status]}"] = true
+    view :view, {:assessment => assessment}
+end
+
+get "/assessment/:id/edit" do
+    assessment = db.get(params[:id])
+    assessment[:metadata][:created_date] = Time.at(assessment[:metadata][:created]).to_s[0..9]
+    assessment[:metadata][:modified_date] = Time.at(assessment[:metadata][:modified]).to_s[0..9]
+
     schema = MultiJson.load(db.get("_design/assessments")[:schema][:assessment][27..-4], :symbolize_keys=>true)
     schema[:properties].delete(:metadata)
     schema[:properties].delete(:taxon)
@@ -200,7 +209,8 @@ get "/assessment/:id/comment" do
     assessment[:metadata][:created_date] = Time.at(assessment[:metadata][:created]).to_s[0..9]
     assessment[:metadata][:modified_date] = Time.at(assessment[:metadata][:modified]).to_s[0..9]
 
-    view :comments, {:assessment => assessment}
+    owner = assessment[:metadata][:creator] == session[:user][:name]
+    view :comments, {:assessment => assessment,:owner=>owner }
 end
 
 post "/assessment/:id/comment" do
