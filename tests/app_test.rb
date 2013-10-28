@@ -79,19 +79,16 @@ describe "Web app" do
 
         assmnt = @couch.get(id)
 
-        post "/assessment/#{id}", {:data=>{:assessor=>"Test assessor"}.to_json}
+        post "/assessment/#{id}", {:data=>{:rationale=>"Test assessor"}.to_json}
         response = MultiJson.load(last_response.body,:symbolize_keys =>true)
-        response[:assessor].should eq('Test assessor')
+        response[:rationale].should eq('Test assessor')
 
-        # TODO:test metadata update...
         post "/logout"
         post "/login", {:user => '{"name":"Diogo","email":"diogok@cncflora.net","roles":[{"role":"assessor"}]}'}
-        post "/assessment/#{id}", {:data=>{:assessor=>"Test assessor2"}.to_json}
+        post "/assessment/#{id}", {:data=>{:rationale=>"Test assessor2"}.to_json}
         response = MultiJson.load(last_response.body,:symbolize_keys =>true)
-        response[:assessor].should eq('Test assessor2')
-        
-        doc = @couch.get(id)
-        doc[:metadata][:contributor].split(" ; ").should =~ ['Bruno','Diogo']
+        response[:rationale].should eq('Test assessor2')
+        response[:metadata][:contributor].split(" ; ").should =~ ['Bruno','Diogo']
 
         @couch.delete(@couch.get(id))
     end
