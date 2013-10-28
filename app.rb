@@ -93,6 +93,7 @@ post "/assessment" do
 
     assessment[:profile] = profile
     assessment[:dateOfAssessment] = Time.new.to_i
+    assessment[:assessor] = session[:user][:name]
 
     assessment[:taxon][:lsid] = spp[:_id]
     assessment[:taxon][:family] = spp[:family]

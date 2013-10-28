@@ -48,6 +48,8 @@ $(function(){
     if (schema) {
         var form = new onde.Onde($("#data"));
         form.render(schema,data,{collapsedCollapsibles: true});
+        $("input[id*='-assessor']").attr("readonly",true);
+        $("input[id*='-evaluator']").attr("readonly",true);
         $("#data").submit(function(e){
             e.preventDefault();
             $("#data .actions button").attr("disabled",true).addClass("disabled").text("Wait...");

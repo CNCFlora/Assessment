@@ -68,6 +68,7 @@ describe "Web app" do
         assessment = @couch.get(id)
         assessment[:metadata][:created].should eq(assessment[:dateOfAssessment])
         assessment[:metadata][:modified].should eq(assessment[:dateOfAssessment])
+        assessment[:assessor].should eq('Bruno')
 
         @couch.delete(@couch.get(id))
     end
