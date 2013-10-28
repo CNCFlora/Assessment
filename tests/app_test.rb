@@ -96,8 +96,7 @@ describe "Web app" do
         @couch.delete(@couch.get(id))
     end
 
-
-    it "Can review assessment" do        
+    it "Can put assessment on review" do        
         post "/assessment", {:lsid=>@taxon_id}
         id = last_response.headers["location"].split("/").last
         assessment = @couch.get(id)
@@ -108,7 +107,7 @@ describe "Web app" do
         @couch.delete(assessment)
     end
 
-    it "Can comment assessment" do
+    it "Can put assessment on comment" do        
         post "/assessment", {:lsid=>@taxon_id}
         id = last_response.headers["location"].split("/").last
         post "/assessment/#{id}/status/comment", {}
@@ -117,7 +116,7 @@ describe "Web app" do
         @couch.delete(assessment)
     end
 
-    it "Can publish assessment" do
+    it "Can put assessment on publish" do        
         post "/assessment", {:lsid=>@taxon_id}
         id = last_response.headers["location"].split("/").last
         post "/assessment/#{id}/status/publish", {}
