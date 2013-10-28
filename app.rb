@@ -122,6 +122,8 @@ get "/assessment/:id" do
     schema[:properties].delete(:taxon)
     schema[:properties].delete(:profile)
     schema[:properties].delete(:dateOfAssessment)
+    schema[:properties].delete(:review)
+    schema[:properties].delete(:comments)
 
     view :edit, {:assessment => assessment,:schema=>schema.to_json,:data => assessment.to_json}
 end
