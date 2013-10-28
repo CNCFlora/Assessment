@@ -168,6 +168,8 @@ end
 get "/workflow/:family/:status" do
     list = [ {:taxon => {:scientificName => "name", :scientificNameAuthorship => "L."}, :_id => "123" },
              {:taxon => {:scientificName => "other name", :scientificNameAuthorship => "B."}, :_id => "321"}]
+    #list = db.view('assessments','by_family_and_status',{:reduce=>false,:key=>["ACANTHAC","open"]})
     content_type :json
     MultiJson.dump list
 end
+

@@ -103,7 +103,6 @@ describe "Web app" do
         @couch.delete(assessment)
     end
 
-
     it "Can comment assessment" do
         post "/assessment", {:lsid=>@taxon_id}
         id = last_response.headers["location"].split("/").last
@@ -123,7 +122,6 @@ describe "Web app" do
     end
 
 =begin    
-
     it "Can list species without assessment for given family" do        
     end
 
@@ -137,9 +135,6 @@ describe "Web app" do
     end
 
     it "Can list species with assessment published" do
-    end
-
-    it "Can move assessments in workflow" do
     end
 =end
 
