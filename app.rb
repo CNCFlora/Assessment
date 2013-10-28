@@ -195,6 +195,27 @@ post "/assessment/:id/review" do
     redirect to("/assessment/#{assessment[:_id]}")
 end
 
+get "/assessment/:id/comment" do
+    assessment = db.get(params[:id])
+    assessment[:metadata][:created_date] = Time.at(assessment[:metadata][:created]).to_s[0..9]
+    assessment[:metadata][:modified_date] = Time.at(assessment[:metadata][:modified]).to_s[0..9]
+
+    view :comments, {:assessment => assessment}
+end
+
+post "/assessment/:id/comment" do
+    assessment = db.get(params[:id])
+
+    if assessment[:comments] == nil 
+        assessment[:comments] = []
+    end
+
+    assessment[:comments].push({:creator=>session[:user][:name] ,:contact=>session[:user][:email] ,:created=>Time.new.to_i ,:comment=>params[:comment]})
+
+    db.update(assessment)
+    redirect to("/assessment/#{assessment[:_id]}")
+end
+
 get "/workflow" do
     families = ["ACANTHACEAE","RUBIACEAE"]
     view :workflow, {:families => families}

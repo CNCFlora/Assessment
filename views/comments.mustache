@@ -3,9 +3,12 @@
 {{#assessment}}
 <div class="span8">
     {{> assessment}}
-    <form action="/assessment/{{_id}}/comment" method="POST">
-        <p><textarea name="comment" rows="10" cols="30"></textarea></p>
-        <p><button type='submit'>Send</button></p>
+    <form action="/assessment/{{_id}}/comment" method="POST" id='comment-form'>
+        <fieldset>
+            <legend>{{strings.add-comment}}</legend>
+            <p><textarea id="comment" name="comment" rows="10" cols="30"></textarea></p>
+            <p><button type='submit' class='btn btn-success'>{{strings.comment}}</button></p>
+        </fieldset>
     </form>
 </div>
 

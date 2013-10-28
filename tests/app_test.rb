@@ -141,6 +141,27 @@ describe "Web app" do
     end
 
     it "Can comment an assessment" do
+        post "/assessment", {:lsid=>@taxon_id}
+        id = last_response.headers["location"].split("/").last
+
+        post "/assessment/#{id}/comment",{:comment=>"Test comment"}
+        assessment = @couch.get(id)
+        assessment[:comments].length.should eq(1)
+        assessment[:comments][0][:comment].should eq('Test comment')
+        assessment[:comments][0][:creator].should eq('Bruno')
+
+        post "/logout"
+        post "/login", {:user => '{"name":"Diogo","email":"diogok@cncflora.net","roles":[{"role":"assessor"}]}'}
+
+        post "/assessment/#{id}/comment",{:comment=>"Test comment2"}
+        assessment = @couch.get(id)
+        assessment[:comments].length.should eq(2)
+        assessment[:comments][0][:comment].should eq('Test comment')
+        assessment[:comments][0][:creator].should eq('Bruno')
+        assessment[:comments][1][:comment].should eq('Test comment2')
+        assessment[:comments][1][:creator].should eq('Diogo')
+
+        @couch.delete(assessment)
     end
 
 =begin    

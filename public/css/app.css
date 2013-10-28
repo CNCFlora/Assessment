@@ -87,8 +87,7 @@ li.spp a.got {
     padding: 10px;
 }
 
-#review-form textarea{
+#review-form textarea, #comment-form textarea{
     width: 90%;
     height: 80px;
-
 }

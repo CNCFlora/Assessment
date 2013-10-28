@@ -36,5 +36,7 @@
     "category":"Categoria",
     "criteria":"Critério",
     "no-comments":"Sem comentários",
-    "review-assessment":"Rever avaliação"
+    "review-assessment":"Rever avaliação",
+    "add-comment":"Comentar",
+    "no-review":"Sem revisao"
 }
