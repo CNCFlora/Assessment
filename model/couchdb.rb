@@ -14,7 +14,12 @@ class CouchDB
     end
 
     def _post(data)
-        r = RestClient.post "#{@url}", MultiJson.dump(data), :content_type => :json, :accept => :json
+        begin
+            r = RestClient.post "#{@url}", MultiJson.dump(data), :content_type => :json, :accept => :json
+        rescue RestClient::Forbidden => e
+            puts e.response.to_str
+            r = e.response
+        end
         MultiJson.load(r.to_str, :symbolize_keys => true)
     end
 

@@ -17,6 +17,10 @@
     {{#metadata}}
     {{> metadata}}
     {{/metadata}}
+    {{#review}}
+    <h4>{{strings.last-review}}</h4>
+    <p><strong>{{review.status}}</strong>: {{review.comment}}</p>
+    {{/review}}
     <form action="/assessment/{{_id}}/status/review" method="POST" class='send-to'>
         <button class="btn btn-success">{{strings.send-to-review}}</button>
     </form>

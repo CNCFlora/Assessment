@@ -86,3 +86,9 @@ li.spp a.got {
     border-right: 1px solid #ddd;
     padding: 10px;
 }
+
+#review-form textarea{
+    width: 90%;
+    height: 80px;
+
+}

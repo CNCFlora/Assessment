@@ -45,7 +45,7 @@ $(function(){
         }
     });
 
-    if (schema) {
+    if (typeof schema == "object") {
         var form = new onde.Onde($("#data"));
         form.render(schema,data,{collapsedCollapsibles: true});
         $("input[id*='-assessor']").attr("readonly",true);

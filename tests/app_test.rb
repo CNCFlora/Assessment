@@ -18,7 +18,6 @@ describe "Web app" do
 
     before(:all) do
         @couch = CouchDB.new Sinatra::Application.settings.couchdb
-        post "/login", {:user => '{"name":"Bruno","email":"bruno@cncflora.net","roles":[{"role":"assessor"}]}'}
 
         # remember to push the datahub...
 
@@ -34,6 +33,10 @@ describe "Web app" do
         @couch.create({:metadata=>{:type=>"profile",:contributor=>"test",:created=>0,:valid=>true,:identifier=>@profile_id},
                        :taxon=>{:family=>"ACANTHACEAE",:scientificName=>"Justicia clivalis",:scientificNameAuthorship=>"S.Profice",:lsid=>@taxon_id},
                        :_id=> @profile_id})
+    end
+
+    before(:each) do
+        post "/login", {:user => '{"name":"Bruno","email":"bruno@cncflora.net","roles":[{"role":"assessor"}]}'}
     end
 
     after(:all) do
@@ -120,6 +123,24 @@ describe "Web app" do
         assessment = @couch.get(id)
         expect(assessment[:metadata][:status]).to eq("publish")
         @couch.delete(assessment)
+    end
+
+    it "Can review an assessment" do
+        post "/assessment", {:lsid=>@taxon_id}
+        id = last_response.headers["location"].split("/").last
+
+        post "/assessment/#{id}/review", {:status=>"inconsistent",:comment=>"what?",:rationale=>"re rationale"}
+
+        assessment = @couch.get(id)
+        assessment[:evaluator].should eq("Bruno")
+        assessment[:review][:status].should eq("inconsistent")
+        assessment[:review][:comment].should eq("what?")
+        assessment[:review][:rationale].should eq("re rationale")
+
+        @couch.delete(assessment)
+    end
+
+    it "Can comment an assessment" do
     end
 
 =begin    

@@ -3,26 +3,27 @@
 {{#assessment}}
 <div class="span8">
     {{> assessment}}
-    <form action="/assessment/{{_id}}/review" method='POST'>
+    <form action="/assessment/{{_id}}/review" method='POST' id='review-form'>
         <fieldset>
+            <legend>{{strings.review-assessment}}</legend>
             <p>
-                <label for="reviewStatus">Review Status</label>
-                <select id="reviewStatus" name="reviewStatus">
-                    <option value="consistent">Consistent</option>
-                    <option value="inconsistent">Inconsistent</option>
-                    <option value="rationale">Inconsistent rationale</option>
+                <label for="status">Review Status</label>
+                <select id="status" name="status" autocomplete='off'>
+                    <option value="consistent" {{#review.status-consistent}} selected='selected' {{/review.status-consistent}}>Consistent</option>
+                    <option value="inconsistent" {{#review.status-inconsistent}} selected="selected" {{/review.status-inconsistent}}>Inconsistent</option>
+                    <option value="rationale" {{#review.status-rationale}} selected='selected' {{/review.status-rationale}}>Review rationale</option>
                 </select>
             </p>
             <p>
-                <label for="reviewComments">Comments</label>
-                <textarea name="reviewComments" rows="10" cols="30"></textarea>
+                <label for="comment">Comments</label>
+                <textarea name="comment" rows="10" cols="30">{{review.comment}}</textarea>
             </p>
             <p>
-                <label for="reviewRationale">Rewrite Rationale</label>
-                <textarea name="reviewRationale" rows="10" cols="30"></textarea>
+                <label for="rationale">Rewrite Rationale</label>
+                <textarea name="rationale" rows="10" cols="30">{{review.rationale}}</textarea>
             </p>
             <p>
-                <button type="submit">Save</button>
+                <button type="submit" class='btn btn-success'>{{strings.save}}</button>
             </p>
         </fieldset>
     </form>

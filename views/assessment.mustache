@@ -22,3 +22,6 @@
 {{#comments}}
 <p><strong>{{creator}}</strong>:{{comment}}</p>
 {{/comments}}
+{{^comments}}
+<p>{{strings.no-comments}}</p>
+{{/comments}}

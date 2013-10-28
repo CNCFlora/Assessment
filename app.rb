@@ -166,6 +166,35 @@ post "/assessment/:id/status/:status" do
     redirect to("/assessment/#{assessment[:_id]}")
 end
 
+get "/assessment/:id/review" do 
+    assessment = db.get(params[:id])
+    assessment[:metadata][:created_date] = Time.at(assessment[:metadata][:created]).to_s[0..9]
+    assessment[:metadata][:modified_date] = Time.at(assessment[:metadata][:modified]).to_s[0..9]
+
+    if assessment[:review] && assessment[:review][:status] 
+        assessment[:review]["status-#{assessment[:review][:status]}"] = true
+    end
+
+    view :review, {:assessment => assessment}
+end
+
+post "/assessment/:id/review" do
+    assessment = db.get(params[:id])
+
+    assessment[:review] = {:status=>params[:status],:comment=>params[:comment],:rationale=>params[:rationale]}
+    assessment[:evaluator] = session[:user][:name]
+
+    contributors = assessment[:metadata][:contributor].split(" ; ")
+    contributors = [session[:user][:name]].concat(contributors).uniq()
+    assessment[:metadata][:contributor] = contributors.join(" ; ")
+    contacts = assessment[:metadata][:contact].split(" ; ")
+    contacts = [session[:user][:email]].concat(contributors).uniq()
+    assessment[:metadata][:contact] = contributors.join(" ; ")
+
+    db.update(assessment)
+    redirect to("/assessment/#{assessment[:_id]}")
+end
+
 get "/workflow" do
     families = ["ACANTHACEAE","RUBIACEAE"]
     view :workflow, {:families => families}
