@@ -92,6 +92,7 @@ post "/assessment" do
     assessment = Assessment.new.schema
 
     assessment[:profile] = profile
+    assessment[:dateOfAssessment] = Time.new.to_i
 
     assessment[:taxon][:lsid] = spp[:_id]
     assessment[:taxon][:family] = spp[:family]
@@ -103,6 +104,8 @@ post "/assessment" do
     assessment[:metadata][:contact] = session[:user][:email]
     assessment[:metadata][:description] = "Assessment for #{spp[:scientificName]}"
     assessment[:metadata][:title] = "Assessment for #{spp[:scientificName]}"
+    assessment[:metadata][:modified] = Time.now.to_i
+    assessment[:metadata][:created] = Time.now.to_i
 
     assessment = db.create(assessment)
 

@@ -65,6 +65,10 @@ describe "Web app" do
         follow_redirect!
         last_response.body.should have_tag("h3 i",:text => "Justicia clivalis")
 
+        assessment = @couch.get(id)
+        assessment[:metadata][:created].should eq(assessment[:dateOfAssessment])
+        assessment[:metadata][:modified].should eq(assessment[:dateOfAssessment])
+
         @couch.delete(@couch.get(id))
     end
 
