@@ -3,8 +3,8 @@
 {{#assessment}}
 <div class="span8">
     <h3><i>{{taxon.scientificName}}</i> {{taxon.scientificNameAuthorship}}</h3>
-    <p><a href="/assessment/{{_id}}">{{strings.assessment}}</a></p>
-    <form id="data" action="/assessment/{{_id}}" method="POST">
+    <p><a href="{{base}}/assessment/{{_id}}">{{strings.assessment}}</a></p>
+    <form id="data" action="{{base}}/assessment/{{_id}}" method="POST">
         <fieldset>
             <div class="onde-panel"></div>
             <p class="actions"><button class="btn btn-success">{{strings.save}}</button></p>
@@ -31,7 +31,7 @@
     {{^comments}}
     <p>{{strings.no-comments}}</p>
     {{/comments}}
-    <form action="/assessment/{{_id}}/status/review" method="POST" class='send-to'>
+    <form action="{{base}}/assessment/{{_id}}/status/review" method="POST" class='send-to'>
         <button class="btn btn-success">{{strings.send-to-review}}</button>
     </form>
 </div>

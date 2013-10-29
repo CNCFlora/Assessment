@@ -2,14 +2,14 @@ $(function(){
     Connect({
         onlogin: function(user) {
             if(!logged) {
-                $.post('/login','user='+JSON.stringify(user),function(){
+                $.post(base+'/login','user='+JSON.stringify(user),function(){
                     location.reload();
                 });
             }
         },
         onlogout: function(nothing){
             if(logged) {
-                $.post('/logout',nothing,function(){
+                $.post(base+'/logout',nothing,function(){
                     location.reload();
                 });
             }
@@ -30,14 +30,14 @@ $(function(){
         var el = $(evt.target),family = el.val(), status = el.parent().attr("id") ;
         if(family != "---") {
             $("#"+status+" ul").html('').append('<li>loading...</li>');
-            $.getJSON('/workflow/'+family+'/'+status,function(r) {
+            $.getJSON(base+'/workflow/'+family+'/'+status,function(r) {
                 $("#"+status+" ul").html('');
                 if(r.length < 1) {
                     $("#"+status+" ul").append('<li>N/A</li>');
                 } else {
                     for(var i in r) {
                         $("#"+status+" ul").append('<li><i class="icon-leaf"></i>'
-                                                  +'<a href="/assessment/'+r[i]._id+'/'+status+'">'
+                                                  +'<a href='+base+'"/assessment/'+r[i]._id+'">'
                                                   +r[i].taxon.scientificName+'</a></li>');
                     }
                 }

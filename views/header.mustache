@@ -4,19 +4,20 @@
 	<meta charset="UTF-8">
     <title>{{strings.risk-assessments}}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <link href="/css/bootstrap.min.css" rel="stylesheet" >
-    <link href="/css/onde.css" rel="stylesheet" >
-    <link href="/css/app.css" rel="stylesheet" >
+    <link href="{{base}}/css/bootstrap.min.css" rel="stylesheet" >
+    <link href="{{base}}/css/onde.css" rel="stylesheet" >
+    <link href="{{base}}/css/app.css" rel="stylesheet" >
     <script type="text/javascript">
         var couchdb = '{{{couchdb}}}';
         var logged = {{{logged}}};
+        var base = '{{base}}';
     </script>
     <script src="{{connect}}/js/connect.js"></script>
-    <script src="/js/jquery.min.js"></script>
-    <script src="/js/jquery.ui.min.js"></script>
-    <script src="/js/bootstrap.min.js"></script>
-    <script src="/js/onde.js"></script>
-    <script src="/js/app.js"></script>
+    <script src="{{base}}/js/jquery.min.js"></script>
+    <script src="{{base}}/js/jquery.ui.min.js"></script>
+    <script src="{{base}}/js/bootstrap.min.js"></script>
+    <script src="{{base}}/js/onde.js"></script>
+    <script src="{{base}}/js/app.js"></script>
 </head>
 <body>
     <div class="container">
@@ -26,13 +27,13 @@
         <nav class="navbar">
             <div class="navbar-inner">
                 <ul class="nav">
-                    <li><a href="/">{{strings.search}}</a></li>
-                    <li><a href="/families">{{strings.families}}</a></li>
+                    <li><a href="{{base}}/">{{strings.search}}</a></li>
+                    <li><a href="{{base}}/families">{{strings.families}}</a></li>
                     {{^logged}}
                     <li id='login'><a href="#">{{strings.login}}</a></li>
                     {{/logged}}
                     {{#logged}}
-                    <li><a href="/workflow">{{strings.workflow}}</a></li>
+                    <li><a href="{{base}}/workflow">{{strings.workflow}}</a></li>
                     <li id='logout'><a href="#">{{strings.logout}}</a></li>
                     {{/logged}}
                 </ul>
