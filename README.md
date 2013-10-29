@@ -40,6 +40,10 @@ Install CouchDB and create our little database:
     # aptitude install couchdb
     # curl -X PUT http://localhost:5984/lilruby
 
+Copy and fill in config.yml
+
+    $ cp config.yml.dist config.yml
+
 Run the tests:
 
     $ rspec app_test.rb
