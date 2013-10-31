@@ -22,8 +22,27 @@ $(function(){
             return confirm("Confirma excluir esse recurso?");
         });
     });
-    $("form.send-to").submit(function(){
-        return confirm("Confirm?");
+
+    var form = null;
+
+    $("form.send-to").submit(function(evt){
+        if(confirm("Confirm?")) {
+            if(typeof form != "undefined" && form != null) {
+                var data = form.getData().data;
+                $.post($("#data").attr("action"),{'data': JSON.stringify(data)} ,function(){
+                    $.post($(evt.target).attr("action"),{},function(){
+                        location.href=$("#data").attr("action");
+                    });
+                });
+            } else if($("#review-form").length >= 1){
+                $.post($(evt.target).attr("action"),{},function(){
+                    $("#review-form").submit();
+                });
+            } else {
+                return true;
+            }
+        }
+        return false;
     });
 
     $("select.families").change(function(evt){
@@ -44,9 +63,10 @@ $(function(){
             });
         }
     });
+    
 
     if (typeof schema == "object") {
-        var form = new onde.Onde($("#data"));
+        form = new onde.Onde($("#data"));
         form.render(schema,data,{collapsedCollapsibles: true});
         $("input[id*='-assessor']").attr("readonly",true);
         $("input[id*='-evaluator']").attr("readonly",true);
