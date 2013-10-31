@@ -28,7 +28,7 @@ allows = allows.uniq.map { | name | name.strip }
 def view(page,data)
     @config = Sinatra::Application.settings;
     @strings = MultiJson.load(File.read("locales/#{@config.lang}.json"),:symbolize_keys => true)
-    @config_hash = {:connect => @config.connect, :lang => @config.lang, :couchdb => @config.couchdb}
+    @config_hash = {:connect => @config.connect, :lang => @config.lang, :couchdb => @config.couchdb, :base => @config.base, :profiles=>@config.profiles}
     @session_hash = {:logged => session[:logged] || false, :user => session[:user] || '{}'}
     if session[:logged] 
         session[:user][:roles].each do | role |
@@ -232,10 +232,10 @@ get "/workflow" do
 end
 
 get "/workflow/:family/:status" do
-    list = [ {:taxon => {:scientificName => "name", :scientificNameAuthorship => "L."}, :_id => "123" },
-             {:taxon => {:scientificName => "other name", :scientificNameAuthorship => "B."}, :_id => "321"}]
-    #list = db.view('assessments','by_family_and_status',{:reduce=>false,:key=>["ACANTHAC","open"]})
+    list = db.view('assessments','by_family_and_status',{:reduce=>false,:key=>[params[:family],params[:status]]})
+    data = []
+    list.each { | row | data.push row[:value] } 
     content_type :json
-    MultiJson.dump list
+    MultiJson.dump data
 end
 

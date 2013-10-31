@@ -13,16 +13,16 @@
     {{#logged}}
         {{#role-assessor}}
             {{#status-open}}
-                <a href="/assessment/{{_id}}/edit" class="btn btn-mini">{{strings.edit}}</a>
+                <a href="{{base}}/assessment/{{_id}}/edit" class="btn btn-mini">{{strings.edit}}</a>
             {{/status-open}}
         {{/role-assessor}}
         {{#role-evaluator}}
             {{#status-review}}
-                <a href="/assessment/{{_id}}/review" class="btn btn-mini">{{strings.review}}</a>
+                <a href="{{base}}/assessment/{{_id}}/review" class="btn btn-mini">{{strings.review}}</a>
             {{/status-review}}
         {{/role-evaluator}}
         {{#status-comments}}
-            <a href="/assessment/{{_id}}/comment" class="btn btn-mini">{{strings.comment}}</a>
+            <a href="{{base}}/assessment/{{_id}}/comment" class="btn btn-mini">{{strings.comment}}</a>
         {{/status-comments}}
     {{/logged}}
 </div>

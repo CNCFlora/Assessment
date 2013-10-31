@@ -3,7 +3,7 @@
 {{#assessment}}
 <div class="span8">
     {{> assessment}}
-    <form action="/assessment/{{_id}}/comment" method="POST" id='comment-form'>
+    <form action="{{base}}/assessment/{{_id}}/comment" method="POST" id='comment-form'>
         <fieldset>
             <legend>{{strings.add-comment}}</legend>
             <p><textarea id="comment" name="comment" rows="10" cols="30"></textarea></p>
@@ -19,10 +19,10 @@
     {{/metadata}}
     {{#role-assessor}}
     {{#owner}}
-    <form action="/assessment/{{_id}}/status/open" method="POST" class='send-to'>
+    <form action="{{base}}/assessment/{{_id}}/status/open" method="POST" class='send-to'>
         <button class="btn btn-success">{{strings.send-to-open}}</button>
     </form>
-    <form action="/assessment/{{_id}}/status/published" method="POST" class='send-to'>
+    <form action="{{base}}/assessment/{{_id}}/status/published" method="POST" class='send-to'>
         <button class="btn btn-success">{{strings.send-to-published}}</button>
     </form>
     {{/owner}}

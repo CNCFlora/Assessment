@@ -164,21 +164,27 @@ describe "Web app" do
         @couch.delete(assessment)
     end
 
-=begin    
-    it "Can list species without assessment for given family" do        
-    end
+    it "Can list assessment at each status for given family" do
+        post "/assessment", {:lsid=>@taxon_id}
+        id = last_response.headers["location"].split("/").last
 
-    it "Can list species with open assessment for given family" do
-    end
+        get "/workflow/ACANTHACEAE/open"
+        res = MultiJson.load(last_response.body, :symbolize_keys => true)
+        res.length.should eq(1)
+        res[0][:_id].should eq(id)
 
-    it "Can list species with assessment to review" do
-    end
+        post "/assessment/#{id}/status/review", {}
+        get "/workflow/ACANTHACEAE/open"
+        res = MultiJson.load(last_response.body, :symbolize_keys => true)
+        res.length.should eq(0)
 
-    it "Can list species with assessment to comment" do
-    end
+        get "/workflow/ACANTHACEAE/review"
+        res = MultiJson.load(last_response.body, :symbolize_keys => true)
+        res.length.should eq(1)
+        res[0][:_id].should eq(id)
 
-    it "Can list species with assessment published" do
+        assessment = @couch.get(id)
+        @couch.delete(assessment)
     end
-=end
 
 end
