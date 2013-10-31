@@ -188,6 +188,10 @@ get "/assessment/:id/review" do
         assessment[:review]["status-#{assessment[:review][:status]}"] = true
     end
 
+    if assessment[:review] && assessment[:review][:rationale].length >=1 
+        assessment[:rationale] = assessment[:review][:rationale]
+    end
+
     view :review, {:assessment => assessment}
 end
 
@@ -213,6 +217,10 @@ get "/assessment/:id/comment" do
     assessment[:metadata][:created_date] = Time.at(assessment[:metadata][:created]).to_s[0..9]
     assessment[:metadata][:modified_date] = Time.at(assessment[:metadata][:modified]).to_s[0..9]
 
+    if assessment[:review] && assessment[:review][:rationale].length >=1 
+        assessment[:rationale] = assessment[:review][:rationale]
+    end
+
     owner = assessment[:metadata][:creator] == session[:user][:name]
     view :comments, {:assessment => assessment,:owner=>owner }
 end
@@ -231,7 +239,14 @@ post "/assessment/:id/comment" do
 end
 
 get "/workflow" do
-    families = ["ACANTHACEAE","RUBIACEAE"]
+    families = []
+    session[:user][:roles].each { | role |
+        role[:entities].each { | entity |
+            if entity[:name] == entity[:name].upcase
+                families.push(entity[:name])
+            end
+        }
+    }
     view :workflow, {:families => families}
 end
 

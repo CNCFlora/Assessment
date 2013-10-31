@@ -36,7 +36,7 @@ describe "Web app" do
     end
 
     before(:each) do
-        post "/login", {:user => '{"name":"Bruno","email":"bruno@cncflora.net","roles":[{"role":"assessor"}]}'}
+        post "/login", {:user => '{"name":"Bruno","email":"bruno@cncflora.net","roles":[{"role":"assessor","entities":[{"label":"ACANTHACEAE","value":"urn:acanthaceae"}]}]}'}
     end
 
     after(:all) do
