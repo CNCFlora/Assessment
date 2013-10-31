@@ -118,6 +118,10 @@ get "/assessment/:id" do
     assessment[:metadata][:created_date] = Time.at(assessment[:metadata][:created]).to_s[0..9]
     assessment[:metadata][:modified_date] = Time.at(assessment[:metadata][:modified]).to_s[0..9]
 
+    if assessment[:review] && assessment[:review][:rationale].length >=1 
+        assessment[:rationale] = assessment[:review][:rationale]
+    end
+
     assessment["status-#{assessment[:metadata][:status]}"] = true
     view :view, {:assessment => assessment}
 end
