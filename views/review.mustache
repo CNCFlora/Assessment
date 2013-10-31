@@ -16,11 +16,11 @@
             </p>
             <p>
                 <label for="comment">Comments</label>
-                <textarea name="comment" rows="10" cols="30">{{review.comment}}</textarea>
+                <textarea name="comment" rows="10" cols="30"></textarea>
             </p>
             <p>
                 <label for="rationale">Rewrite Rationale</label>
-                <textarea name="rationale" rows="10" cols="30">{{review.rationale}}</textarea>
+                <textarea name="rationale" rows="10" cols="30"></textarea>
             </p>
             <p>
                 <button type="submit" class='btn btn-success'>{{strings.save}}</button>
@@ -34,6 +34,20 @@
     {{#metadata}}
     {{> metadata}}
     {{/metadata}}
+    <h4>{{strings.last-review}}</h4>
+    {{#review}}
+    <p><strong>({{evaluator}}) {{review.status}}</strong>: {{review.comment}}</p>
+    {{/review}}
+    {{^review}}
+    <p>{{strings.no-review}}</p>
+    {{/review}}
+    <h4>{{strings.comments}}</h4>
+    {{#comments}}
+    <p><strong>{{creator}}</strong>: {{comment}}</p>
+    {{/comments}}
+    {{^comments}}
+    <p>{{strings.no-comments}}</p>
+    {{/comments}}
     <form action="{{base}}/assessment/{{_id}}/status/open" method="POST" class='send-to'>
         <button class="btn btn-success">{{strings.send-to-open}}</button>
     </form>

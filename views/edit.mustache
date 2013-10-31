@@ -19,7 +19,7 @@
     {{/metadata}}
     <h4>{{strings.last-review}}</h4>
     {{#review}}
-    <p><strong>{{review.status}} {{evaluator}}</strong>: {{review.comment}}</p>
+    <p><strong>({{evaluator}}) {{review.status}}</strong>: {{review.comment}}</p>
     {{/review}}
     {{^review}}
     <p>{{strings.no-review}}</p>
