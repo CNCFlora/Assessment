@@ -1,6 +1,5 @@
 # CNCFlora Assessment Tool 
 
-
 ## Deployment
 
 TODO
@@ -16,43 +15,21 @@ Now clone the app, and enter it's directory:
     $ git clone git@github.com:CNCFlora/Assessment.git 
     $ cd Assessment
 
-You will need ruby, as expected:
+### Vagrant
 
-    # aptitude install ruby
+Default is to use vagrant to simplify development, install [VirtualBox](http://virtualbox.org) and [Vagrant](http://vagrantup.org) and start the VM:
 
-Install RVM for ruby versions control, them install jRuby:
+    $ vagrant up
 
-    $ curl -L https://get.rvm.io | bash -s stable
-    $ echo 'source $HOME/.rvm/scripts/rvm' >> ~/.bashrc
-    $ rvm install jruby
-    $ rvm use jruby
+And, to run the server:
 
-Them bundler, to deal with dependencies:
+    $ vagrant ssh -c "cd /vagrant && rackup"
 
-    # gem install bundler
+To run tests:
 
-Use bundler to solve dependencies (take a look at Gemfile):
+    $ vagrant ssh -c "cd /vagrant && rspec tests/"
 
-    $ bundle install
+The app will be running on 9494, connect(auth) at 3001 and couchdb on 5999. 
 
-Install CouchDB and create our little database:
-
-    # aptitude install couchdb
-    # curl -X PUT http://localhost:5984/lilruby
-
-Copy and fill in config.yml
-
-    $ cp config.yml.dist config.yml
-
-Run the tests:
-
-    $ rspec app_test.rb
-
-Run the application:
-    
-    $ rackup
-
-Create deployable war:
-
-    $ warble war
+Remember to create an user on the connect app (at http://localhost:3001).
 

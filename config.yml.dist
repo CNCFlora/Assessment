@@ -1,12 +1,12 @@
 development:
     lang: "pt"
-    connect: "http://localhost:3000"
-    couchdb: "http://tester:tester@localhost:5984/cncflora"
+    connect: "http://localhost:3001"
+    couchdb: "http://localhost:5984/cncflora"
     profiles: "http://localhost/apps/profiles"
 test:
     lang: "pt"
-    connect: "http://localhost:3000"
-    couchdb: "http://tester:tester@localhost:5984/cncflora_test_assessment"
+    connect: "http://localhost:3001"
+    couchdb: "http://localhost:5984/cncflora_test"
     profiles: "http://localhost/apps/profiles"
 production:
     lang: "pt"
