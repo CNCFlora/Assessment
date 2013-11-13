@@ -4,6 +4,9 @@
 apt-get update
 apt-get install ruby openjdk-7-jdk curl git couchdb -y
 
+cp /etc/rc.local /etc/rc.local.bkp
+sudo sed -e 's/exit/#exit/g' /etc/rc.local.bkp > /etc/rc.local
+
 # config ruby gems to https and rvm
 gem sources -r http://rubygems.org/
 gem sources -r http://rubygems.org
@@ -18,6 +21,6 @@ gem install bundler
 # initial config of app
 cd /vagrant
 bundle install
-cp config.yml.dist config.yml
-#nohup rackup &
+[[ ! -e config.yml ]] && cp config.yml.dist config.yml
+nohup rackup &
 

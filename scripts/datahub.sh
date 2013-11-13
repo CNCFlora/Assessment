@@ -4,6 +4,7 @@
 service couchdb stop
 cp /etc/couchdb/local.ini /etc/couchdb/local.ini.bkp
 sudo sed -e 's/;bind_address = [0-9]\+.[0-9]\+.[0-9]\+.[0-9]\+/bind_address = 0.0.0.0/' /etc/couchdb/local.ini.bkp > /etc/couchdb/local.ini 
+echo "service couchdb start" >> /etc/rc.local
 service couchdb start
 
 # install the datahub design docs
