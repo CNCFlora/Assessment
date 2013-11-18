@@ -22,5 +22,4 @@ gem install bundler
 cd /vagrant
 bundle install
 [[ ! -e config.yml ]] && cp config.yml.dist config.yml
-nohup rackup &
 
