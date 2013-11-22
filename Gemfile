@@ -15,6 +15,6 @@ gem 'rspec'
 gem 'rspec-html-matchers'
 gem 'rack-test'
 
-gem 'zip-zip'
-gem 'warbler'
+gem 'rubyzip'
+gem 'warbler',"1.4.0"
 
