@@ -7,7 +7,7 @@ require 'time'
 require_relative 'model/couchdb'
 require_relative 'model/assessment'
 
-config_file 'config.yml'
+config_file ENV['config'] || 'config.yml'
 enable :sessions
 
 if development? || test? 
