@@ -7,11 +7,251 @@
     <form id="data" action="{{base}}/assessment/{{_id}}" method="POST">
         <fieldset>
             <div class="onde-panel"></div>
-            <p class="actions"><button class="btn btn-success">{{strings.save}}</button></p>
+            <p class="actions">
+                <button class="btn btn-success">{{strings.save}}</button>
+                <button class="btn btn-info" data-toggle="modal" data-target="#myModal">Criteria</button>
+            </p>
         </fieldset>
     </form>
 </div>
 
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">Criteria</h4>
+            </div>
+            <div class="modal-body" id="check">
+
+
+                <div class="accordion" id="accordion2">
+
+                    <div class="accordion-group">
+
+                        <div class="accordion-heading">
+                            <a class="accordion-toggle" data-toggle="collapse" href="#collapseOne">Criterion A</a>
+                        </div>
+                        <div id="collapseOne" class="accordion-body collapse in">
+                            <div class="accordion-inner">
+                                <label class="checkbox inline"><input type="checkbox" id="A1a" value="A1a">A1a</label>
+                                <label class="checkbox inline"><input type="checkbox" id="A1b" value="A1b">A1b</label>
+                                <label class="checkbox inline"><input type="checkbox" id="A1c" value="A1c">A1c</label>
+                                <label class="checkbox inline"><input type="checkbox" id="A1d" value="A1d">A1d</label>
+                                <label class="checkbox inline"><input type="checkbox" id="A1e" value="A1e">A1e</label>
+                            </div>
+                            <div class="accordion-inner">
+                                <label class="checkbox inline"><input type="checkbox" id="A2a" value="A2a">A2a</label>
+                                <label class="checkbox inline"><input type="checkbox" id="A2b" value="A2b">A2b</label>
+                                <label class="checkbox inline"><input type="checkbox" id="A2c" value="A2c">A2c</label>
+                                <label class="checkbox inline"><input type="checkbox" id="A2d" value="A2d">A2d</label>
+                                <label class="checkbox inline"><input type="checkbox" id="A2e" value="A2e">A2e</label>
+                            </div>
+                            <div class="accordion-inner">
+                                <label class="checkbox inline"></label>
+                                <label class="checkbox inline"><input type="checkbox" id="A3b" value="A3b">A3b</label>
+                                <label class="checkbox inline"><input type="checkbox" id="A3c" value="A3c">A3c</label>
+                                <label class="checkbox inline"><input type="checkbox" id="A3d" value="A3d">A3d</label>
+                                <label class="checkbox inline"><input type="checkbox" id="A3e" value="A3e">A3e</label>
+                            </div>
+                            <div class="accordion-inner">
+                                <label class="checkbox inline"><input type="checkbox" id="A4a" value="A4a">A4a</label>
+                                <label class="checkbox inline"><input type="checkbox" id="A4b" value="A4b">A4b</label>
+                                <label class="checkbox inline"><input type="checkbox" id="A4c" value="A4c">A4c</label>
+                                <label class="checkbox inline"><input type="checkbox" id="A4d" value="A4d">A4d</label>
+                                <label class="checkbox inline"><input type="checkbox" id="A4e" value="A4e">A4e</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="accordion-group">
+                        <div class="accordion-heading">
+                            <a class="accordion-toggle" data-toggle="collapse" data-parent="" href="#collapseTwo">Criteria B</a>
+                        </div>
+                        <div id="collapseTwo" class="accordion-body collapse in">
+                            <div class="accordion-inner">
+                                <label class="checkbox inline"><input type="checkbox" id="B1a" value="B1a">B1a</label>                                
+                            </div>
+                            <div class="accordion-inner">
+                                <label class="checkbox inline"><input type="checkbox" id="B1bi" value="B1b(i)">B1b(i)</label>
+                                <label class="checkbox inline"><input type="checkbox" id="B1bii" value="B1b(ii)">B1b(ii)</label>
+                                <label class="checkbox inline"><input type="checkbox" id="B1biii" value="B1b(iii)">B1b(iii)</label>
+                                <label class="checkbox inline"><input type="checkbox" id="B1biv" value="B1b(iv)">B1b(iv)</label>
+                                <label class="checkbox inline"><input type="checkbox" id="B1biv" value="B1b(v)">B1b(v)</label>
+                            </div>
+                            <div class="accordion-inner">
+                                <label class="checkbox inline"><input type="checkbox" id="B1ci" value="B1c(i)">B1c(i)</label>
+                                <label class="checkbox inline"><input type="checkbox" id="B1cii" value="B1c(ii)">B1c(ii)</label>                                
+                                <label class="checkbox inline"><input type="checkbox" id="B1ciii" value="B1c(iii)">B1c(iii)</label>
+                                <label class="checkbox inline"><input type="checkbox" id="B1civ" value="B1c(iv)">B1c(iv)</label>
+                            </div>
+                            <div class="accordion-inner">                                
+                                <label class="checkbox inline"><input type="checkbox" id="B2a" value="B2a">B2a</label>                                
+                            </div>
+                            <div class="accordion-inner">
+                                <label class="checkbox inline"><input type="checkbox" id="B2bi" value="B2b(i)">B2b(i)</label>
+                                <label class="checkbox inline"><input type="checkbox" id="B2bii" value="B2b(ii)">B2b(ii)</label>
+                                <label class="checkbox inline"><input type="checkbox" id="B2biii" value="B2b(iii)">B2b(iii)</label>
+                                <label class="checkbox inline"><input type="checkbox" id="B2biv" value="B2b(iv)">B2b(iv)</label>
+                                <label class="checkbox inline"><input type="checkbox" id="B2biv" value="B2b(v)">B2b(v)</label>
+                            </div>
+                            <div class="accordion-inner">
+                                <label class="checkbox inline"><input type="checkbox" id="B2ci" value="B2c(i)">B2c(i)</label>
+                                <label class="checkbox inline"><input type="checkbox" id="B2cii" value="B2c(ii)">B2c(ii)</label>
+                                <label class="checkbox inline"><input type="checkbox" id="B2ciii" value="B2c(iii)">B2c(iii)</label>
+                                <label class="checkbox inline"><input type="checkbox" id="B2civ" value="B2c(iv)">B2c(iv)</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-group">
+                        <div class="accordion-heading">
+                            <a class="accordion-toggle" data-toggle="collapse" data-parent="" href="#collapseTwo">Criteria C</a>
+                        </div>
+                        <div id="collapseTwo" class="accordion-body collapse in">
+                            <div class="accordion-inner">
+                                <label class="checkbox inline"><input type="checkbox" id="D" value="D">D</label>
+                                <label class="checkbox inline"><input type="checkbox" id="D1" value="D1">D1</label>
+                                <label class="checkbox inline"><input type="checkbox" id="D2" value="D2">D2</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-group">
+                        <div class="accordion-heading">
+                            <a class="accordion-toggle" data-toggle="collapse" data-parent="" href="#collapseTwo">Criteria C</a>
+                        </div>
+                        <div id="collapseTwo" class="accordion-body collapse in">
+                            <div class="accordion-inner">
+                                <label class="checkbox inline"><input type="checkbox" id="E" value="E">E</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--
+                        <div class="accordion" id="accordion2">
+                            <div class="accordion-group">
+                                <div class="accordion-heading">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
+                                        Collapsible Group Item #1
+                                    </a>
+                                </div>
+                        
+                                <div id="collapseOne" class="accordion-body collapse in">
+                                    <div class="accordion-inner">
+                                        Anim pariatur cliche...
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="accordion-group">
+                                <div class="accordion-heading">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
+                                        Collapsible Group Item #2
+                                    </a>
+                                </div>
+
+                                <div id="collapseTwo" class="accordion-body collapse">
+
+                                    <div class="accordion-inner">
+                                        Anim pariatur cliche...
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        ...
+                    -->
+
+
+
+
+
+
+
+
+
+
+
+                </div>            
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button id="saveCriteria" type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<script type="text/javascript">
+    
+    $(function(){ 
+        $('#myModal').modal({
+            keyboard: false
+        })
+        $( "#saveCriteria" ).click(function() {
+            var id;
+            var uppLetter = "";
+            var numberCriteria = "";
+            // var downLetter = "";
+            var criteria =[];
+            var letter = "";
+            var str = "";
+            
+            $("#collapseOne input:checkbox:checked").each( function( key, value ) {
+                // alert("id = "+$(this).attr('id'));
+            })
+
+
+            $("#check").click( function(){
+                if( $(this).is(':checked') ) alert("checked");
+            });
+
+        )}
+        // $("#myModal input:checkbox:checked").each( function( key, value ) {
+            // alert( key + ": " + value );
+        //     id = $(this).attr('id');
+
+        //     // if( id.substr(0,1) != uppLetter ){
+        //     //     uppLetter = id.substr(0,1);
+        //     //     numberCriteria = id.substr(1,1);
+        //     //     criteria[uppLetter] = [];
+        //     //     criteria[uppLetter][numberCriteria] = "";
+        //     // }
+        //     // if( id.substr(1,1) != numberCriteria ){
+        //     //     numberCriteria = id.substr(1,1);                
+        //     //         // alert(criteria[uppLetter][numberCriteria]);
+        //     // }
+        //     // criteria[uppLetter][numberCriteria] = criteria[uppLetter][numberCriteria] + id.substr(2,id.length-2);
+
+        //     if( id.substr(0,2) != letter ){
+        //         letter = id.substr(0,2);
+        //         uppLetter = id.substr(0,1);
+        //         numberCriteria = id.substr(1,1);
+        //         criteria[uppLetter] = [];
+        //         criteria[uppLetter][numberCriteria] = "";
+        //         // alert( myArray[0] );
+        //         // alert( id.substr(1,id.length-1) );
+        //     }
+        //     if( criteria[uppLetter].length > 0 ){
+        //         criteria[uppLetter][numberCriteria] = criteria[uppLetter][numberCriteria] + id.substr(2,id.length-2);
+        //     }
+        //     alert(criteria);
+        //     // myArray[1] = myArray[1] + id.substr(2,id.length-2);
+        //     // alert("id = "+myArray+" size = "+myArray[1]);
+        // })
+        // if( criteria[uppLetter].length > 0 ){
+            
+        //     for(var i in criteria){
+        //         alert(criteria[i]);
+        //     }
+
+
+        //     // alert("criteria = "+criteria[uppLetter][numberCriteria]);
+        // }        
+        // myArray[0] = "";
+        // myArray[1] = "";
+    })
+</script>
 <div class="span4">
     <h4>{{strings.metadata}}</h4>
     {{#metadata}}
@@ -32,7 +272,7 @@
     <p>{{strings.no-comments}}</p>
     {{/comments}}
     <form action="{{base}}/assessment/{{_id}}/status/review" method="POST" class='send-to'>
-        <button class="btn btn-success">{{strings.send-to-review}}</button>
+        <button class="btn btn-success">{{strings.send-to-review}}</button>        
     </form>
 </div>
 {{/assessment}}
