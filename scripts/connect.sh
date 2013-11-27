@@ -15,5 +15,5 @@ nohup ~/lein ring server-headless &
 echo 'cd /root/Connect && nohup /root/lein ring server-headless &' >> /etc/rc.local
 echo "Waiting server..."
 sleep 10
-
+echo "Done connect"
 
