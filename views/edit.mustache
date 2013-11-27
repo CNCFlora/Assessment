@@ -16,6 +16,56 @@
 </div>
 
 <!-- Modal -->
+<script type="text/javascript">
+        $(function(){ 
+            $("input[type=checkbox]").change(function() {
+                    var values = $("input[type=checkbox]:checked").map(function(i,e){ return e.value;}).toArray();
+                    var parts = {};
+                    for(var i in values) {
+                        var value   = values[i];
+                        var letter  = value[0];
+                        var number  = value[1];
+                        var letter2 = value[2];
+                        var roman   = value.substring(value.indexOf("(") + 1,value.lastIndexOf(")"));
+
+                        if(typeof parts[letter] == "undefined") parts[letter] = {};
+                        if(typeof number == "string") {
+                            if(typeof parts[letter][number] == "undefined") parts[letter][number] = {};
+                            if(typeof letter2 == "string") {
+                                if(typeof parts[letter][number][letter2] == "undefined") parts[letter][number][letter2] = [];
+                                if(typeof roman == "string" && roman.length >= 1) {
+                                    parts[letter][number][letter2].push(roman);
+                                }
+                            }
+                        }
+                    }
+                    var allParts = [];
+
+                    for(var letter in parts) {
+                        var pParts = [];
+                        for(var number in parts[letter]) {
+                            var nTpl = number ;
+                            for(var letter2 in parts[letter][number]) {
+                                var tpl = letter2 ;
+                                if(parts[letter][number][letter2].length >= 1) {
+                                    tpl += "("+parts[letter][number][letter2].join(",")+")";
+                                }
+                                nTpl += tpl ;
+                            }
+                            pParts.push(nTpl);
+                        }
+                        if(pParts.length >= 1) {
+                            allParts.push(letter+pParts.join("+"));
+                        } else {
+                            allParts.push(letter);
+                        }
+                    }
+
+                    var str = allParts.join(";");
+                    $("#txtbox").val(str);
+            })
+        });
+    </script>
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -25,13 +75,13 @@
             </div>
             <div class="modal-body" id="check">
 
-
+                <input type="text" id="text">
                 <div class="accordion" id="accordion2">
 
                     <div class="accordion-group">
 
                         <div class="accordion-heading">
-                            <a class="accordion-toggle" data-toggle="collapse" href="#collapseOne">Criterion A</a>
+                            <a class="accordion-toggle" data-toggle="collapse" href="#collapseOne">Criteria A</a>
                         </div>
                         <div id="collapseOne" class="accordion-body collapse in">
                             <div class="accordion-inner">
@@ -120,7 +170,7 @@
 
                     <div class="accordion-group">
                         <div class="accordion-heading">
-                            <a class="accordion-toggle" data-toggle="collapse" data-parent="" href="#collapseTwo">Criteria C</a>
+                            <a class="accordion-toggle" data-toggle="collapse" data-parent="" href="#collapseTwo">Criteria D</a>
                         </div>
                         <div id="collapseTwo" class="accordion-body collapse in">
                             <div class="accordion-inner">

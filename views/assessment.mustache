@@ -16,5 +16,77 @@
     <strong>{{strings.rationale}}</strong>:{{rationale}}
 </p>
 
-<p><a target='_blank' href="{{profiles}}/profile/{{profile}}">{{strings.specie-profile}}</a></p>
+{{#currentPopulationTrend}}
+	<p>
+		<strong>{{current-population-trend}}</strong>:{{currentPopulationTrend}}
+	</p>
+{{/currentPopulationTrend}}
 
+{{#information.dateLastSeen}}
+	<p>
+		<strong>{{strings.date-last-seen}}</strong>:{{information.dateLastSeen}}
+	</p>
+{{/information.dateLastSeen}}
+
+{{#information.generationLength}}
+<p>
+	<strong>{{strings.generation-length}}</strong>:{{information.generationLength}}
+</p>
+{{/information.generationLength}}
+
+{{#information.numberOfLocations}}
+<p>
+	<strong>{{strings.number-of-locations}}</strong>:{{information.numberOfLocations}}
+</p>
+{{/information.numberOfLocations}}
+
+{{#information.numberOfMatureIndividuals}}
+<p>
+	<strong>{{strings.number-of-mature-individuals}}</strong>:{{information.numberOfMatureIndividuals}}
+</p>
+{{/information.numberOfMatureIndividuals}}
+
+{{#information.populationDeclinePast}}
+<p>
+	<strong>{{strings.population-decline-past}}</strong>:{{information.populationDeclinePast}}
+</p>
+{{/information.populationDeclinePast}}
+
+{{#information.timePeriodOfPastDecline}}
+<p>
+	<strong>{{strings.time-period-of-past-decline}}</strong>:{{information.timePeriodOfPastDecline}}
+</p>
+{{/information.timePeriodOfPastDecline}}
+
+{{#information.populationDeclineFuture}}
+<p>
+	<strong>{{strings.population-decline-future}}</strong>:{{information.populationDeclineFuture}}
+</p>
+{{/information.populationDeclineFuture}}
+
+{{#information.timePeriodOfFutureDecline}}
+<p>
+	<strong>{{strings.time-period-of-future-decline}}</strong>:{{information.timePeriodOfFutureDecline}}
+</p>
+{{/information.timePeriodOfFutureDecline}}
+
+{{#information.possiblyExtinctCandidate}}
+	<p>
+		<strong>{{strings.possibly-extinct-candidate}}</strong>
+	</p>
+{{/information.possiblyExtinctCandidate}}
+
+{{#information.possiblyExtinct}}
+	<p>
+		<strong>{{strings.possibly-extinct}}</strong>
+	</p>
+{{/information.possiblyExtinct}}
+
+{{#information.severelyFragmented}}
+<p>
+	<strong>{{strings.severely-fragmented}}</strong>:{{information.severelyFragmented}}
+</p>
+{{/information.severelyFragmented}}
+
+
+<p><a target='_blank' href="{{profiles}}/profile/{{profile}}">{{strings.specie-profile}}</a></p>

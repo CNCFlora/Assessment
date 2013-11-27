@@ -39,5 +39,18 @@
     "review-assessment":"Rever avaliação",
     "add-comment":"Comentar",
     "no-review":"Sem revisao",
-    "specie-profile":"Perfil da espécie"
-}
+    "specie-profile":"Perfil da espécie",
+    "more-information":"Mais informações",
+    "current-population-trend":"Current Population Trend",
+    "date-last-seen":"Última data em que foi vista",
+    "generation-length":"Tempo de geração",
+    "number-of-locations":"Número de locais",
+    "number-of-mature-individuals":"Número de indivíduos maduros",
+    "population-decline-past": "Declínio populacional no passado",
+    "time-period-of-past-decline":"Período de tempo do declínio populacional passado",
+    "population-decline-future":"Declínio populacional no futuro",
+    "time-period-of-future-decline":"Período de tempo do declínio populacional futuro",
+    "possibly-extinct-candidate":"Candidata a Possivelmente Extinta",
+    "possibly-extinct":"Possivelmente Extinta",
+    "severely-fragmented":"Severamente Fragmentada"
+} 

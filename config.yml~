@@ -1,0 +1,18 @@
+development:
+    lang: "pt"
+    connect: "http://localhost:3000"
+    couchdb: "http://localhost:5984/cncflora"
+    profiles: "http://localhost/apps/profiles"
+    base: ""
+test:
+    lang: "pt"
+    connect: "http://localhost:3001"
+    couchdb: "http://localhost:5984/cncflora_test"
+    profiles: "http://localhost/apps/profiles"
+    base: ""
+production:
+    lang: "pt"
+    connect: "http://localhost:3000"
+    couchdb: "http://tester:tester@localhost:5984/cncflora"
+    profiles: "http://localhost/apps/profiles"
+    base: "assessment"
