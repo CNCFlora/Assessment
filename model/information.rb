@@ -4,7 +4,7 @@ class Information
 	def initialize()
 		@schema = {
 			:currentPopulationTrend => '',
-			:dateLastSeen => 0,
+			:dateLastSeen => '',
 			:generationLength => '',
 			:numberOfLocations => 0,
 			:numberOfMatureIndividuals => '',

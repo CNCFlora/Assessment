@@ -21,4 +21,5 @@ for f in $(ls -d */); do
     ./erica push $f $TEST
 done;
 cd ..
+echo "Done datahub"
 

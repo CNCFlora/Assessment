@@ -8,7 +8,8 @@ require_relative 'model/couchdb'
 require_relative 'model/assessment'
 
 config_file ENV['config'] || 'config.yml'
-enable :sessions
+use Rack::Session::Pool
+set :session_secret, '1flora2'
 
 if development? || test? 
     also_reload "model/*.rb"

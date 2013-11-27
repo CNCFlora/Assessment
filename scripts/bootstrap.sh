@@ -2,7 +2,7 @@
 
 # ruby, java, git, curl and couchdb
 apt-get update
-apt-get install ruby openjdk-7-jdk curl git couchdb -y
+apt-get install ruby openjdk-7-jdk curl git couchdb libgd2-noxpm -y
 
 cp /etc/rc.local /etc/rc.local.bkp
 sudo sed -e 's/exit/#exit/g' /etc/rc.local.bkp > /etc/rc.local
@@ -22,4 +22,5 @@ gem install bundler
 cd /vagrant
 bundle install
 [[ ! -e config.yml ]] && cp config.yml.dist config.yml
+echo "Done bootstrap"
 
