@@ -9,7 +9,7 @@
             <div class="onde-panel"></div>
             <p class="actions">
                 <button class="btn btn-success">{{strings.save}}</button>
-                <button class="btn btn-info" data-toggle="modal" data-target="#myModal">Criteria</button>
+                <button class="btn btn-info" data-toggle="modal" data-target="#criteria-modal">Criteria</button>
             </p>
         </fieldset>
     </form>
@@ -17,56 +17,57 @@
 
 <!-- Modal -->
 <script type="text/javascript">
-        $(function(){ 
-            $("input[type=checkbox]").change(function() {
-                    var values = $("input[type=checkbox]:checked").map(function(i,e){ return e.value;}).toArray();
-                    var parts = {};
-                    for(var i in values) {
-                        var value   = values[i];
-                        var letter  = value[0];
-                        var number  = value[1];
-                        var letter2 = value[2];
-                        var roman   = value.substring(value.indexOf("(") + 1,value.lastIndexOf(")"));
+    $(function(){ 
+        $("#criteria-modal input[type=checkbox]").change(function() {
+            var values = $("#criteria-modal  input[type=checkbox]:checked").map(function(i,e){ return e.value;}).toArray();
+            var parts = {};
+            for(var i in values) {
+                var value   = values[i];
+                var letter  = value[0];
+                var number  = value[1];
+                var letter2 = value[2];
+                var roman   = value.substring(value.indexOf("(") + 1,value.lastIndexOf(")"));
 
-                        if(typeof parts[letter] == "undefined") parts[letter] = {};
-                        if(typeof number == "string") {
-                            if(typeof parts[letter][number] == "undefined") parts[letter][number] = {};
-                            if(typeof letter2 == "string") {
-                                if(typeof parts[letter][number][letter2] == "undefined") parts[letter][number][letter2] = [];
-                                if(typeof roman == "string" && roman.length >= 1) {
-                                    parts[letter][number][letter2].push(roman);
-                                }
+                if(typeof parts[letter] == "undefined") parts[letter] = {};
+                if(typeof number == "string") {
+                    if(typeof parts[letter][number] == "undefined") parts[letter][number] = {};
+                    if(typeof letter2 == "string") {
+                        if(typeof parts[letter][number][letter2] == "undefined") parts[letter][number][letter2] = [];
+                            if(typeof roman == "string" && roman.length >= 1) {
+                                parts[letter][number][letter2].push(roman);
                             }
-                        }
                     }
-                    var allParts = [];
+                }
+            }
 
-                    for(var letter in parts) {
-                        var pParts = [];
-                        for(var number in parts[letter]) {
-                            var nTpl = number ;
-                            for(var letter2 in parts[letter][number]) {
-                                var tpl = letter2 ;
-                                if(parts[letter][number][letter2].length >= 1) {
-                                    tpl += "("+parts[letter][number][letter2].join(",")+")";
-                                }
-                                nTpl += tpl ;
-                            }
-                            pParts.push(nTpl);
+            var allParts = [];
+
+            for(var letter in parts) {
+                var pParts = [];
+                for(var number in parts[letter]) {
+                    var nTpl = number ;
+                    for(var letter2 in parts[letter][number]) {
+                        var tpl = letter2 ;
+                        if(parts[letter][number][letter2].length >= 1) {
+                            tpl += "("+parts[letter][number][letter2].join(",")+")";
                         }
-                        if(pParts.length >= 1) {
-                            allParts.push(letter+pParts.join("+"));
-                        } else {
-                            allParts.push(letter);
-                        }
+                        nTpl += tpl ;
                     }
+                    pParts.push(nTpl);
+                }
+                if(pParts.length >= 1) {
+                    allParts.push(letter+pParts.join("+"));
+                } else {
+                    allParts.push(letter);
+                }
+            }
 
-                    var str = allParts.join(";");
-                    $("#txtbox").val(str);
-            })
-        });
+            var str = allParts.join(";");
+            $("#txt_criteria").val(str);
+        })
+    });
     </script>
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal hide fade" id="criteria-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -75,15 +76,16 @@
             </div>
             <div class="modal-body" id="check">
 
-                <input type="text" id="text">
+                
+                <input type="text" id="txt_criteria" disabled>
                 <div class="accordion" id="accordion2">
 
                     <div class="accordion-group">
 
                         <div class="accordion-heading">
-                            <a class="accordion-toggle" data-toggle="collapse" href="#collapseOne">Criteria A</a>
+                            <a class="accordion-toggle" data-toggle="collapse" href="#collapseA">Criteria A</a>
                         </div>
-                        <div id="collapseOne" class="accordion-body collapse in">
+                        <div id="collapseA" class="accordion-body collapse in">
                             <div class="accordion-inner">
                                 <label class="checkbox inline"><input type="checkbox" id="A1a" value="A1a">A1a</label>
                                 <label class="checkbox inline"><input type="checkbox" id="A1b" value="A1b">A1b</label>
@@ -157,9 +159,23 @@
 
                     <div class="accordion-group">
                         <div class="accordion-heading">
-                            <a class="accordion-toggle" data-toggle="collapse" data-parent="" href="#collapseTwo">Criteria C</a>
+                            <a class="accordion-toggle" data-toggle="collapse" data-parent="" href="#collapseC">Criteria C</a>
                         </div>
-                        <div id="collapseTwo" class="accordion-body collapse in">
+                        <div id="collapseC" class="accordion-body collapse in">
+                            <div class="accordion-inner">
+                                <label class="checkbox inline"><input type="checkbox" id="D" value="C1">C1</label>
+                                <label class="checkbox inline"><input type="checkbox" id="D1" value="C2a(i)">C2a(i)</label>
+                                <label class="checkbox inline"><input type="checkbox" id="D2" value="C2a(ii)">C2a(ii)</label>
+                                <label class="checkbox inline"><input type="checkbox" id="D2" value="C2a(ii)">C2b</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-group">
+                        <div class="accordion-heading">
+                            <a class="accordion-toggle" data-toggle="collapse" data-parent="" href="#collapseD">Criteria D</a>
+                        </div>
+                        <div id="collapseD" class="accordion-body collapse in">
                             <div class="accordion-inner">
                                 <label class="checkbox inline"><input type="checkbox" id="D" value="D">D</label>
                                 <label class="checkbox inline"><input type="checkbox" id="D1" value="D1">D1</label>
@@ -170,58 +186,14 @@
 
                     <div class="accordion-group">
                         <div class="accordion-heading">
-                            <a class="accordion-toggle" data-toggle="collapse" data-parent="" href="#collapseTwo">Criteria D</a>
+                            <a class="accordion-toggle" data-toggle="collapse" data-parent="" href="#collapseE">Criteria E</a>
                         </div>
-                        <div id="collapseTwo" class="accordion-body collapse in">
+                        <div id="collapseE" class="accordion-body collapse in">
                             <div class="accordion-inner">
                                 <label class="checkbox inline"><input type="checkbox" id="E" value="E">E</label>
                             </div>
                         </div>
                     </div>
-
-                    <!--
-                        <div class="accordion" id="accordion2">
-                            <div class="accordion-group">
-                                <div class="accordion-heading">
-                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
-                                        Collapsible Group Item #1
-                                    </a>
-                                </div>
-                        
-                                <div id="collapseOne" class="accordion-body collapse in">
-                                    <div class="accordion-inner">
-                                        Anim pariatur cliche...
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="accordion-group">
-                                <div class="accordion-heading">
-                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
-                                        Collapsible Group Item #2
-                                    </a>
-                                </div>
-
-                                <div id="collapseTwo" class="accordion-body collapse">
-
-                                    <div class="accordion-inner">
-                                        Anim pariatur cliche...
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        ...
-                    -->
-
-
-
-
-
-
-
-
-
-
 
                 </div>            
             </div>
@@ -234,72 +206,13 @@
 </div><!-- /.modal -->
 <script type="text/javascript">
     
-    $(function(){ 
-        $('#myModal').modal({
-            keyboard: false
+    $(function(){         
+        $( "#saveCriteria" ).click(function() { 
+            $("input[id*='-criteria']").val( $("#txt_criteria").val() ) ;
+            $("#criteria-modal").modal('hide');
+            // $('#txt_criteria').value
         })
-        $( "#saveCriteria" ).click(function() {
-            var id;
-            var uppLetter = "";
-            var numberCriteria = "";
-            // var downLetter = "";
-            var criteria =[];
-            var letter = "";
-            var str = "";
-            
-            $("#collapseOne input:checkbox:checked").each( function( key, value ) {
-                // alert("id = "+$(this).attr('id'));
-            })
-
-
-            $("#check").click( function(){
-                if( $(this).is(':checked') ) alert("checked");
-            });
-
-        )}
-        // $("#myModal input:checkbox:checked").each( function( key, value ) {
-            // alert( key + ": " + value );
-        //     id = $(this).attr('id');
-
-        //     // if( id.substr(0,1) != uppLetter ){
-        //     //     uppLetter = id.substr(0,1);
-        //     //     numberCriteria = id.substr(1,1);
-        //     //     criteria[uppLetter] = [];
-        //     //     criteria[uppLetter][numberCriteria] = "";
-        //     // }
-        //     // if( id.substr(1,1) != numberCriteria ){
-        //     //     numberCriteria = id.substr(1,1);                
-        //     //         // alert(criteria[uppLetter][numberCriteria]);
-        //     // }
-        //     // criteria[uppLetter][numberCriteria] = criteria[uppLetter][numberCriteria] + id.substr(2,id.length-2);
-
-        //     if( id.substr(0,2) != letter ){
-        //         letter = id.substr(0,2);
-        //         uppLetter = id.substr(0,1);
-        //         numberCriteria = id.substr(1,1);
-        //         criteria[uppLetter] = [];
-        //         criteria[uppLetter][numberCriteria] = "";
-        //         // alert( myArray[0] );
-        //         // alert( id.substr(1,id.length-1) );
-        //     }
-        //     if( criteria[uppLetter].length > 0 ){
-        //         criteria[uppLetter][numberCriteria] = criteria[uppLetter][numberCriteria] + id.substr(2,id.length-2);
-        //     }
-        //     alert(criteria);
-        //     // myArray[1] = myArray[1] + id.substr(2,id.length-2);
-        //     // alert("id = "+myArray+" size = "+myArray[1]);
-        // })
-        // if( criteria[uppLetter].length > 0 ){
-            
-        //     for(var i in criteria){
-        //         alert(criteria[i]);
-        //     }
-
-
-        //     // alert("criteria = "+criteria[uppLetter][numberCriteria]);
-        // }        
-        // myArray[0] = "";
-        // myArray[1] = "";
+        
     })
 </script>
 <div class="span4">
