@@ -2,3 +2,4 @@ config.yml
 .vagrant
 *.swp
 *.war
+*~

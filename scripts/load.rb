@@ -9,7 +9,7 @@ count = 1
 taxons = {}
 profiles = {}
 assessments = {}
-File.open('checklist.csv', 'r') do |file|  
+File.open('config/checklist.csv', 'r') do |file|  
 	while line = file.gets  
     actualrow = line.gsub("\"","").split(";")
     taxon_id = "taxon#{count}"
