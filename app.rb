@@ -248,7 +248,7 @@ get "/workflow" do
             end
         }
     }
-    view :workflow, {:families => families}
+    view :workflow, {:families => families.uniq}
 end
 
 get "/workflow/:family/:status" do
