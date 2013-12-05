@@ -4,6 +4,8 @@ require 'sinatra/mustache'
 require "sinatra/reloader" if development? || test?
 require 'multi_json'
 require 'time'
+require 'uri-handler'
+require 'rest-client'
 require_relative 'model/couchdb'
 require_relative 'model/assessment'
 
@@ -40,7 +42,7 @@ def view(page,data)
 end
 
 get '/' do
-    view :index, {:foo =>"bar"}
+    view :index,{}
 end
 
 post '/login' do
@@ -56,7 +58,18 @@ post '/logout' do
 end
 
 get "/search" do
-    view :index,{}
+    uri =  "#{settings.es}/assessment/_search?q=#{params[:query].to_uri}"
+    r = RestClient.get uri
+    res = MultiJson.load(r.to_str,:symbolize_keys => true)[:hits][:hits].map { |hit| hit[:_source]}
+    view :index,{:result=>res,:query=>params[:query]}
+end
+
+get "/biblio" do
+    uri =  "#{settings.es}/biblio/_search?q=#{params[:term].to_uri}"
+    r = RestClient.get uri
+    res = MultiJson.load(r.to_str,:symbolize_keys => true)[:hits][:hits]
+                   .map { |hit| {:label=>hit[:_source][:fullCitation],:value=>hit[:_source][:_id]}}
+    MultiJson.dump res
 end
     
 get "/families" do
