@@ -2,7 +2,22 @@
 
 ## Deployment
 
-TODO
+### CI
+
+### Manual
+
+Create the WAR:
+
+    $ warble war
+
+Deploy assessments.war to tomcat
+
+    $ scp assessments.war cncflora@146.134.16.24:~/
+    $ ssh cncflora@146.134.16.24
+
+In the tomcat machine:
+
+    $ sudo cp assessments.war /var/lib/tomcat6/webapps
 
 ## Development
 

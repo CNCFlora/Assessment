@@ -79,5 +79,37 @@ $(function(){
             });
             return false;
         });
+
+        var got = {};
+        $(".field-add.item-add").click(function(){
+            setTimeout(function(){
+                $("input[type=text]").each(function(i,e){
+                    var input = $(e);
+                    if(!got[input.prop("name")] && (input.prop("name").match(/references\[[0-9]+\].citation$/)?true:false)) {
+                        got[input.prop("name")] = true;
+                        input.autocomplete({ source:base+"/biblio" });
+                        input.on('autocompleteselect',function(evt,ui){
+                            var input = $(evt.target);
+                            input.val(ui.item.label);
+                            $("#"+input.prop("id").replace("citation","ref")).val(ui.item.value);
+                            return false;
+                        });
+                    }
+                });
+            },1000);
+        });
+
+        $("input[type=text]").each(function(i,e){
+            var input = $(e);
+            if((input.prop("name").match(/references\[[0-9]+\].citation$/)?true:false)) {
+                got[input.prop("name")] = true;
+                input.on('autocompleteselect',function(evt,ui){
+                    var input = $(evt.target);
+                    input.val(ui.item.label);
+                    $("#"+input.prop("id").replace("citation","ref")).val(ui.item.value);
+                    return false;
+                });
+            }
+        });
     }
 });
