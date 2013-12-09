@@ -1,0 +1,44 @@
+{{> header}}
+
+<div class="span8">
+    <ul class="nav nav-tabs">
+        <li class='active'><a href="#not_open" data-toggle="tab">{{strings.not-started}}</a></li>        
+        <li><a href="#open" data-toggle="tab">{{strings.open}}</a></li>
+        <li><a href="#review" data-toggle="tab">{{strings.review}}</a></li>
+        <li><a href="#comments" data-toggle="tab">{{strings.comments}}</a></li>        
+        <li><a href="#published" data-toggle="tab">{{strings.done}}</a></li>
+    </ul>
+    <div class="tab-content">
+        {{#status}}
+        <div id="{{status}}" class='tab-pane'>
+            {{^families}}
+            <p>Vazio</p>
+            {{/families}}
+            {{#families}}
+                <div class="accordion" id="{{status}}-in">
+                    <div class="accordion-group">
+                        <div class="accordion-heading">
+                            <a class="accordion-toggle" data-toggle="collapse"
+                                data-parent="#{{status}}-in" href="#{{status}}-{{name}}">{{name}} ({{count}}/{{total}})</a> 
+                        </div>
+                        <div id="{{status}}-{{name}}" class="accordion-body collapse in">
+                            <div class="accordion-inner">
+                                <ul>
+                                {{#species}}
+                                <li><a href="/specie/{{lsid}}"><i>{{scientificName}}</i></a></li>
+                                {{/species}}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {{/families}}
+        </div>
+        {{/status}}
+    </div>
+</div>
+<script type="text/javascript">
+    $(".collapse").collapse();
+    $(".tab-pane:eq(0)").addClass('active');
+</script>
+{{> footer}}    

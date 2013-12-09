@@ -251,6 +251,97 @@ get "/workflow" do
     view :workflow, {:families => families}
 end
 
+get "/control" do
+
+
+    docs_assessment = db.view('assessments','by_taxon_lsid',{:reduce=>false})
+    docs_profile = db.view('species_profiles','by_taxon_lsid',{:reduce=>false})
+
+
+    status = {
+                :not_open=>{ :status=>"not_open",:families=>[] },
+                :open=>{ :status=>"open",:families=>[] },
+                :review=>{ :status=>"review",:families=>[] },
+                :comments=>{ :status=>"comments",:families=>[] },
+                :published=>{ :status=>"published",:families=>[] }
+            }
+
+
+    lsid = []
+    family = {}
+    docs_assessment.each do |assessment|
+        if !status[ assessment[:value][:metadata][:status].to_sym ][:families].find{ |f| f[:name] == assessment[:value][:taxon][:family] }
+            family = { :name=>assessment[:value][:taxon][:family],:species=>[],:count=>0,:total=>0 }
+            status[ assessment[:value][:metadata][:status].to_sym ][:families].push( family )
+        end
+        specie = { :lsid=>assessment[:value][:taxon][:lsid], :scientificName=>assessment[:value][:taxon][:scientificName] }
+        f = status[ assessment[:value][:metadata][:status].to_sym ][:families].find{ |f| f[:name] == assessment[:value][:taxon][:family] }
+        if f
+            f[:species].push(specie)
+            f[:count] = f[:count] + 1
+            # f[:total] = f[:total] + 1
+        end
+
+        lsid.push( assessment[:value][:taxon][:lsid] )
+        
+    end    
+
+    docs_profile.each do |profile|
+        if !lsid.include? profile[:value][:taxon][:lsid]
+            if !status[ :not_open ][:families].find{ |f| f[:name] == profile[:value][:taxon][:family] }
+                family = { :name=>profile[:value][:taxon][:family],:species=>[],:count=>0,:total=>0 }
+                status[ :not_open ][:families].push( family )
+            end    
+            specie = { :lsid=>profile[:value][:taxon][:lsid], :scientificName=>profile[:value][:taxon][:scientificName] }
+            f = status[ :not_open ][:families].find{ |f| f[:name] == profile[:value][:taxon][:family] }
+            if f
+                f[:species].push(specie)
+                f[:count] = f[:count] + 1
+            end            
+        end
+    end
+
+    families = {}
+    docs_profile.each do |profile|
+        if !families.keys.include? profile[:value][:taxon][:family]
+            families[ profile[:value][:taxon][:family] ] = 0
+        end
+        families[ profile[:value][:taxon][:family] ] = families[ profile[:value][:taxon][:family] ] + 1
+    end
+
+    families.each do |key,value|
+        not_open = status[:not_open][:families].find{ |f| f[:name] == key }
+        if not_open
+            not_open[:total] = value
+        end
+        open = status[:open][:families].find{ |f| f[:name] == key }
+        if open
+            open[:total] = value        
+        end
+        review = status[:review][:families].find{ |f| f[:name] == key }
+        if review
+            review[:total] = value
+        end
+        comments = status[:comments][:families].find{ |f| f[:name] == key }
+        if comments
+            comments[:total] = value
+        end
+        published = status[:published][:families].find{ |f| f[:name] == key }
+        if published
+            published[:total] = value
+        end
+    end
+
+
+    sorted = status[:not_open][:families].sort { |family1,family2| family1[:name] <=> family2[:name] }    
+    status[:not_open][:families] = sorted
+
+    view :control, {:status => status.values}
+
+
+end
+
+
 get "/workflow/:family/:status" do
     list = db.view('assessments','by_family_and_status',{:reduce=>false,:key=>[params[:family],params[:status]]})
     data = []
