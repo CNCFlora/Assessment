@@ -31,7 +31,7 @@ allows = allows.uniq.map { | name | name.strip }
 def view(page,data)
     @config = Sinatra::Application.settings;
     @strings = MultiJson.load(File.read("locales/#{@config.lang}.json"),:symbolize_keys => true)
-    @config_hash = {:connect => @config.connect, :lang => @config.lang, :couchdb => @config.couchdb, :base => @config.base, :profiles=>@config.profiles}
+    @config_hash = {:connect => @config.connect, :lang => @config.lang, :couchdb => @config.couchdb, :base => @config.base, :profiles=>@config.profiles,:biblio=>@config.biblio}
     @session_hash = {:logged => session[:logged] || false, :user => session[:user] || '{}'}
     if session[:logged] 
         session[:user][:roles].each do | role |
@@ -167,15 +167,16 @@ post "/assessment/:id" do
 
     assessment[:metadata][:modified] = Time.now.to_i
 
-    data  = MultiJson.load(params[:data], :symbolize_keys=>true)
-    data.each{ |key, value|
-        assessment[key] = value
-    }
+    data = MultiJson.load(params[:data], :symbolize_keys=>true)
+    data[:_rev] = assessment[:_rev]
+    data[:_id] = assessment[:_id]
+    data[:metadata] = assessment[:metadata]
+    data[:taxon] = assessment[:taxon]
 
-    db.update(assessment)
+    db.update(data)
 
     content_type :json
-    assessment.to_json
+    data.to_json
 end
 
 post "/assessment/:id/status/:status" do    
