@@ -173,8 +173,13 @@ post "/assessment/:id" do
     data[:metadata] = assessment[:metadata]
     data[:taxon] = assessment[:taxon]
     data[:profile] = assessment[:profile]
-    data[:review] = assessment[:review]
-    data[:comments] = assessment[:comments]
+
+    if assessment[:review]
+        data[:review] = assessment[:review]
+    end
+    if assessment[:comments]
+        data[:comments] = assessment[:comments]
+    end
 
     db.update(data)
 
