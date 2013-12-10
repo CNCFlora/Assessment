@@ -279,47 +279,49 @@ get "/control" do
                 :published=>{ :status=>"published",:families=>[] }
             }
 
-
     lsid = []
     family = {}
     docs_assessment.each do |assessment|
-        if !status[ assessment[:value][:metadata][:status].to_sym ][:families].find{ |f| f[:name] == assessment[:value][:taxon][:family] }
-            family = { :name=>assessment[:value][:taxon][:family],:species=>[],:count=>0,:total=>0 }
-            status[ assessment[:value][:metadata][:status].to_sym ][:families].push( family )
-        end
-        specie = { :lsid=>assessment[:value][:taxon][:lsid], :scientificName=>assessment[:value][:taxon][:scientificName] }
-        f = status[ assessment[:value][:metadata][:status].to_sym ][:families].find{ |f| f[:name] == assessment[:value][:taxon][:family] }
-        if f
-            f[:species].push(specie)
-            f[:count] = f[:count] + 1
-            # f[:total] = f[:total] + 1
-        end
-
-        lsid.push( assessment[:value][:taxon][:lsid] )
-        
-    end    
-
-    docs_profile.each do |profile|
-        if !lsid.include? profile[:value][:taxon][:lsid]
-            if !status[ :not_open ][:families].find{ |f| f[:name] == profile[:value][:taxon][:family] }
-                family = { :name=>profile[:value][:taxon][:family],:species=>[],:count=>0,:total=>0 }
-                status[ :not_open ][:families].push( family )
-            end    
-            specie = { :lsid=>profile[:value][:taxon][:lsid], :scientificName=>profile[:value][:taxon][:scientificName] }
-            f = status[ :not_open ][:families].find{ |f| f[:name] == profile[:value][:taxon][:family] }
+        if allows.include? assessment[:value][:taxon][:scientificName]
+            if !status[ assessment[:value][:metadata][:status].to_sym ][:families].find{ |f| f[:name] == assessment[:value][:taxon][:family] }
+                family = { :name=>assessment[:value][:taxon][:family],:species=>[],:count=>0,:total=>0 }
+                status[ assessment[:value][:metadata][:status].to_sym ][:families].push( family )
+            end
+            specie = { :lsid=>assessment[:value][:taxon][:lsid], :scientificName=>assessment[:value][:taxon][:scientificName] }
+            f = status[ assessment[:value][:metadata][:status].to_sym ][:families].find{ |f| f[:name] == assessment[:value][:taxon][:family] }
             if f
                 f[:species].push(specie)
                 f[:count] = f[:count] + 1
+            end
+            lsid.push( assessment[:value][:taxon][:lsid] )
+        end
+    end    
+
+    docs_profile.each do |profile|
+        if allows.include? profile[:value][:taxon][:scientificName]
+            if !lsid.include? profile[:value][:taxon][:lsid]
+                if !status[ :not_open ][:families].find{ |f| f[:name] == profile[:value][:taxon][:family] }
+                    family = { :name=>profile[:value][:taxon][:family],:species=>[],:count=>0,:total=>0 }
+                    status[ :not_open ][:families].push( family )
+                end    
+                specie = { :lsid=>profile[:value][:taxon][:lsid], :scientificName=>profile[:value][:taxon][:scientificName] }
+                f = status[ :not_open ][:families].find{ |f| f[:name] == profile[:value][:taxon][:family] }
+                if f
+                    f[:species].push(specie)
+                    f[:count] = f[:count] + 1
+                end
             end            
         end
     end
 
     families = {}
     docs_profile.each do |profile|
-        if !families.keys.include? profile[:value][:taxon][:family]
-            families[ profile[:value][:taxon][:family] ] = 0
+        if allows.include? profile[:value][:taxon][:scientificName]
+            if !families.keys.include? profile[:value][:taxon][:family]
+                families[ profile[:value][:taxon][:family] ] = 0
+            end
+            families[ profile[:value][:taxon][:family] ] = families[ profile[:value][:taxon][:family] ] + 1
         end
-        families[ profile[:value][:taxon][:family] ] = families[ profile[:value][:taxon][:family] ] + 1
     end
 
     families.each do |key,value|
