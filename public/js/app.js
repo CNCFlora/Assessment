@@ -56,7 +56,7 @@ $(function(){
                 } else {
                     for(var i in r) {
                         $("#"+status+" ul").append('<li><i class="icon-leaf"></i>'
-                                                  +'<a href="'+base+'/assessment/'+r[i]._id+'">'
+                                                  +'<a href="'+base+'/specie/'+r[i].taxon.lsid+'">'
                                                   +r[i].taxon.scientificName+'</a></li>');
                     }
                 }
