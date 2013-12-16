@@ -270,6 +270,7 @@ get "/workflow" do
             end
         }
     }
+    families = families.sort
     view :workflow, {:families => families.uniq}
 end
 
@@ -367,9 +368,28 @@ end
 
 
 get "/workflow/:family/:status" do
-    list = db.view('assessments','by_family_and_status',{:reduce=>false,:key=>[params[:family],params[:status]]})
     data = []
-    list.each { | row | data.push row[:value] } 
+    
+    if params[:status] == "empty"
+        lsid_assessments = []
+        list = db.view( 'assessments','by_family',{ :reduce=>false,:key=>params[:family] } )
+        list.each do |item|
+            lsid_assessments.push( item[:value][:taxon][:lsid] )
+        end
+
+        profiles = db.view( 'species_profiles','by_family',{ :reduce=>false,:key=>params[:family] } )
+
+        profiles.each do |profile|
+            if !lsid_assessments.include? profile[:value][:taxon][:lsid]
+                data.push( profile[:value] )
+            end
+        end
+    else
+        list = db.view( 'assessments','by_family_and_status',{ :reduce=>false,:key=>[params[:family],params[:status]] } ) 
+        list.each { | row | data.push row[:value] } 
+    end
+
+    data = data.sort { |specie1,specie2| specie1[:taxon][:scientificName] <=> specie2[:taxon][:scientificName] }
     content_type :json
     MultiJson.dump data
 end
