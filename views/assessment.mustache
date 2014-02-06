@@ -15,7 +15,6 @@
 <p>
     <strong>{{strings.rationale}}</strong>:{{rationale}}
 </p>
-
 {{#currentPopulationTrend}}
 	<p>
 		<strong>{{current-population-trend}}</strong>:{{currentPopulationTrend}}
@@ -87,5 +86,72 @@
     <li><a href="{{biblio}}/biblio/{{ref}}">{{citation}}</a></li>
     {{/references}}
 </ul>
+
+<p>
+{{#specie_profile}}
+    <h4>{{strings.uses}}</h4>
+	    {{#uses}}
+	        <p><strong>{{strings.use}}</strong>: {{use}}</p>
+	        <p><strong>{{strings.resource}}</strong>: {{resource}}</p>
+	        <p><strong>{{strings.provenance}}</strong>: {{provenance}}</p>
+	        <p>{{details}}</p>
+	        <ul>
+	            {{#references}}
+	            <li><a href="/../biblio/biblio/{{ref}}">{{citation}}</a></li>
+	            {{/references}}
+	        </ul>
+	    {{/uses}}
+	    {{^uses}}
+	    <p>N/A</p>
+	    {{/uses}}
+	{{strings.threats}}
+	    {{#threats}}
+	        <p><strong>{{strings.threat}}</strong>: {{threat}}</p>
+	        <p><strong>{{strings.incidence}}</strong>: {{incidence}}</p>
+	        <p><strong>{{strings.severity}}</strong>: {{severity}}</p>
+	        {{#reversible}} <p><strong>{{strings.reversible}}</strong></p>{{/reversible}}
+	        {{#ended}} <p><strong>{{strings.ended}}</strong></p>{{/ended}}
+	        <p>
+	            <strong>{{strings.timing}}</strong>:
+	            <ul>
+	                {{#timing}}
+	                <li>{{.}}</li>
+	                {{/timing}}
+	            </ul>
+	        </p>
+	        <p>
+	            <strong>{{strings.decline}}</strong>:
+	            <ul>
+	                {{#decline}}
+	                <li>{{.}}</li>
+	                {{/decline}}
+	            </ul>
+	        </p>
+	        <p>{{details}}</p>
+	        <ul>
+	            {{#references}}
+	            <li><a href="/../biblio/biblio/{{ref}}">{{citation}}</a></li>
+	            {{/references}}
+	        </ul>
+	    {{/threats}}
+	    {{^threats}}
+	    <p>N/A</p>
+	    {{/threats}}
+	    <h4>{{strings.conservation-actions}}</h4>
+	    {{#actions}}
+	        <p><strong>{{strings.action}}</strong>: {{action}}</p>
+	        <p><strong>{{strings.situation}}</strong>: {{situation}}</p>
+	        <p>{{details}}</p>
+	        <ul>
+	            {{#references}}
+	            <li><a href="/../biblio/biblio/{{ref}}">{{citation}}</a></li>
+	            {{/references}}
+	        </ul>
+	    {{/actions}}
+	    {{^actions}}
+	    <p>N/A</p>
+	    {{/actions}}
+</p>
+{{/specie_profile}}
 
 <p><a target='_blank' href="{{profiles}}/profile/{{profile}}">{{strings.specie-profile}}</a></p>

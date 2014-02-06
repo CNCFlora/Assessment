@@ -70,6 +70,10 @@ $(function(){
         form.render(schema,data,{collapsedCollapsibles: true});
         $("input[id*='-assessor']").attr("readonly",true);
         $("input[id*='-evaluator']").attr("readonly",true);
+        $("input[id*='-criteria']").attr("readonly",true);
+        $("input[id*='-criteria']").click(function(evt){
+            $("#btn-criteria").click()
+        })
         $("#data").submit(function(e){
             e.preventDefault();
             $("#data .actions button").attr("disabled",true).addClass("disabled").text("Wait...");
