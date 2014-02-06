@@ -128,7 +128,11 @@ post "/assessment" do
 end
 
 get "/assessment/:id" do
+
     assessment = db.get(params[:id])
+
+    profile = db.get(assessment[:profile])
+    
     assessment[:metadata][:created_date] = Time.at(assessment[:metadata][:created]).to_s[0..9]
     assessment[:metadata][:modified_date] = Time.at(assessment[:metadata][:modified]).to_s[0..9]
 
@@ -137,7 +141,8 @@ get "/assessment/:id" do
     end
 
     assessment["status-#{assessment[:metadata][:status]}"] = true
-    view :view, {:assessment => assessment}
+    view :view, {:assessment => assessment, :specie_profile => profile}
+
 end
 
 get "/assessment/:id/edit" do
