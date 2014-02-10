@@ -30,7 +30,7 @@ allows = allows.uniq.map { | name | name.strip }
 
 def view(page,data)
     @config = Sinatra::Application.settings;
-    @strings = MultiJson.load(File.read("locales/#{@config.lang}.json"),:symbolize_keys => true)
+    @strings = MultiJson.load(File.read("locales/#{@config.lang}.json", :encoding => "BINARY"),:symbolize_keys => true)
     @config_hash = {:connect => @config.connect, :lang => @config.lang, :couchdb => @config.couchdb, :base => @config.base, :profiles=>@config.profiles,:biblio=>@config.biblio}
     @session_hash = {:logged => session[:logged] || false, :user => session[:user] || '{}'}
     if session[:logged] 
