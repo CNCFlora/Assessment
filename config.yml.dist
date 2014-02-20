@@ -1,24 +1,15 @@
 development:
+    etcd: "http://192.168.50.2:4001"
+    couchdb_base: "cncflora"
     lang: "pt"
-    connect: "http://localhost:3001"
-    couchdb: "http://localhost:5984/cncflora"
-    profiles: "http://localhost/apps/profiles"
-    biblio: "http://localhost/apps/biblio"
-    es: 'http://localhost:9200/cncflora'
     base: ""
 test:
+    etcd: "http://192.168.50.2:4001"
     lang: "pt"
-    connect: "http://localhost:3001"
-    couchdb: "http://localhost:5984/cncflora_test"
-    profiles: "http://localhost/apps/profiles"
-    biblio: "http://localhost/apps/biblio"
-    es: 'http://localhost:9200/cncflora'
+    couchdb_base: "cncflora_test"
     base: ""
 production:
+    etcd: "http://192.168.50.2:4001"
+    couchdb_base: "cncflora"
     lang: "pt"
-    connect: "http://localhost:3000"
-    couchdb: "http://tester:tester@localhost:5984/cncflora"
-    profiles: "http://localhost/apps/profiles"
-    biblio: "http://localhost/apps/biblio"
-    es: 'http://localhost:9200/cncflora'
     base: ""

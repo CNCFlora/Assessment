@@ -17,7 +17,23 @@ if development? || test?
     also_reload "model/*.rb"
 end
 
-db = CouchDB.new Sinatra::Application.settings.couchdb
+config =  Sinatra::Application.settings
+
+if config.etcd
+    etcd = MultiJson.load(RestClient.get("#{config.etcd}/v2/keys/?recursive=true"),:symbolize_keys=>true) 
+    etcd[:node][:nodes].each {|node|
+        if node.has_key?(:nodes)
+            node[:nodes].each {|entry|
+                if entry.has_key?(:value) && entry.value.lentgh >= 1 
+                    config[entry.key.gsub("/","_").lower().substr(1)] = entry.value
+                end
+            }
+        end
+    }
+end
+
+
+db = CouchDB.new "http://#{config.couchdb_host}:#{config.couchdb_port}/#{config.couchdb_base}"
 
 allows = []
 File.foreach("config/checklist.csv") do |csv_line|
