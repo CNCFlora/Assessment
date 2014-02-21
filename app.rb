@@ -17,23 +17,28 @@ if development? || test?
     also_reload "model/*.rb"
 end
 
-config =  Sinatra::Application.settings
+@config =  Sinatra::Application.settings
 
-if config.etcd
-    etcd = MultiJson.load(RestClient.get("#{config.etcd}/v2/keys/?recursive=true"),:symbolize_keys=>true) 
+if @config.etcd
+    etcd = MultiJson.load(RestClient.get("#{@config.etcd}/v2/keys/?recursive=true"),:symbolize_keys=>true) 
     etcd[:node][:nodes].each {|node|
         if node.has_key?(:nodes)
             node[:nodes].each {|entry|
-                if entry.has_key?(:value) && entry.value.lentgh >= 1 
-                    config[entry.key.gsub("/","_").lower().substr(1)] = entry.value
+                if entry.has_key?(:value) && entry[:value].length >= 1 
+										key = entry[:key].gsub("/","_").downcase()[1..-1]
+										set key.to_sym, entry[:value]
                 end
             }
         end
     }
 end
 
+@config.set("connect" , "http://#{@config.connect_host}:#{@config.connect_port}")
+@config.set("couchdb" , "http://#{@config.couchdb_host}:#{@config.couchdb_port}")
+@config.set("profiles" , "http://#{@config.profiles_host}:#{@config.profiles_port}")
+#config.set("biblio" , "http://#{config.biblio_host}:#{config.biblio_port}")
 
-db = CouchDB.new "http://#{config.couchdb_host}:#{config.couchdb_port}/#{config.couchdb_base}"
+db = CouchDB.new "http://#{@config.couchdb_host}:#{@config.couchdb_port}/#{@config.couchdb_base}"
 
 allows = []
 File.foreach("config/checklist.csv") do |csv_line|
@@ -45,9 +50,15 @@ end
 allows = allows.uniq.map { | name | name.strip }
 
 def view(page,data)
-    @config = Sinatra::Application.settings;
+@config =  Sinatra::Application.settings
     @strings = MultiJson.load(File.read("locales/#{@config.lang}.json", :encoding => "BINARY"),:symbolize_keys => true)
-    @config_hash = {:connect => @config.connect, :lang => @config.lang, :couchdb => @config.couchdb, :base => @config.base, :profiles=>@config.profiles,:biblio=>@config.biblio}
+    @config_hash = { :connect => @config.connect,
+									   :lang => @config.lang, 
+										 :couchdb => @config.couchdb, 
+										 :base => @config.base, 
+										 :profiles=>@config.profiles,
+										 #:biblio=>config.biblio 
+									}
     @session_hash = {:logged => session[:logged] || false, :user => session[:user] || '{}'}
     if session[:logged] 
         session[:user][:roles].each do | role |
@@ -173,8 +184,7 @@ get "/assessment/:id/edit" do
     schema[:properties].delete(:dateOfAssessment)
     schema[:properties].delete(:review)
     schema[:properties].delete(:comments)
-
-    view :edit, {:assessment => assessment,:schema=>schema.to_json,:data => assessment.to_json}
+    view :edit, {:assessment => assessment,:schema=>MultiJson.dump(schema),:data => MultiJson.dump(assessment)}
 end
 
 post "/assessment/:id" do    
@@ -205,7 +215,7 @@ post "/assessment/:id" do
     db.update(data)
 
     content_type :json
-    data.to_json
+    MultiJson.dump(data)
 end
 
 post "/assessment/:id/status/:status" do    
