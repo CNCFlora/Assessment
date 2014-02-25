@@ -2,7 +2,7 @@
 
 # ruby, java, git, curl and couchdb
 apt-get update
-apt-get install default-jre-headless curl git couchdb libgd2-noxpm tmux vim libxslt-dev libxml2-dev ruby ruby1.9.1-dev -y
+apt-get install default-jre-headless curl git couchdb libgd2-noxpm tmux vim libxslt-dev libxml2-dev ruby ruby1.9.1-dev libssl-dev -y
 
 # startup setup
 sed -i -e 's/exit/#exit/g' /etc/rc.local
@@ -25,6 +25,7 @@ su vagrant -c 'git clone https://github.com/sstephenson/ruby-build.git ~/.rbenv/
 # initial config of app
 cd /vagrant
 rbenv install $(cat .ruby-version)
+cd .
 bundle install
 [[ ! -e config.yml ]] && cp config.yml.dist config.yml
 
