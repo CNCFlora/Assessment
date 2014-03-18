@@ -2,11 +2,12 @@ ENV['RACK_ENV'] = 'test'
 
 require_relative '../app'
 require_relative '../model/assessment'
-require_relative '../model/couchdb'
 
 require 'rspec'
 require 'rack/test'
 require 'rspec-html-matchers'
+require 'couchdb_basic'
+require 'json'
 
 include Rack::Test::Methods
 
@@ -14,10 +15,32 @@ def app
     Sinatra::Application
 end
 
+@config =  Sinatra::Application.settings
+
+if @config.etcd
+    etcd = MultiJson.load(RestClient.get("#{@config.etcd}/v2/keys/?recursive=true"),:symbolize_keys=>true) 
+    etcd[:node][:nodes].each {|node|
+        if node.has_key?(:nodes)
+            node[:nodes].each {|entry|
+                if entry.has_key?(:value) && entry[:value].length >= 1 
+										key = entry[:key].gsub("/","_").downcase()[1..-1]
+										set key.to_sym, entry[:value]
+                end
+            }
+        end
+    }
+end
+
+@config.set("connect" , "http://#{@config.connect_host}:#{@config.connect_port}")
+@config.set("couchdb" , "http://#{@config.couchdb_host}:#{@config.couchdb_port}/#{@config.couchdb_base}")
+@config.set("profiles" , "http://#{@config.profiles_host}:#{@config.profiles_port}")
+
 describe "Web app" do
 
     before(:all) do
-        @couch = CouchDB.new Sinatra::Application.settings.couchdb
+        
+        @couch = Couchdb.new Sinatra::Application.settings.couchdb
+        puts "@couch = #{@couch}"
 
         # remember to push the datahub...
 
