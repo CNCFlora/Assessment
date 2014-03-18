@@ -6,7 +6,7 @@ require 'multi_json'
 require 'time'
 require 'uri-handler'
 require 'rest-client'
-require_relative 'model/couchdb'
+require 'couchdb_basic'
 require_relative 'model/assessment'
 
 config_file ENV['config'] || 'config.yml'
@@ -38,7 +38,7 @@ end
 @config.set("profiles" , "http://#{@config.profiles_host}:#{@config.profiles_port}")
 #config.set("biblio" , "http://#{config.biblio_host}:#{config.biblio_port}")
 
-db = CouchDB.new "http://#{@config.couchdb_host}:#{@config.couchdb_port}/#{@config.couchdb_base}"
+db = Couchdb.new "http://#{@config.couchdb_host}:#{@config.couchdb_port}/#{@config.couchdb_base}"
 
 allows = []
 File.foreach("config/checklist.csv") do |csv_line|

@@ -40,7 +40,6 @@ describe "Web app" do
     before(:all) do
         
         @couch = Couchdb.new Sinatra::Application.settings.couchdb
-        puts "@couch = #{@couch}"
 
         # remember to push the datahub...
 
