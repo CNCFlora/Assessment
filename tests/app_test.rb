@@ -186,6 +186,16 @@ describe "Web app" do
         @couch.delete(assessment)
     end
 
+    it "Can change status of assessment" do
+        post "/assessment", {:lsid=>@taxon_id}
+        id = last_response.headers["location"].split("/").last
+
+        post "/assessment/#{id}/change", { :status=>"comment" } 
+        assessment = @couch.get(id)
+        expect(assessment[:metadata][:status]).to eq("comment")
+        @couch.delete(assessment)
+    end
+
     it "Can list assessment at each status for given family" do
         post "/assessment", {:lsid=>@taxon_id}
         id = last_response.headers["location"].split("/").last

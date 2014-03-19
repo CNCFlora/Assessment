@@ -425,3 +425,9 @@ get "/workflow/:family/:status" do
     MultiJson.dump data
 end
 
+post "/assessment/:id/change" do
+    assessment = db.get(params[:id])
+    assessment[:metadata][:status] = params[:status]
+    db.update(assessment)
+    redirect to("/assessment/#{assessment[:_id]}")
+end

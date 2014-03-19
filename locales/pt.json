@@ -68,5 +68,7 @@
     "situation":"Situação",
     "use":"Uso",
     "resource":"Recurso",
-    "provenance":"Proveniência"
+    "provenance":"Proveniência",
+    "change-status":"Mudar etapa",
+    "send":"Enviar"
 } 

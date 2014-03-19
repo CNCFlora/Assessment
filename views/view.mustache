@@ -38,6 +38,22 @@
         {{#status-comments}}
             <a href="{{base}}/assessment/{{_id}}/comment" class="btn btn-mini">{{strings.comment}}</a>
         {{/status-comments}}
+
+        {{#role-admin}}
+        <form action="{{base}}/assessment/{{_id}}/change" method='POST'>
+              <fieldset>
+                  <legend>{{strings.change-status}}</legend>
+                  <select name="status">
+                      <option>open</option>
+                      <option>review</option>
+                      <option>comments</option>
+                      <option>published</option>
+                 </select>
+                  <button class="btn btn-primary">{{strings.send}}</button>
+              </fieldset>
+          </form>
+        {{/role-admin}}
+
     {{/logged}}
 </div>
 {{/assessment}}
