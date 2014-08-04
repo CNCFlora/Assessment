@@ -1,0 +1,16 @@
+{{> header}}
+
+<div class="col-md-12">
+    <h2>{{family}}</h2>
+    <ul>
+        {{#species}}
+            <li>
+                <i class='icon-leaf'></i>
+                <i><a href="{{base}}/specie/{{scientificNameWithoutAuthorship}}">{{scientificNameWithoutAuthorship}}</a></i>
+                <small>{{scientificNameAuthorship}}</small>
+            </li>
+        {{/species}}
+    </ul>
+</div>
+
+{{> footer}}

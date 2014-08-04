@@ -1,0 +1,61 @@
+{{> header}}
+
+{{#assessment}}
+<div class="col-md-8">
+    {{> assessment}}
+    <form action="{{base}}/assessment/{{_id}}/comment" method="POST" id='comment-form' class='form'>
+        <fieldset>
+            <legend>{{strings.add-comment}}</legend>
+            <p><textarea id="comment" name="comment" rows="10" cols="30" class='form-control'></textarea></p>
+            <p><button type='submit' class='btn btn-success'>{{strings.comment}}</button></p>
+        </fieldset>
+    </form>
+</div>
+
+<div class="col-md-4">
+
+    <h4>{{strings.metadata}}</h4>
+    {{#metadata}}
+    {{> metadata}}
+    {{/metadata}}
+
+    <h4>{{strings.last-review}}</h4>
+    {{#review}}
+    <p><strong>({{evaluator}}) {{review.status}}</strong>: {{review.comment}}</p>
+    {{/review}}
+    {{^review}}
+    <p>{{strings.no-review}}</p>
+    {{/review}}
+
+    <h4>{{strings.comments}}</h4>
+    {{#comments}}
+    <p>
+        <strong>{{creator}}</strong>: {{comment}}
+        {{#owner}}
+        <a href="{{base}}/assessment/{{_id}}/comment/{{created}}/delete" class="glyphicon glyphicon-trash"></a>
+        {{/owner}}
+    </p>
+    {{/comments}}
+    {{^comments}}
+    <p>{{strings.no-comments}}</p>
+    {{/comments}}
+
+    {{#role-assessor}}
+    {{#owner}}
+    <form action="{{base}}/assessment/{{_id}}/status/open" method="POST" class='send-to'>
+        <p>
+            <button class="btn btn-success">{{strings.send-to-open}}</button>
+        </p>
+    </form>
+    <form action="{{base}}/assessment/{{_id}}/status/published" method="POST" class='send-to'>
+        <p>
+            <button class="btn btn-success">{{strings.send-to-published}}</button>
+        </p>
+    </form>
+    {{/owner}}
+    {{/role-assessor}}
+</div>
+{{/assessment}}
+
+{{> footer}}
+

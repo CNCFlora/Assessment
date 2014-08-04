@@ -1,0 +1,14 @@
+{{> header}}
+
+<div class="col-md-12">
+    <h2>{{strings.families}}</h2>
+    <ul>
+        {{#families}}
+            <li>
+                <a href="{{base}}/family/{{.}}">{{.}}</a>
+            </li>
+        {{/families}}
+    </ul>
+</div>
+
+{{> footer}}

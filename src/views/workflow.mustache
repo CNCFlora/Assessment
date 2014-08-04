@@ -1,0 +1,19 @@
+{{> header}}
+
+<div class="col-md-12">
+    <ul>
+        {{#species}}
+        <li>
+            {{family}} <i><a href="/specie/{{scientificNameWithoutAuthorship}}">{{scientificNameWithoutAuthorship}}</a></i>
+            {{#assessment}}
+                ({{status}})
+            {{/assessment}}
+            {{^assessment}}
+                (not started)
+            {{/assessment}}
+        </li>
+        {{/species}}
+    </ul>
+</div>
+
+{{> footer}}

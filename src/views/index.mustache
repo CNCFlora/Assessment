@@ -1,0 +1,11 @@
+{{> header}}
+
+{{^logged}}
+<h2 class="col-md-12">{{strings.must-login}}</h2>
+{{/logged}}
+
+{{#logged}}
+    <p class="col-md-12">{{strings.welcome}}, {{user.name}}.</p>
+{{/logged}}
+
+{{> footer}}

@@ -1,0 +1,228 @@
+{{> header}}
+
+{{#assessment}}
+
+<div class="col-md-8">
+    <h3><i>{{taxon.scientificName}}</i> {{taxon.scientificNameAuthorship}}</h3>
+    <p><a href="{{base}}/assessment/{{_id}}" target='_blank'>{{strings.assessment}}</a></p>
+    <form id="data" action="{{base}}/assessment/{{_id}}" method="POST">
+        <fieldset>
+            <div class="onde-panel"></div>
+            <p class="actions">
+                <button type='submit' class="btn btn-success">{{strings.save}}</button>
+                <button type='button' id="btn-criteria" class="btn btn-info" data-toggle="modal" data-target="#criteria-modal">Criteria</button>
+            </p>
+        </fieldset>
+    </form>
+</div>
+
+<!-- Modal -->
+<script type="text/javascript">
+    $(function(){ 
+        $("#criteria-modal input[type=checkbox]").change(function() {
+            var values = $("#criteria-modal  input[type=checkbox]:checked").map(function(i,e){ return e.value;}).toArray();
+            var parts = {};
+            for(var i in values) {
+                var value   = values[i];
+                var letter  = value[0];
+                var number  = value[1];
+                var letter2 = value[2];
+                var roman   = value.substring(value.indexOf("(") + 1,value.lastIndexOf(")"));
+
+                if(typeof parts[letter] == "undefined") parts[letter] = {};
+                if(typeof number == "string") {
+                    if(typeof parts[letter][number] == "undefined") parts[letter][number] = {};
+                    if(typeof letter2 == "string") {
+                        if(typeof parts[letter][number][letter2] == "undefined") parts[letter][number][letter2] = [];
+                            if(typeof roman == "string" && roman.length >= 1) {
+                                parts[letter][number][letter2].push(roman);
+                            }
+                    }
+                }
+            }
+
+            var allParts = [];
+
+            for(var letter in parts) {
+                var pParts = [];
+                for(var number in parts[letter]) {
+                    var nTpl = number ;
+                    for(var letter2 in parts[letter][number]) {
+                        var tpl = letter2 ;
+                        if(parts[letter][number][letter2].length >= 1) {
+                            tpl += "("+parts[letter][number][letter2].join(",")+")";
+                        }
+                        nTpl += tpl ;
+                    }
+                    pParts.push(nTpl);
+                }
+                if(pParts.length >= 1) {
+                    allParts.push(letter+pParts.join("+"));
+                } else {
+                    allParts.push(letter);
+                }
+            }
+
+            var str = allParts.join(";");
+            $("#txt_criteria").val(str);
+        })
+    });
+    </script>
+<div class="modal fade" id="criteria-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">Criteria</h4>
+            </div>
+            <div class="modal-body" id="check">
+                <form class='form'>
+                    <input type="text" id="txt_criteria" disabled class='form-control'>
+
+                    <fieldset>
+                        <legend>Criteria A</legend>
+                        <p>
+                            <label class="checkbox-inline"><input  type="checkbox" id="A1a" value="A1a">A1a</label>
+                            <label class="checkbox-inline"><input  type="checkbox" id="A1b" value="A1b">A1b</label>
+                            <label class="checkbox-inline"><input  type="checkbox" id="A1c" value="A1c">A1c</label>
+                            <label class="checkbox-inline"><input  type="checkbox" id="A1d" value="A1d">A1d</label>
+                            <label class="checkbox-inline"><input  type="checkbox" id="A1e" value="A1e">A1e</label>
+                        </p>
+                        <p>
+                            <label class="checkbox-inline"><input  type="checkbox" id="A2a" value="A2a">A2a</label>
+                            <label class="checkbox-inline"><input  type="checkbox" id="A2b" value="A2b">A2b</label>
+                            <label class="checkbox-inline"><input  type="checkbox" id="A2c" value="A2c">A2c</label>
+                            <label class="checkbox-inline"><input  type="checkbox" id="A2d" value="A2d">A2d</label>
+                            <label class="checkbox-inline"><input  type="checkbox" id="A2e" value="A2e">A2e</label>
+                        </p>
+                        <p>
+                            <label class="checkbox-inline">&nbsp;&nbsp;</label>
+                            <label class="checkbox-inline"><input  type="checkbox" id="A3b" value="A3b">A3b</label>
+                            <label class="checkbox-inline"><input  type="checkbox" id="A3c" value="A3c">A3c</label>
+                            <label class="checkbox-inline"><input  type="checkbox" id="A3d" value="A3d">A3d</label>
+                            <label class="checkbox-inline"><input  type="checkbox" id="A3e" value="A3e">A3e</label>
+                        </p>
+                        <p>
+                            <label class="checkbox-inline"><input  type="checkbox" id="A4a" value="A4a">A4a</label>
+                            <label class="checkbox-inline"><input  type="checkbox" id="A4b" value="A4b">A4b</label>
+                            <label class="checkbox-inline"><input  type="checkbox" id="A4c" value="A4c">A4c</label>
+                            <label class="checkbox-inline"><input  type="checkbox" id="A4d" value="A4d">A4d</label>
+                            <label class="checkbox-inline"><input  type="checkbox" id="A4e" value="A4e">A4e</label>
+                        </p>
+                    </fieldset>
+                    <fieldset>
+                        <legend>Criteria B</legend>
+                        <p>
+                            <label class="checkbox-inline"><input  type="checkbox" id="B1a" value="B1a">B1a</label> 
+                        </p>
+                        <p>
+                            <label class="checkbox-inline"><input  type="checkbox" id="B1bi" value="B1b(i)">B1b(i)</label>
+                            <label class="checkbox-inline"><input  type="checkbox" id="B1bii" value="B1b(ii)">B1b(ii)</label>
+                            <label class="checkbox-inline"><input  type="checkbox" id="B1biii" value="B1b(iii)">B1b(iii)</label>
+                            <label class="checkbox-inline"><input  type="checkbox" id="B1biv" value="B1b(iv)">B1b(iv)</label>
+                            <label class="checkbox-inline"><input  type="checkbox" id="B1biv" value="B1b(v)">B1b(v)</label>
+                        </p>
+                        <p>
+                            <label class="checkbox-inline"><input  type="checkbox" id="B1ci" value="B1c(i)">B1c(i)</label>
+                            <label class="checkbox-inline"><input  type="checkbox" id="B1cii" value="B1c(ii)">B1c(ii)</label>                                
+                            <label class="checkbox-inline"><input  type="checkbox" id="B1ciii" value="B1c(iii)">B1c(iii)</label>
+                            <label class="checkbox-inline"><input  type="checkbox" id="B1civ" value="B1c(iv)">B1c(iv)</label>
+                        </p>
+                        <p>
+                            <label class="checkbox-inline"><input  type="checkbox" id="B2a" value="B2a">B2a</label> 
+                        </p>
+                        <p>
+                            <label class="checkbox-inline"><input  type="checkbox" id="B2bi" value="B2b(i)">B2b(i)</label>
+                            <label class="checkbox-inline"><input  type="checkbox" id="B2bii" value="B2b(ii)">B2b(ii)</label>
+                            <label class="checkbox-inline"><input  type="checkbox" id="B2biii" value="B2b(iii)">B2b(iii)</label>
+                            <label class="checkbox-inline"><input  type="checkbox" id="B2biv" value="B2b(iv)">B2b(iv)</label>
+                            <label class="checkbox-inline"><input  type="checkbox" id="B2biv" value="B2b(v)">B2b(v)</label>
+                            <p>
+                            <label class="checkbox-inline"><input  type="checkbox" id="B2ci" value="B2c(i)">B2c(i)</label>
+                            <label class="checkbox-inline"><input  type="checkbox" id="B2cii" value="B2c(ii)">B2c(ii)</label>
+                            <label class="checkbox-inline"><input  type="checkbox" id="B2ciii" value="B2c(iii)">B2c(iii)</label>
+                            <label class="checkbox-inline"><input  type="checkbox" id="B2civ" value="B2c(iv)">B2c(iv)</label>
+                        </p>
+                    </fieldset>
+                    <fieldset>
+                        <legend>Criteria C</legend>
+                        <p>
+                            <label class="checkbox-inline"><input  type="checkbox" id="D" value="C1">C1</label>
+                            <label class="checkbox-inline"><input  type="checkbox" id="D1" value="C2a(i)">C2a(i)</label>
+                            <label class="checkbox-inline"><input  type="checkbox" id="D2" value="C2a(ii)">C2a(ii)</label>
+                            <label class="checkbox-inline"><input  type="checkbox" id="D2" value="C2a(ii)">C2b</label>
+                        </p>
+                    </fieldset>
+                    <fieldset>
+                        <legend>Criteria D</legend>
+                        <p>
+                            <label class="checkbox-inline"><input  type="checkbox" id="D" value="D">D</label>
+                            <label class="checkbox-inline"><input  type="checkbox" id="D1" value="D1">D1</label>
+                            <label class="checkbox-inline"><input  type="checkbox" id="D2" value="D2">D2</label>
+                        </p>
+                    </fieldset>
+                    <fieldset>
+                        <legend>Criteria E</legend>
+                        <p>
+                            <label class="checkbox-inline"><input  type="checkbox" id="E" value="E">E</label>
+                        </p>
+                    </fieldset>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button id="saveCriteria" type="button" class="btn btn-primary">{{strings.save-changes}}</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<script type="text/javascript">
+    
+    $(function(){         
+        $("#saveCriteria").click(function() { 
+            $("input[id*='-criteria']").val( $("#txt_criteria").val() ) ;
+            $("#criteria-modal").modal('hide');
+            // $('#txt_criteria').value
+        });
+    });
+
+</script>
+
+<div class="col-md-4">
+    <h4>{{strings.metadata}}</h4>
+    {{#metadata}}
+    {{> metadata}}
+    {{/metadata}}
+    <h4>{{strings.last-review}}</h4>
+    {{#review}}
+    <p><strong>({{evaluator}}) {{review.status}}</strong>: {{review.comment}}</p>
+    {{/review}}
+    {{^review}}
+    <p>{{strings.no-review}}</p>
+    {{/review}}
+    <h4>{{strings.comments}}</h4>
+    {{#comments}}
+    <p>
+        <strong>{{creator}}</strong>: {{comment}}
+        {{#owner}}
+        <a href="{{base}}/assessment/{{_id}}/comment/{{created}}/delete" class="glyphicon glyphicon-trash"></a>
+        {{/owner}}
+    </p>
+    {{/comments}}
+    {{^comments}}
+    <p>{{strings.no-comments}}</p>
+    {{/comments}}
+    <form action="{{base}}/assessment/{{_id}}/status/review" method="POST" class='send-to'>
+        <button class="btn btn-success">{{strings.send-to-review}}</button>        
+    </form>
+</div>
+
+{{/assessment}}
+
+<script type="text/javascript">
+    var schema = {{{schema}}};
+    var data = {{{data}}};
+</script>
+
+{{> footer}}
+

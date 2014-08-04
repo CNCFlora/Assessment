@@ -1,0 +1,71 @@
+{{> header}}
+
+{{#assessment}}
+<div class="col-md-8">
+    {{> assessment}}
+</div>
+
+<div class="col-md-4">
+    <h4>{{strings.metadata}}</h4>
+    {{#metadata}}
+    {{> metadata}}
+    {{/metadata}}
+    <h4>{{strings.last-review}}</h4>
+    {{#review}}
+    <p><strong>({{evaluator}}) {{review.status}}</strong>: {{review.comment}}</p>
+    {{/review}}
+    {{^review}}
+    <p>{{strings.no-review}}</p>
+    {{/review}}
+    <h4>{{strings.comments}}</h4>
+    {{#comments}}
+    <p>
+        <strong>{{creator}}</strong>: {{comment}}
+        {{#owner}}
+        <a href="{{base}}/assessment/{{_id}}/comment/{{created}}/delete" class="glyphicon glyphicon-trash"></a>
+        {{/owner}}
+    </p>
+    {{/comments}}
+    {{^comments}}
+    <p>{{strings.no-comments}}</p>
+    {{/comments}}
+    {{#logged}}
+        {{#role-assessor}}
+            {{#status-open}}
+                <a href="{{base}}/assessment/{{_id}}/edit" class="btn btn-default">{{strings.edit}}</a>
+            {{/status-open}}
+        {{/role-assessor}}
+        {{#role-evaluator}}
+            {{#status-review}}
+                <a href="{{base}}/assessment/{{_id}}/review" class="btn btn-default">{{strings.review}}</a>
+            {{/status-review}}
+        {{/role-evaluator}}
+        {{#status-comments}}
+            <a href="{{base}}/assessment/{{_id}}/comment" class="btn btn-default">{{strings.comment}}</a>
+        {{/status-comments}}
+
+        {{#role-admin}}
+        <form action="{{base}}/assessment/{{_id}}/change" method='POST' class='form'>
+              <fieldset>
+                  <legend>{{strings.change-status}}</legend>
+                  <p>
+                  <select name="status" class='form-control'>
+                      <option value="open">{{strings.open}}</option>
+                      <option value="review">{{strings.review}}</option>
+                      <option value="comments">{{strings.comments}}</option>
+                      <option value="published">{{strings.published}}</option>
+                  </select>
+                  </p>
+                 <p>
+                 <button class="btn btn-primary">{{strings.change-status}}</button>
+                 </p>
+              </fieldset>
+          </form>
+        {{/role-admin}}
+
+    {{/logged}}
+</div>
+{{/assessment}}
+
+{{> footer}}
+
