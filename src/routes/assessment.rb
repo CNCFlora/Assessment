@@ -22,14 +22,14 @@ post "/assessment" do
     assessment[:metadata][:status] = "open"
     assessment[:metadata][:type] = "assessment"
 
-    assessment = settings.db.create(assessment)
+    assessment = settings.conn.create(assessment)
 
     redirect to("/assessment/#{assessment[:_id]}")
 end
 
 get "/assessment/:id" do
 
-    assessment = settings.db.get(params[:id])
+    assessment = settings.conn.get(params[:id])
 
     #profile = db.get(assessment[:profile])
     #profile={}
@@ -50,7 +50,7 @@ get "/assessment/:id" do
 end
 
 get "/assessment/:id/edit" do
-    assessment = settings.db.get(params[:id])
+    assessment = settings.conn.get(params[:id])
 
     assessment[:metadata][:created_date] = Time.at(assessment[:metadata][:created]).to_s[0..9]
     assessment[:metadata][:modified_date] = Time.at(assessment[:metadata][:modified]).to_s[0..9]
@@ -67,7 +67,7 @@ get "/assessment/:id/edit" do
 end
 
 post "/assessment/:id" do    
-    assessment = settings.db.get(params[:id])
+    assessment = settings.conn.get(params[:id])
 
     contributors = assessment[:metadata][:contributor].split(" ; ")
     contributors = [session[:user]["name"]].concat(contributors).uniq().select {|c| c != nil && c.length >= 2} 
@@ -94,7 +94,7 @@ post "/assessment/:id" do
         data["comments"] = assessment[:comments]
     end
 
-    settings.db.update(data)
+    settings.conn.update(data)
 
     content_type :json
     JSON.dump(data)

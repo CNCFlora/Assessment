@@ -22,7 +22,7 @@ get "/workflow" do
 end
 
 post "/assessment/:id/status/:status" do    
-    assessment = settings.db.get(params[:id])
+    assessment = settings.conn.get(params[:id])
     contributors = assessment[:metadata][:contributor].split(" ; ")
     contributors = [session[:user][:name]].concat(contributors).uniq()
     assessment[:metadata][:contributor] = contributors.join(" ; ")
@@ -32,14 +32,14 @@ post "/assessment/:id/status/:status" do
     assessment[:metadata][:status] = params[:status]
     assessment[:metadata][:modified] = Time.now.to_i
 
-    settings.db.update(assessment)
+    settings.conn.update(assessment)
     redirect to("/assessment/#{assessment[:_id]}")
 end
 
 post "/assessment/:id/change" do
-    assessment = settings.db.get(params[:id])
+    assessment = settings.conn.get(params[:id])
     assessment[:metadata][:status] = params[:status]
-    settings.db.update(assessment)
+    settings.conn.update(assessment)
     redirect to("/assessment/#{assessment[:_id]}")
 end
 

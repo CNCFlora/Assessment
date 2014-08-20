@@ -21,7 +21,7 @@ end
 
 setup '../config.yml'
 
-set :db, Couchdb.new( settings.couchdb )
+set :conn, Couchdb.new( settings.couchdb )
 
 Dir["src/routes/*.rb"].each {|file|
     require_relative file.gsub('src/','')

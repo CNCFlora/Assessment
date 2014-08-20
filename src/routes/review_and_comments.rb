@@ -1,6 +1,6 @@
 
 get "/assessment/:id/review" do 
-    assessment = settings.db.get(params[:id])
+    assessment = settings.conn.get(params[:id])
     assessment[:metadata][:created_date] = Time.at(assessment[:metadata][:created]).to_s[0..9]
     assessment[:metadata][:modified_date] = Time.at(assessment[:metadata][:modified]).to_s[0..9]
 
@@ -16,7 +16,7 @@ get "/assessment/:id/review" do
 end
 
 post "/assessment/:id/review" do
-    assessment = settings.db.get(params[:id])
+    assessment = settings.conn.get(params[:id])
 
     assessment[:review] = {:status=>params[:status],:comment=>params[:comment],:rationale=>params[:rationale]}
     assessment[:evaluator] = session[:user]["name"]
@@ -29,13 +29,13 @@ post "/assessment/:id/review" do
     contacts = [session[:user]["email"]].concat(contacts).uniq().select {|c| c != nil && c.length >= 2}
     assessment[:metadata][:contact] = contacts.join(" ; ")
 
-    settings.db.update(assessment)
+    settings.conn.update(assessment)
 
     redirect to("/assessment/#{assessment[:_id]}")
 end
 
 get "/assessment/:id/comment" do
-    assessment = settings.db.get(params[:id])
+    assessment = settings.conn.get(params[:id])
     assessment[:metadata][:created_date] = Time.at(assessment[:metadata][:created]).to_s[0..9]
     assessment[:metadata][:modified_date] = Time.at(assessment[:metadata][:modified]).to_s[0..9]
 
@@ -48,7 +48,7 @@ get "/assessment/:id/comment" do
 end
 
 post "/assessment/:id/comment" do
-    assessment = settings.db.get(params[:id])
+    assessment = settings.conn.get(params[:id])
 
     if assessment[:comments] == nil 
         assessment[:comments] = []
@@ -56,17 +56,17 @@ post "/assessment/:id/comment" do
 
     assessment[:comments].push({:creator=>session[:user]["name"] ,:contact=>session[:user]["email"] ,:created=>Time.new.to_i ,:comment=>params[:comment]})
 
-    settings.db.update(assessment)
+    settings.conn.update(assessment)
     redirect to("/assessment/#{assessment[:_id]}")
 end
 
 get "/assessment/:id/comment/:created/delete" do
-    assessment = settings.db.get(params[:id])
+    assessment = settings.conn.get(params[:id])
 
     assessment[:comments] = assessment[:comments]
                                 .select {|c| c[:created] != params[:created].to_i }
 
-    settings.db.update(assessment)
+    settings.conn.update(assessment)
     redirect to("/assessment/#{assessment[:_id]}")
 end
 
