@@ -1,6 +1,17 @@
 <h3><i>{{taxon.scientificNameWithoutAuthorship}}</i> {{taxon.scientificNameAuthorship}}</h3>
 
 <p>
+    <a href="{{profiles}}/specie/{{taxon.scientificNameWithoutAuthorship}}" class='btn btn-default'>
+        <span class="glyphicon glyphicon-leaf"></span>
+        {{strings.see-profile}}
+    </a>
+    <a href="{{occurrences}}/specie/{{taxon.scientificNameWithoutAuthorship}}" class='btn btn-default'>
+        <span class='glyphicon glyphicon-globe'></span>
+        {{strings.occurrence-map}}
+    </a>
+</p>
+
+<p>
     <strong>{{strings.assessor}}</strong>:{{assessor}}
 </p>
 <p>

@@ -34,6 +34,7 @@ get "/assessment/:id" do
     #profile = db.get(assessment[:profile])
     #profile={}
     profile=nil
+    #profile= search("profile","taxon.scientificNameWithoutAuthorship:\"#{ assessment.taxon.scientificNameWithoutAuthorship}\"")[0]
     
     assessment[:metadata][:created_date] = Time.at(assessment[:metadata][:created]).to_s[0..9]
     assessment[:metadata][:modified_date] = Time.at(assessment[:metadata][:modified]).to_s[0..9]
