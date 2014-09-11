@@ -21,7 +21,17 @@ end
 
 setup '../config.yml'
 
+def require_logged_in
+    redirect('/') unless is_authenticated?
+end
+ 
+def is_authenticated?
+    return !!session[:logged]
+end
+
+
 set :conn, Couchdb.new( settings.couchdb )
+puts "conn = #{:conn}"
 
 Dir["src/routes/*.rb"].each {|file|
     require_relative file.gsub('src/','')

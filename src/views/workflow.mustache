@@ -1,5 +1,6 @@
 {{> header}}
 
+<!--
 <div class="col-md-12">
     <ul>
         {{#species}}
@@ -15,5 +16,55 @@
         {{/species}}
     </ul>
 </div>
+-->
+
+{{^logged}}
+<h2 class="col-md-12">{{strings.must-login}}</h2>
+{{/logged}}
+
+{{#logged}}
+
+<div class="col-md-12">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>{{strings.family}}</th>
+                <th>{{strings.not-started}}</th>
+                <th>{{strings.open}}</th>
+                <th>{{strings.reviewed}}</th>
+                <th>{{strings.published}}</th>
+                <th>{{strings.commented}}</th>
+                <th>{{strings.total}}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#families}}
+            <tr>
+                <td><a href="{{base}}/workflow/{{family}}">{{family}}</a></td>
+                <td>
+                    {{not_started}}
+                </td>
+                <td>
+                    {{open}}
+                </td>
+                <td>
+                    {{review}}
+                </td>
+                <td>
+                    {{published}}
+                </td>
+                <td>
+                    {{comments}}
+                </td>
+                <td>
+                    {{total}}
+                </td>
+            </tr>
+            {{/families}}
+        </tbody>
+    </table>
+</div>
+{{/logged}}
+
 
 {{> footer}}
