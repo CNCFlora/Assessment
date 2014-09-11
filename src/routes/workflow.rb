@@ -33,13 +33,13 @@ post "/assessment/:id/status/:status" do
     assessment[:metadata][:modified] = Time.now.to_i
 
     settings.conn.update(assessment)
-    redirect to("/assessment/#{assessment[:_id]}")
+    redirect to("#{settings.base}/assessment/#{assessment[:_id]}")
 end
 
 post "/assessment/:id/change" do
     assessment = settings.conn.get(params[:id])
     assessment[:metadata][:status] = params[:status]
     settings.conn.update(assessment)
-    redirect to("/assessment/#{assessment[:_id]}")
+    redirect to("#{settings.base}/assessment/#{assessment[:_id]}")
 end
 
