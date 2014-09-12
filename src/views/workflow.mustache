@@ -39,26 +39,14 @@
         </thead>
         <tbody>
             {{#families}}
-            <tr>
+            <tr id="{{family}}">
                 <td><a href="{{base}}/workflow/{{family}}">{{family}}</a></td>
-                <td>
-                    {{not_started}}
-                </td>
-                <td>
-                    {{open}}
-                </td>
-                <td>
-                    {{review}}
-                </td>
-                <td>
-                    {{published}}
-                </td>
-                <td>
-                    {{comments}}
-                </td>
-                <td>
-                    {{total}}
-                </td>
+                <td id="not_started">{{not_started}}</td>
+                <td id="open">{{open}}</td>
+                <td id="review">{{review}}</td>
+                <td id="published">{{published}}</td>
+                <td id="comments">{{comments}}</td>
+                <td id="total">{{total}}</td>
             </tr>
             {{/families}}
         </tbody>

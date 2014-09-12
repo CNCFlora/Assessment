@@ -18,7 +18,6 @@ get "/workflow" do
     assessments = search("assessment","*")
 
     assessments.each{ |doc|
-
         family = doc["taxon"]["family"]
         status = doc["metadata"]["status"]
 
