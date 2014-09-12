@@ -1,0 +1,67 @@
+{{> header}}
+
+<div class="col-md-12">
+    <h2>{{family.scientificName}} ({{family.total}})</h2>
+    <ul class="nav nav-tabs">
+
+        <li class='active'>
+            <a href="#empty" data-toggle="tab">
+                {{strings.not-started}}
+                ({{family.status.not_started.total}})
+            </a>
+        </li>
+        <li>
+            <a href="#open" data-toggle="tab">
+                {{strings.open}}
+                ({{family.status.open.total}})
+            </a>
+        </li>
+        <li>
+            <a href="#review" data-toggle="tab">
+                {{strings.review}}
+                ({{family.status.review.total}})
+            </a>
+        </li>
+        <li>
+            <a href="#published" data-toggle="tab">
+                {{strings.published}}
+                ({{family.status.published.total}})
+            </a>
+        </li>
+        <li>
+            <a href="#comments" data-toggle="tab">
+                {{strings.comments}}
+                ({{family.status.comments.total}})
+            </a>
+        </li>
+    </ul>
+    <div class="tab-content">
+        {{#family}}
+        {{#status_vetor}}
+        <div id="{{status}}" class='tab-pane'>
+            {{^species}}
+            <p>{{strings.empty}}</p>
+            {{/species}}
+            <ul>
+            {{#species}}
+                <li>
+                    <a href="/specie/{{.}}"><i>{{.}}</i></a>
+                </li>
+            {{/species}}
+            </ul>
+        </div>
+        {{/status_vetor}}
+        {{/family}}
+    </div>
+    <!--
+    <div class="tab-content">
+        {{#family}}
+        {{#status}}        
+        {{.}}
+        {{/status}}
+        {{/family}}
+    </div>
+    -->
+</div>
+
+{{> footer}}
