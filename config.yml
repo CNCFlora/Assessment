@@ -1,7 +1,6 @@
 development:
     etcd: "http://192.168.50.13:4001"
-    #db: "cncflora"
-    db: "plantas_raras_cerrado"
+    db: "cncflora"
     lang: "pt"
     context: "connect"
     base: ""

@@ -68,5 +68,7 @@ $(function(){
             return false;
         });
     }
+
+    $(".tab-pane:eq(0)").addClass('active');
 });
 

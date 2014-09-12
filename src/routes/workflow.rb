@@ -44,11 +44,11 @@ get "/workflow/:family" do
     family = {
         "scientificName"=>params[:family],
         "status"=>{
+            "not_started"=>{"species"=>[], "total"=>0,"status"=>'not_started'},
             "open"=>{"species"=>[], "total"=>0, "status"=>"open"},
             "review"=>{"species"=>[], "total"=>0, "status"=>"review"},
-            "published"=>{"species"=>[], "total"=>0, "status"=>"published"},
             "comments"=>{"species"=>[], "total"=>0, "status"=>"comments"},
-            "not_started"=>{"species"=>[], "total"=>0,"status"=>'not_started'}
+            "published"=>{"species"=>[], "total"=>0, "status"=>"published"}
         },
         "total"=>0
     }
@@ -79,13 +79,13 @@ post "/assessment/:id/status/:status" do
     assessment[:metadata][:modified] = Time.now.to_i
 
     settings.conn.update(assessment)
-    redirect to("/assessment/#{assessment[:_id]}")
+    redirect to("#{settings.base}/assessment/#{assessment[:_id]}")
 end
 
 post "/assessment/:id/change" do
     assessment = settings.conn.get(params[:id])
     assessment[:metadata][:status] = params[:status]
     settings.conn.update(assessment)
-    redirect to("/assessment/#{assessment[:_id]}")
+    redirect to("#{settings.base}/assessment/#{assessment[:_id]}")
 end
 
