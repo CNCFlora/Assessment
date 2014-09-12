@@ -42,30 +42,28 @@ get "/workflow/:family" do
     species = search("taxon","taxonomicStatus:\"accepted\" AND taxon.family:\"#{params[:family]}\" AND (taxonRank:\"species\" OR taxonRank:\"variety\" OR taxonRank:\"subspecie\")")
 
     family = {
-        "family"=>params[:family],
-        "not_started"=>{"species"=>[], "total"=>0}, 
-        "open"=>{"species"=>[], "total"=>0}, 
-        "review"=>{"species"=>[], "total"=>0}, 
-        "published"=>{"species"=>[], "total"=>0}, 
-        "comments"=>{"species"=>[], "total"=>0}, 
-        "total"=>{"species"=>[], "total"=>0} 
+        "scientificName"=>params[:family],
+        "status"=>{
+            "open"=>{"species"=>[], "total"=>0, "status"=>"open"},
+            "review"=>{"species"=>[], "total"=>0, "status"=>"review"},
+            "published"=>{"species"=>[], "total"=>0, "status"=>"published"},
+            "comments"=>{"species"=>[], "total"=>0, "status"=>"comments"},
+            "not_started"=>{"species"=>[], "total"=>0,"status"=>'not_started'}
+        },
+        "total"=>0
     }
 
-    species.each{ |specie|        
-        _specie = search("assessment","scientificNameWithoutAuthorship:\"#{specie["scientificNameWithoutAuthorship"]}\"")
-        if _specie.length == 1
-            family[ _specie[0]["metadata"]["status"] ]["species"] << specie["scientificNameWithoutAuthorship"]
-            family[ _specie[0]["metadata"]["status"] ]["total"] += 1
-        else
-            family["not_started"]["species"] << specie["scientificNameWithoutAuthorship"]
-            family["not_started"]["total"] += 1
-        end
-        #puts "x: #{specie}"
-        #puts "x: #{specie["taxon"]["scientificNameWithoutAuthorship"]} - #{specie["metadata"]}"
-        #family[ specie["metadata"]["status"] ]["species"] << specie["taxon"]["scientificNameWithoutAuthorship"]
-        #family[ specie["metadata"]["status"] ]["total"] += 1
+    species.each{ |specie|
+        family["total"] += 1
+        _specie = search("assessment","scientificNameWithoutAuthorship:\"#{specie["scientificNameWithoutAuthorship"]}\"")[0]
+        _specie.nil? ? status = "not_started" : status = _specie["metadata"]["status"]
+        family["status"][status]["species"] << specie["scientificNameWithoutAuthorship"]
+        family["status"][status]["total"] += 1 
     }
 
+    family["status_vetor"] = family["status"].values
+    puts "family[staus] = #{family["status"]}" 
+    puts "family[staus].values = #{family["status_vetor"]}" 
     view :workflow_family, {:family=>family}
 end
 
@@ -81,13 +79,13 @@ post "/assessment/:id/status/:status" do
     assessment[:metadata][:modified] = Time.now.to_i
 
     settings.conn.update(assessment)
-    redirect to("#{settings.base}/assessment/#{assessment[:_id]}")
+    redirect to("/assessment/#{assessment[:_id]}")
 end
 
 post "/assessment/:id/change" do
     assessment = settings.conn.get(params[:id])
     assessment[:metadata][:status] = params[:status]
     settings.conn.update(assessment)
-    redirect to("#{settings.base}/assessment/#{assessment[:_id]}")
+    redirect to("/assessment/#{assessment[:_id]}")
 end
 
