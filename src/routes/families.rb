@@ -1,5 +1,6 @@
 
 get "/families" do
+    require_logged_in
     families=[]
 
     r = search("taxon","taxonomicStatus:\"accepted\"")
@@ -11,6 +12,7 @@ get "/families" do
 end
 
 get "/family/:family" do
+    require_logged_in
     family = params[:family]
     species= search("taxon","family:\"#{family}\" AND taxonomicStatus:\"accepted\" 
                     AND (taxonRank:\"species\" OR taxonRank:\"variety\" OR taxonRank:\"subspecie\")")
@@ -19,6 +21,7 @@ get "/family/:family" do
 end
 
 get "/specie/:scientificName" do
+    require_logged_in
     specie = search("taxon","scientificNameWithoutAuthorship:\"#{params[:scientificName]}\"")[0]
     assessment = search("assessment","taxon.scientificNameWithoutAuthorship:\"#{params[:scientificName]}\"")[0]
     if assessment

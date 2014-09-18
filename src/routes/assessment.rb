@@ -1,5 +1,6 @@
 
 post "/assessment" do    
+    require_logged_in
     spp = search("taxon","scientificNameWithoutAuthorship:\"#{params[:scientificName]}\"")[0]
 
     assessment = {}
@@ -24,10 +25,11 @@ post "/assessment" do
 
     assessment = settings.conn.create(assessment)
 
-    redirect to("/assessment/#{assessment[:_id]}")
+    redirect to("#{settings.base}/assessment/#{assessment[:_id]}")
 end
 
 get "/assessment/:id" do
+    require_logged_in
 
     assessment = settings.conn.get(params[:id])
 
@@ -51,6 +53,7 @@ get "/assessment/:id" do
 end
 
 get "/assessment/:id/edit" do
+    require_logged_in
     assessment = settings.conn.get(params[:id])
 
     assessment[:metadata][:created_date] = Time.at(assessment[:metadata][:created]).to_s[0..9]
@@ -68,6 +71,7 @@ get "/assessment/:id/edit" do
 end
 
 post "/assessment/:id" do    
+    require_logged_in
     assessment = settings.conn.get(params[:id])
 
     contributors = assessment[:metadata][:contributor].split(" ; ")

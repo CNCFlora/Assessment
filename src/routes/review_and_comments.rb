@@ -1,5 +1,6 @@
 
 get "/assessment/:id/review" do 
+    require_logged_in
     assessment = settings.conn.get(params[:id])
     assessment[:metadata][:created_date] = Time.at(assessment[:metadata][:created]).to_s[0..9]
     assessment[:metadata][:modified_date] = Time.at(assessment[:metadata][:modified]).to_s[0..9]
@@ -16,6 +17,7 @@ get "/assessment/:id/review" do
 end
 
 post "/assessment/:id/review" do
+    require_logged_in
     assessment = settings.conn.get(params[:id])
 
     assessment[:review] = {:status=>params[:status],:comment=>params[:comment],:rationale=>params[:rationale]}
@@ -31,10 +33,11 @@ post "/assessment/:id/review" do
 
     settings.conn.update(assessment)
 
-    redirect to("/assessment/#{assessment[:_id]}")
+    redirect to("#{settings.base}/assessment/#{assessment[:_id]}")
 end
 
 get "/assessment/:id/comment" do
+    require_logged_in
     assessment = settings.conn.get(params[:id])
     assessment[:metadata][:created_date] = Time.at(assessment[:metadata][:created]).to_s[0..9]
     assessment[:metadata][:modified_date] = Time.at(assessment[:metadata][:modified]).to_s[0..9]
@@ -48,6 +51,7 @@ get "/assessment/:id/comment" do
 end
 
 post "/assessment/:id/comment" do
+    require_logged_in
     assessment = settings.conn.get(params[:id])
 
     if assessment[:comments] == nil 
@@ -57,16 +61,17 @@ post "/assessment/:id/comment" do
     assessment[:comments].push({:creator=>session[:user]["name"] ,:contact=>session[:user]["email"] ,:created=>Time.new.to_i ,:comment=>params[:comment]})
 
     settings.conn.update(assessment)
-    redirect to("/assessment/#{assessment[:_id]}")
+    redirect to("#{settings.base}/assessment/#{assessment[:_id]}")
 end
 
 get "/assessment/:id/comment/:created/delete" do
+    require_logged_in
     assessment = settings.conn.get(params[:id])
 
     assessment[:comments] = assessment[:comments]
                                 .select {|c| c[:created] != params[:created].to_i }
 
     settings.conn.update(assessment)
-    redirect to("/assessment/#{assessment[:_id]}")
+    redirect to("#{settings.base}/assessment/#{assessment[:_id]}")
 end
 

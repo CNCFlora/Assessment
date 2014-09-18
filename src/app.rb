@@ -22,7 +22,7 @@ end
 setup '../config.yml'
 
 def require_logged_in
-    redirect('/') unless is_authenticated?
+    redirect("#{settings.base}/") unless is_authenticated?
 end
  
 def is_authenticated?

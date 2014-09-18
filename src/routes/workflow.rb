@@ -1,5 +1,6 @@
 
 get "/workflow" do
+    require_logged_in
 
     species = search("taxon","taxonomicStatus:\"accepted\" AND (taxonRank:\"species\" OR taxonRank:\"variety\" OR taxonRank:\"subspecie\")")
 
@@ -37,6 +38,7 @@ get "/workflow" do
 end
 
 get "/workflow/:family" do
+    require_logged_in
 
     species = search("taxon","taxonomicStatus:\"accepted\" AND taxon.family:\"#{params[:family]}\" AND (taxonRank:\"species\" OR taxonRank:\"variety\" OR taxonRank:\"subspecie\")")
 
@@ -67,6 +69,7 @@ get "/workflow/:family" do
 end
 
 post "/assessment/:id/status/:status" do    
+    require_logged_in
     assessment = settings.conn.get(params[:id])
     contributors = assessment[:metadata][:contributor].split(" ; ")
     contributors = [session[:user][:name]].concat(contributors).uniq()
@@ -82,6 +85,7 @@ post "/assessment/:id/status/:status" do
 end
 
 post "/assessment/:id/change" do
+    require_logged_in
     assessment = settings.conn.get(params[:id])
     assessment[:metadata][:status] = params[:status]
     settings.conn.update(assessment)
