@@ -1,8 +1,8 @@
 
-get "/workflow" do
+get "/:db/workflow" do
     require_logged_in
 
-    species = search("taxon","taxonomicStatus:\"accepted\" AND (taxonRank:\"species\" OR taxonRank:\"variety\" OR taxonRank:\"subspecie\")")
+    species = search(params[:db],"taxon","taxonomicStatus:\"accepted\" AND (taxonRank:\"species\" OR taxonRank:\"variety\" OR taxonRank:\"subspecie\")")
 
     _families = []
 
@@ -16,7 +16,7 @@ get "/workflow" do
         families << { "family"=>family,"not_started"=>0, "open"=>0, "review"=>0, "published"=>0, "comments"=>0, "total"=>0 }
     }
 
-    assessments = search("assessment","*")
+    assessments = search(params[:db],"assessment","*")
 
     assessments.each{ |doc|
         family = doc["taxon"]["family"]
@@ -27,20 +27,20 @@ get "/workflow" do
     }
 
     families.each {|family|
-        family["total"]= search("taxon","family:\"#{family["family"]}\" AND taxonomicStatus:\"accepted\" 
+        family["total"]= search(params[:db],"taxon","family:\"#{family["family"]}\" AND taxonomicStatus:\"accepted\" 
                         AND (taxonRank:\"species\" OR taxonRank:\"variety\" OR taxonRank:\"subspecie\")").length
         family["not_started"] = family["total"] - (family["open"] + family["review"] + family["published"] + family["comments"])
     }
 
     families = families.sort_by{ |k| k["family"]}
 
-    view :workflow, { :families=>families }
+    view :workflow, { :families=>families, :db=>params[:db] }
 end
 
-get "/workflow/:family" do
+get "/:db/workflow/:family" do
     require_logged_in
 
-    species = search("taxon","taxonomicStatus:\"accepted\" AND taxon.family:\"#{params[:family]}\" AND (taxonRank:\"species\" OR taxonRank:\"variety\" OR taxonRank:\"subspecie\")")
+    species = search(params[:db],"taxon","taxonomicStatus:\"accepted\" AND taxon.family:\"#{params[:family]}\" AND (taxonRank:\"species\" OR taxonRank:\"variety\" OR taxonRank:\"subspecie\")")
 
     family = {
         "scientificName"=>params[:family],
@@ -56,39 +56,40 @@ get "/workflow/:family" do
 
     species.each{ |specie|
         family["total"] += 1
-        _specie = search("assessment","scientificNameWithoutAuthorship:\"#{specie["scientificNameWithoutAuthorship"]}\"")[0]
+        _specie = search(params[:db],"assessment","scientificNameWithoutAuthorship:\"#{specie["scientificNameWithoutAuthorship"]}\"")[0]
         _specie.nil? ? status = "not_started" : status = _specie["metadata"]["status"]
         family["status"][status]["species"] << specie["scientificNameWithoutAuthorship"]
         family["status"][status]["total"] += 1 
     }
 
     family["status_vetor"] = family["status"].values
-    puts "family[staus] = #{family["status"]}" 
-    puts "family[staus].values = #{family["status_vetor"]}" 
-    view :workflow_family, {:family=>family}
+    view :workflow_family, {:family=>family,:db=>params[:db]}
 end
 
-post "/assessment/:id/status/:status" do    
+post "/:db/assessment/:id/status/:status" do    
     require_logged_in
-    assessment = settings.conn.get(params[:id])
-    contributors = assessment[:metadata][:contributor].split(" ; ")
-    contributors = [session[:user][:name]].concat(contributors).uniq()
-    assessment[:metadata][:contributor] = contributors.join(" ; ")
-    contacts = assessment[:metadata][:contact].split(" ; ")
-    contacts = [session[:user][:email]].concat(contributors).uniq()
-    assessment[:metadata][:contact] = contributors.join(" ; ")
-    assessment[:metadata][:status] = params[:status]
-    assessment[:metadata][:modified] = Time.now.to_i
 
-    settings.conn.update(assessment)
-    redirect to("#{settings.base}/assessment/#{assessment[:_id]}")
+    assessment = http_get("#{settings.datahub}/#{params[:db]}/#{params[:id]}")
+
+    contributors = assessment["metadata"]["contributor"].split(" ; ")
+    contributors = [session["user"]["name"]].concat(contributors).uniq()
+    assessment["metadata"]["contributor"] = contributors.join(" ; ")
+    contacts = assessment["metadata"]["contact"].split(" ; ")
+    contacts = [session["user"]["email"]].concat(contributors).uniq()
+    assessment["metadata"]["contact"] = contributors.join(" ; ")
+    assessment["metadata"]["status"] = params[:status]
+    assessment["metadata"]["modified"] = Time.now.to_i
+
+    r = http_put("#{settings.couchdb}/#{params[:db]}/#{params[:id]}",assessment)
+
+    redirect to("#{settings.base}/#{params[:db]}/assessment/#{params[:id]}")
 end
 
-post "/assessment/:id/change" do
+post "/:db/assessment/:id/change" do
     require_logged_in
-    assessment = settings.conn.get(params[:id])
-    assessment[:metadata][:status] = params[:status]
-    settings.conn.update(assessment)
-    redirect to("#{settings.base}/assessment/#{assessment[:_id]}")
+    assessment = http_get("#{settings.datahub}/#{params[:db]}/#{params[:id]}")
+    assessment['metadata']['status'] = params[:status]
+    r = http_put("#{settings.couchdb}/#{params[:db]}/#{params[:id]}",assessment)
+    redirect to("#{settings.base}/#{params[:db]}/assessment/#{assessment[:_id]}")
 end
 

@@ -1,7 +1,9 @@
 
-post "/assessment" do    
+post "/:db/assessment" do    
     require_logged_in
-    spp = search("taxon","scientificNameWithoutAuthorship:\"#{params[:scientificName]}\"")[0]
+    spp = search(params[:db],"taxon","scientificNameWithoutAuthorship:\"#{params[:scientificName]}\"")[0]
+
+    id = SecureRandom.uuid
 
     assessment = {}
 
@@ -22,42 +24,56 @@ post "/assessment" do
     assessment[:metadata][:created] = Time.now.to_i
     assessment[:metadata][:status] = "open"
     assessment[:metadata][:type] = "assessment"
+    assessment[:metadata][:identifier]= id
 
-    assessment = settings.conn.create(assessment)
+    assessment[:_id]=id;
 
-    redirect to("#{settings.base}/assessment/#{assessment[:_id]}")
+    r = http_put("#{settings.couchdb}/#{params[:db]}/#{id}",assessment)
+
+    redirect to("#{settings.base}/#{params[:db]}/assessment/#{id}")
 end
 
-get "/assessment/:id" do
+get "/:db/assessment/:id" do
     require_logged_in
 
-    assessment = settings.conn.get(params[:id])
+    assessment = http_get("#{settings.datahub}/#{params[:db]}/#{params[:id]}")
 
-    #profile = db.get(assessment[:profile])
-    #profile={}
-    profile=nil
-    #profile= search("profile","taxon.scientificNameWithoutAuthorship:\"#{ assessment.taxon.scientificNameWithoutAuthorship}\"")[0]
-    
-    assessment[:metadata][:created_date] = Time.at(assessment[:metadata][:created]).to_s[0..9]
-    assessment[:metadata][:modified_date] = Time.at(assessment[:metadata][:modified]).to_s[0..9]
+    assessment["metadata"]["created_date"] = Time.at(assessment["metadata"]["created"]).to_s[0..9]
+    assessment["metadata"]["modified_date"] = Time.at(assessment["metadata"]["modified"]).to_s[0..9]
 
-    if assessment[:review] && assessment[:review][:rationale].length >=1 
-        assessment[:rationale] = assessment[:review][:rationale]
+    if assessment["review"] && assessment["review"]["rationale"].length >=1 
+        assessment["rationale"] = assessment["review"]["rationale"]
     end
 
-    assessment["status-#{assessment[:metadata][:status]}"] = true
+    assessment["status-#{assessment["metadata"]["status"]}"] = true
 
-    owner = assessment[:metadata][:creator] == session[:user]["name"]
+    specie=assessment["taxon"]
 
-    view :view, {:assessment => assessment, :specie_profile => profile, :owner=>owner}
+    can_edit = assessment["metadata"]["creator"] == session["user"]["name"]
+    session[:user]["roles"].each{|r|
+      if r["context"].downcase==params[:db].downcase then
+        r["roles"].each{|role|
+          if role["role"].downcase == "assessor" then
+            role["entities"].each {|e|
+              if e.downcase == specie["scientificName"].downcase || e.downcase == specie["scientificNameWithoutAuthorship"].downcase || e.downcase == specie["family"].downcase then
+                can_edit=true;
+              end
+            }
+          end
+        }
+      end
+    }
+
+    view :view, {:assessment => assessment, :can_edit=>can_edit,:db=>params[:db]}
 end
 
-get "/assessment/:id/edit" do
+get "/:db/assessment/:id/edit" do
     require_logged_in
-    assessment = settings.conn.get(params[:id])
 
-    assessment[:metadata][:created_date] = Time.at(assessment[:metadata][:created]).to_s[0..9]
-    assessment[:metadata][:modified_date] = Time.at(assessment[:metadata][:modified]).to_s[0..9]
+    assessment = http_get("#{settings.datahub}/#{params[:db]}/#{params[:id]}")
+
+    assessment["metadata"]["created_date"] = Time.at(assessment["metadata"]["created"]).to_s[0..9]
+    assessment["metadata"]["modified_date"] = Time.at(assessment["metadata"]["modified"]).to_s[0..9]
 
     schema = JSON.parse(File.read("src/schema.json", :encoding => "BINARY"))
 
@@ -67,39 +83,40 @@ get "/assessment/:id/edit" do
     schema["properties"].delete("dateOfAssessment")
     schema["properties"].delete("review")
     schema["properties"].delete("comments")
-    view :edit, {:assessment => assessment,:schema=> JSON.dump(schema),:data => JSON.dump(assessment)}
+    view :edit, {:assessment => assessment,:schema=> JSON.dump(schema),:data => JSON.dump(assessment),:db=>params[:db]}
 end
 
-post "/assessment/:id" do    
+post "/:db/assessment/:id" do    
     require_logged_in
-    assessment = settings.conn.get(params[:id])
 
-    contributors = assessment[:metadata][:contributor].split(" ; ")
+    assessment = http_get("#{settings.datahub}/#{params[:db]}/#{params[:id]}")
+
+    contributors = assessment["metadata"]["contributor"].split(" ; ")
     contributors = [session[:user]["name"]].concat(contributors).uniq().select {|c| c != nil && c.length >= 2} 
-    assessment[:metadata][:contributor] = contributors.join(" ; ")
+    assessment["metadata"]["contributor"] = contributors.join(" ; ")
 
-    contacts = assessment[:metadata][:contact].split(" ; ")
-    contacts = [session[:user]["email"]].concat(contacts).uniq().select {|c| c != nil && c.length >= 2}
-    assessment[:metadata][:contact] = contacts.join(" ; ")
+    contacts = assessment["metadata"]["contact"].split(" ; ")
+    contacts = [session["user"]["email"]].concat(contacts).uniq().select {|c| c != nil && c.length >= 2}
+    assessment["metadata"]["contact"] = contacts.join(" ; ")
 
-    assessment[:metadata][:modified] = Time.now.to_i
+    assessment["metadata"]["modified"] = Time.now.to_i
 
-    data = JSON.parse(params[:data])
-    data[:_rev] = assessment[:_rev]
-    data[:_id] = assessment[:_id]
-    data["metadata"] = assessment[:metadata]
-    data["taxon"] = assessment[:taxon]
-    data["profile"] = assessment[:profile]
+    data = JSON.parse(params["data"])
+    data["_rev"] = assessment["_rev"]
+    data["_id"] = assessment["_id"]
+    data["metadata"] = assessment["metadata"]
+    data["taxon"] = assessment["taxon"]
+    data["profile"] = assessment["profile"]
 
     if assessment["review"]
-        data["review"] = assessment[:review]
+        data["review"] = assessment["review"]
     end
 
     if assessment["comments"]
-        data["comments"] = assessment[:comments]
+        data["comments"] = assessment["comments"]
     end
 
-    settings.conn.update(data)
+    r = http_put("#{settings.couchdb}/#{params[:db]}/#{params[:id]}",data)
 
     content_type :json
     JSON.dump(data)

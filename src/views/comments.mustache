@@ -3,7 +3,7 @@
 {{#assessment}}
 <div class="col-md-8">
     {{> assessment}}
-    <form action="{{base}}/assessment/{{_id}}/comment" method="POST" id='comment-form' class='form'>
+    <form action="{{base}}/{{db}}/assessment/{{_id}}/comment" method="POST" id='comment-form' class='form'>
         <fieldset>
             <legend>{{strings.add-comment}}</legend>
             <p><textarea id="comment" name="comment" rows="10" cols="30" class='form-control'></textarea></p>
@@ -32,7 +32,7 @@
     <p>
         <strong>{{creator}}</strong>: {{comment}}
         {{#owner}}
-        <a href="{{base}}/assessment/{{_id}}/comment/{{created}}/delete" class="glyphicon glyphicon-trash"></a>
+        <a href="{{base}}/{{db}}/assessment/{{_id}}/comment/{{created}}/delete" class="glyphicon glyphicon-trash"></a>
         {{/owner}}
     </p>
     {{/comments}}
@@ -42,12 +42,12 @@
 
     {{#role-assessor}}
     {{#owner}}
-    <form action="{{base}}/assessment/{{_id}}/status/open" method="POST" class='send-to'>
+    <form action="{{base}}/{{db}}/assessment/{{_id}}/status/open" method="POST" class='send-to'>
         <p>
             <button class="btn btn-success">{{strings.send-to-open}}</button>
         </p>
     </form>
-    <form action="{{base}}/assessment/{{_id}}/status/published" method="POST" class='send-to'>
+    <form action="{{base}}/{{db}}/assessment/{{_id}}/status/published" method="POST" class='send-to'>
         <p>
             <button class="btn btn-success">{{strings.send-to-published}}</button>
         </p>

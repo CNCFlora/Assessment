@@ -3,9 +3,10 @@
 {{#assessment}}
 
 <div class="col-md-8">
+    <h2><a href='{{base}}/{{db}}/family/{{taxon.family}}'>{{taxon.family}}</a></h2>
     <h3><i>{{taxon.scientificName}}</i> {{taxon.scientificNameAuthorship}}</h3>
-    <p><a href="{{base}}/assessment/{{_id}}" target='_blank'>{{strings.assessment}}</a></p>
-    <form id="data" action="{{base}}/assessment/{{_id}}" method="POST">
+    <p><a href="{{base}}/{{db}}/assessment/{{_id}}" target='_blank'>{{strings.assessment}}</a></p>
+    <form id="data" action="{{base}}/{{db}}/assessment/{{_id}}" method="POST">
         <fieldset>
             <div class="onde-panel"></div>
             <p class="actions">
@@ -205,14 +206,14 @@
     <p>
         <strong>{{creator}}</strong>: {{comment}}
         {{#owner}}
-        <a href="{{base}}/assessment/{{_id}}/comment/{{created}}/delete" class="glyphicon glyphicon-trash"></a>
+        <a href="{{base}}/{{db}}/assessment/{{_id}}/comment/{{created}}/delete" class="glyphicon glyphicon-trash"></a>
         {{/owner}}
     </p>
     {{/comments}}
     {{^comments}}
     <p>{{strings.no-comments}}</p>
     {{/comments}}
-    <form action="{{base}}/assessment/{{_id}}/status/review" method="POST" class='send-to'>
+    <form action="{{base}}/{{db}}/assessment/{{_id}}/status/review" method="POST" class='send-to'>
         <button class="btn btn-success">{{strings.send-to-review}}</button>        
     </form>
 </div>

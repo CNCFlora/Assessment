@@ -20,7 +20,7 @@ describe "Web app" do
 
     before(:all) do
 
-        @couch = Couchdb.new Sinatra::Application.settings.couchdb
+        @couch = Couchdb.new "#{Sinatra::Application.settings.datahub}/cncflora_test"
 
         @couch.create({:metadata=> 
                         {

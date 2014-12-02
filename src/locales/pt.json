@@ -3,17 +3,19 @@
     "assessment":"Avaliação",
     "risk-assessments":"Avaliações de risco de extinção",
     "login":"Login",
+    "must-login":"Necessário fazer login.",
     "logout":"Logout",
     "families":"Familias",
     "search":"Busca",
     "workflow":"Workflow",
     "control":"Controle",
+    "total":"Total",
     "no-result":"Sem resultados",
     "not-started":"Não iniciadas",
     "open":"Abertas",
     "review":"Revisão",
     "last-review":"Ultima revisão",
-    "comments":"Comentar",
+    "comments":"Comentários",
     "comment":"Comentar",
     "done":"Publicada",
     "save":"Salvar",
@@ -30,7 +32,6 @@
     "send-to-comments":"Avançar para comentários",
     "send-to-published":"Publicar",
     "species-profile":"Dados sobre a espécie",
-    "comments":"Comentários",
     "rationale":"Justificativa",
     "assessor":"Avaliador",
     "evaluator":"Revisor",
@@ -87,6 +88,8 @@
     "reviewed":"Revisadas",
     "commented":"Comentadas",
     "published":"Publicadas",
-    "empty":"Nenhum(a)"
+    "empty":"Nenhum(a)",
+    "checklists":"Recortes",
+    "checklist":"Recorte"
 
 } 

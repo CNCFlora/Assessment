@@ -1,22 +1,5 @@
 {{> header}}
 
-<!--
-<div class="col-md-12">
-    <ul>
-        {{#species}}
-        <li>
-            {{family}} <i><a href="/specie/{{scientificNameWithoutAuthorship}}">{{scientificNameWithoutAuthorship}}</a></i>
-            {{#assessment}}
-                ({{status}})
-            {{/assessment}}
-            {{^assessment}}
-                (not started)
-            {{/assessment}}
-        </li>
-        {{/species}}
-    </ul>
-</div>
--->
 
 {{^logged}}
 <h2 class="col-md-12">{{strings.must-login}}</h2>
@@ -32,21 +15,21 @@
                 <th>{{strings.not-started}}</th>
                 <th>{{strings.open}}</th>
                 <th>{{strings.reviewed}}</th>
+                <th>{{strings.comment}}</th>
                 <th>{{strings.published}}</th>
-                <th>{{strings.commented}}</th>
                 <th>{{strings.total}}</th>
             </tr>
         </thead>
         <tbody>
             {{#families}}
             <tr id="{{family}}">
-                <td><a href="{{base}}/workflow/{{family}}">{{family}}</a></td>
-                <td id="not_started">{{not_started}}</td>
-                <td id="open">{{open}}</td>
-                <td id="review">{{review}}</td>
-                <td id="published">{{published}}</td>
-                <td id="comments">{{comments}}</td>
-                <td id="total">{{total}}</td>
+                <td><a href="{{base}}/{{db}}/workflow/{{family}}">{{family}}</a></td>
+                <td class="not_started">{{not_started}}</td>
+                <td class="open">{{open}}</td>
+                <td class="review">{{review}}</td>
+                <td class="comments">{{comments}}</td>
+                <td class="published">{{published}}</td>
+                <td class="total">{{total}}</td>
             </tr>
             {{/families}}
         </tbody>

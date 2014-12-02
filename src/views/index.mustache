@@ -5,7 +5,17 @@
 {{/logged}}
 
 {{#logged}}
-    <p class="col-md-12">{{strings.welcome}}, {{user.name}}.</p>
+  <div class='col-md-12'>
+    <h1 >{{strings.welcome}}, {{user.name}}.</h1>
+    <h3>
+      {{strings.checklists}}
+    </h3>
+    <ul>
+    {{#dbs}}
+      <li><a href="{{base}}/{{db}}/workflow">{{name}}</a></li>
+    {{/dbs}}
+    </ul>
+  </div>
 {{/logged}}
 
 {{> footer}}

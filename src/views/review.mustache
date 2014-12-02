@@ -3,7 +3,7 @@
 {{#assessment}}
 <div class="col-md-8">
     {{> assessment}}
-    <form action="{{base}}/assessment/{{_id}}/review" method='POST' id='review-form' class='form'>
+    <form action="{{base}}/{{db}}/assessment/{{_id}}/review" method='POST' id='review-form' class='form'>
         <fieldset>
             <legend>{{strings.review-assessment}}</legend>
             <p>
@@ -46,7 +46,7 @@
     <p>
         <strong>{{creator}}</strong>: {{comment}}
         {{#owner}}
-        <a href="{{base}}/assessment/{{_id}}/comment/{{created}}/delete" class="glyphicon glyphicon-trash"></a>
+        <a href="{{base}}/{{db}}/assessment/{{_id}}/comment/{{created}}/delete" class="glyphicon glyphicon-trash"></a>
         {{/owner}}
     </p>
     {{/comments}}
@@ -54,13 +54,13 @@
     <p>{{strings.no-comments}}</p>
     {{/comments}}
 
-    <form action="{{base}}/assessment/{{_id}}/status/open" method="POST" class='send-to'>
+    <form action="{{base}}/{{db}}/assessment/{{_id}}/status/open" method="POST" class='send-to'>
         <p>
         <button class="btn btn-success">{{strings.send-to-open}}</button>
         </p>
     </form>
 
-    <form action="{{base}}/assessment/{{_id}}/status/comments" method="POST" class='send-to'>
+    <form action="{{base}}/{{db}}/assessment/{{_id}}/status/comments" method="POST" class='send-to'>
         <p>
         <button class="btn btn-success">{{strings.send-to-comments}}</button>
         </p>

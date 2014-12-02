@@ -5,7 +5,7 @@
     <ul class="nav nav-tabs">
 
         <li class='active'>
-            <a href="#empty" data-toggle="tab">{{strings.not-started}} ({{family.status.not_started.total}})</a>
+            <a href="#not_started" data-toggle="tab">{{strings.not-started}} ({{family.status.not_started.total}})</a>
         </li>
         <li>
             <a href="#open" data-toggle="tab">{{strings.open}} ({{family.status.open.total}})</a>
@@ -14,10 +14,10 @@
             <a href="#review" data-toggle="tab">{{strings.review}} ({{family.status.review.total}})</a>
         </li>
         <li>
-            <a href="#published" data-toggle="tab">{{strings.published}} ({{family.status.published.total}})</a>
+            <a href="#comments" data-toggle="tab">{{strings.comments}} ({{family.status.comments.total}})</a>
         </li>
         <li>
-            <a href="#comments" data-toggle="tab">{{strings.comments}} ({{family.status.comments.total}})</a>
+            <a href="#published" data-toggle="tab">{{strings.published}} ({{family.status.published.total}})</a>
         </li>
     </ul>
     <div class="tab-content">
@@ -30,7 +30,7 @@
             <ul>
             {{#species}}
                 <li>
-                    <a href="/specie/{{.}}"><i>{{.}}</i></a>
+                  <a href="{{base}}/{{db}}/specie/{{.}}"><i>{{.}}</i></a>
                 </li>
             {{/species}}
             </ul>
@@ -38,15 +38,6 @@
         {{/status_vetor}}
         {{/family}}
     </div>
-    <!--
-    <div class="tab-content">
-        {{#family}}
-        {{#status}}        
-        {{.}}
-        {{/status}}
-        {{/family}}
-    </div>
-    -->
 </div>
 
 {{> footer}}
