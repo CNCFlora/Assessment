@@ -22,7 +22,9 @@ get "/:db/workflow" do
         family = doc["taxon"]["family"]
         status = doc["metadata"]["status"]
 
+        puts doc
         element = families.find{ |k| k["family"]==family }
+        puts element
         element[status] += 1
     }
 

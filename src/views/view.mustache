@@ -7,12 +7,13 @@
     <h4>{{strings.comments}}</h4>
     {{#comments}}
     <p>
-        <strong>{{creator}}</strong>: {{comment}}
+        <strong class='commenter'>{{creator}}</strong>: <span class='comment'>{{comment}}</span>
         {{#owner}}
         <a href="{{base}}/{{db}}/assessment/{{_id}}/comment/{{created}}/delete" class="glyphicon glyphicon-trash"></a>
         {{/owner}}
     </p>
     {{/comments}}
+
     {{^comments}}
     <p>{{strings.no-comments}}</p>
     {{/comments}}
@@ -26,7 +27,7 @@
 
     <h4>{{strings.last-review}}</h4>
     {{#review}}
-    <p><strong>({{evaluator}}) {{review.status}}</strong>: {{review.comment}}</p>
+    <p><strong>(<span class='evaluator'>{{evaluator}}</span>) <span class='evaluation'>{{review.status}}</span></strong>: {{review.comment}}</p>
     {{/review}}
 
     {{^review}}

@@ -3,6 +3,20 @@
 {{#assessment}}
 <div class="col-md-8">
     {{> assessment}}
+
+    <h4>{{strings.comments}}</h4>
+    {{#comments}}
+    <p>
+        <strong>{{creator}}</strong>: {{comment}}
+        {{#owner}}
+        <a href="{{base}}/{{db}}/assessment/{{_id}}/comment/{{created}}/delete" class="glyphicon glyphicon-trash"></a>
+        {{/owner}}
+    </p>
+    {{/comments}}
+    {{^comments}}
+    <p>{{strings.no-comments}}</p>
+    {{/comments}}
+
     <form action="{{base}}/{{db}}/assessment/{{_id}}/comment" method="POST" id='comment-form' class='form'>
         <fieldset>
             <legend>{{strings.add-comment}}</legend>
@@ -26,19 +40,6 @@
     {{^review}}
     <p>{{strings.no-review}}</p>
     {{/review}}
-
-    <h4>{{strings.comments}}</h4>
-    {{#comments}}
-    <p>
-        <strong>{{creator}}</strong>: {{comment}}
-        {{#owner}}
-        <a href="{{base}}/{{db}}/assessment/{{_id}}/comment/{{created}}/delete" class="glyphicon glyphicon-trash"></a>
-        {{/owner}}
-    </p>
-    {{/comments}}
-    {{^comments}}
-    <p>{{strings.no-comments}}</p>
-    {{/comments}}
 
     {{#role-assessor}}
     {{#owner}}
