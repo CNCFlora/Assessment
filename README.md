@@ -1,50 +1,44 @@
-# CNCFlora Assessment Tool 
+# Assessment
+
+CNCFlora app to handle the assessments, a simple list of species to work upon for the other apps.
 
 ## Deployment
 
-### CI
+Use docker:
+  
+  docker run -d -p 8282:8080 -t cncflora/assessment
 
-### Manual
-
-Create the WAR:
-
-    $ warble war
-
-Deploy assessments.war to tomcat
-
-    $ scp assessments.war cncflora@146.134.16.24:~/
-    $ ssh cncflora@146.134.16.24
-
-In the tomcat machine:
-
-    $ sudo cp assessments.war /var/lib/tomcat6/webapps
+You will need to have access to etcd, connect and datahub.
 
 ## Development
 
-Start with git, obviously:
+Start with git:
 
-    # aptitude install git
+  git clone git@github.com:CNCFlora/assessment
+  cd assessment
 
-Now clone the app, and enter it's directory:
+Use [vagrant](http://vagrantup.com) and [virtualbox](http://virtualbox.org):
 
-    $ git clone git@github.com:CNCFlora/Assessment.git 
-    $ cd Assessment
+  vagrant up
+  vagrant ssh
+  cd /vagrant
 
-### Vagrant
 
-Default is to use vagrant to simplify development, install [VirtualBox](http://virtualbox.org) and [Vagrant](http://vagrantup.org) and start the VM:
+To start the test server, available at http://192.168.50.16:9292:
 
-    $ vagrant up
+  rackup
 
-And, to run the server:
+Run tests:
 
-    $ vagrant ssh -c "cd /vagrant && rackup"
+  rspec tests/\*.rb
 
-To run tests:
+Build the container for deployment:
 
-    $ vagrant ssh -c "cd /vagrant && rspec tests/"
 
-The app will be running on 9494, connect(auth) at 3001 and couchdb on 5999. 
+  docker build -t cncflora/assessment .
+  docker push cncflora/assessment 
 
-Remember to create an user on the connect app (at http://localhost:3001).
+## License
+
+Apache License 2.0
 
