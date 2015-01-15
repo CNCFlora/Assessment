@@ -20,7 +20,7 @@ else
     set :test , false
 end
 
-setup '../config.yml'
+setup 'config.yml'
 
 def require_logged_in
     redirect("#{settings.base}/?back_to=#{request.path_info}") unless is_authenticated?

@@ -14,7 +14,7 @@ def app
 end
 
 def before_each()
-    uri = "#{Sinatra::Application.settings.datahub}/cncflora_test"
+    uri = "#{Sinatra::Application.settings.couchdb}/cncflora_test"
     docs = http_get("#{uri}/_all_docs")["rows"]
     docs.each{ |e|
       deleted = http_delete( "#{uri}/#{e["id"]}?rev=#{e["value"]["rev"]}")

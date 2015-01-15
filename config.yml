@@ -7,6 +7,6 @@ test:
     lang: "pt"
     base: ""
 production:
-    etcd: "http://cncflora.jbrj.gov.br/etcd"
+    etcd: "http://$HOST/etcd"
     lang: "pt"
     base: "/assessments"

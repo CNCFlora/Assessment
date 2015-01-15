@@ -69,7 +69,7 @@ end
 post "/:db/assessment/:id/status/:status" do    
     require_logged_in
 
-    assessment = http_get("#{settings.datahub}/#{params[:db]}/#{params[:id]}")
+    assessment = http_get("#{settings.couchdb}/#{params[:db]}/#{params[:id]}")
 
     contributors = assessment["metadata"]["contributor"].split(" ; ")
     contributors = [session["user"]["name"]].concat(contributors).uniq()
@@ -87,7 +87,7 @@ end
 
 post "/:db/assessment/:id/change" do
     require_logged_in
-    assessment = http_get("#{settings.datahub}/#{params[:db]}/#{params[:id]}")
+    assessment = http_get("#{settings.couchdb}/#{params[:db]}/#{params[:id]}")
     assessment['metadata']['status'] = params[:status]
     r = http_put("#{settings.couchdb}/#{params[:db]}/#{params[:id]}",assessment)
     redirect to("#{settings.base}/#{params[:db]}/assessment/#{assessment[:_id]}")

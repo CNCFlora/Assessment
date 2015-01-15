@@ -36,7 +36,7 @@ end
 get "/:db/assessment/:id" do
     require_logged_in
 
-    assessment = http_get("#{settings.datahub}/#{params[:db]}/#{params[:id]}")
+    assessment = http_get("#{settings.couchdb}/#{params[:db]}/#{params[:id]}")
 
     assessment["metadata"]["created_date"] = Time.at(assessment["metadata"]["created"]).to_s[0..9]
     assessment["metadata"]["modified_date"] = Time.at(assessment["metadata"]["modified"]).to_s[0..9]
@@ -70,7 +70,7 @@ end
 get "/:db/assessment/:id/edit" do
     require_logged_in
 
-    assessment = http_get("#{settings.datahub}/#{params[:db]}/#{params[:id]}")
+    assessment = http_get("#{settings.couchdb}/#{params[:db]}/#{params[:id]}")
 
     assessment["metadata"]["created_date"] = Time.at(assessment["metadata"]["created"]).to_s[0..9]
     assessment["metadata"]["modified_date"] = Time.at(assessment["metadata"]["modified"]).to_s[0..9]
@@ -89,7 +89,7 @@ end
 post "/:db/assessment/:id" do    
     require_logged_in
 
-    assessment = http_get("#{settings.datahub}/#{params[:db]}/#{params[:id]}")
+    assessment = http_get("#{settings.couchdb}/#{params[:db]}/#{params[:id]}")
 
     contributors = assessment["metadata"]["contributor"].split(" ; ")
     contributors = [session[:user]["name"]].concat(contributors).uniq().select {|c| c != nil && c.length >= 2} 

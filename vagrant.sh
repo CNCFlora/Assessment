@@ -17,10 +17,9 @@ if [[ ! -e /root/.app_done ]]; then
 
     # uh?
     gem install bundler
-    #cd /vagrant && bundle install
 
     # initial config of app
-    #su vagrant -lc 'cd /vagrant && gem install bundler'
+    su vagrant -lc 'cd /vagrant && gem install bundler'
     su vagrant -lc 'cd /vagrant && bundle install'
     touch /root/.app_done
 fi
