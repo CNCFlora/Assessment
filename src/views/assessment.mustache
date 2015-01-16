@@ -4,13 +4,13 @@
 
 <p>
     {{#profiles}}
-    <a href="{{profiles}}/{{db}}/specie/{{taxon.scientificNameWithoutAuthorship}}" class='btn btn-default'>
+    <a href="{{profiles_url}}/{{db}}/specie/{{taxon.scientificNameWithoutAuthorship}}" class='btn btn-default'>
         <span class="glyphicon glyphicon-leaf"></span>
         {{strings.see-profile}}
     </a>
     {{/profiles}}
     {{#occurrences}}
-    <a href="{{occurrences}}/{{db}}/specie/{{taxon.scientificNameWithoutAuthorship}}" class='btn btn-default'>
+    <a href="{{occurrences_url}}/{{db}}/specie/{{taxon.scientificNameWithoutAuthorship}}" class='btn btn-default'>
         <span class='glyphicon glyphicon-globe'></span>
         {{strings.occurrence-map}}
     </a>
