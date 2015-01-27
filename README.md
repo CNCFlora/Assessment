@@ -1,6 +1,6 @@
 # Assessment
 
-CNCFlora app to handle the assessments, a simple list of species to work upon for the other apps.
+CNCFlora app to handle the risk assessments.
 
 ## Deployment
 
@@ -8,7 +8,7 @@ Use docker:
   
   docker run -d -p 8282:8080 -t cncflora/assessment
 
-You will need to have access to etcd, connect and datahub.
+You will need to have access to etcd, connect, couchdb and elasticsearch.
 
 ## Development
 
@@ -24,9 +24,9 @@ Use [vagrant](http://vagrantup.com) and [virtualbox](http://virtualbox.org):
   cd /vagrant
 
 
-To start the test server, available at http://192.168.50.16:9292:
+To start the test server, available at http://192.168.50.13:9292:
 
-  rackup
+  rackup -o 0.0.0.0
 
 Run tests:
 
@@ -34,9 +34,8 @@ Run tests:
 
 Build the container for deployment:
 
-
-  docker build -t cncflora/assessment .
-  docker push cncflora/assessment 
+  docker build -t cncflora/assessments .
+  docker push cncflora/assessments 
 
 ## License
 
