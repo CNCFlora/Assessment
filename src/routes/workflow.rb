@@ -23,7 +23,7 @@ get "/:db/workflow" do
         status = doc["metadata"]["status"]
 
         element = families.find{ |k| k["family"]==family }
-        element[status] += 1
+        if element then element[status] += 1 end
     }
 
     families.each {|family|
