@@ -7,28 +7,29 @@ post "/:db/assessment" do
 
     assessment = {}
 
-    assessment[:dateOfAssessment] = Time.now.to_i
-    assessment[:assessor] = session[:user]["name"]
+    assessment["dateOfAssessment"] = Time.now.to_i
+    assessment["assessor"] = session[:user]["name"]
 
-    assessment[:taxon] = {}
-    assessment[:taxon][:family] = spp["family"]
-    assessment[:taxon][:scientificName] = spp["scientificName"]
-    assessment[:taxon][:scientificNameWithoutAuthorship] = spp["scientificNameWithoutAuthorship"]
-    assessment[:taxon][:scientificNameAuthorship] = spp["scientificNameAuthorship"]
+    assessment["taxon"] = {}
+    assessment["taxon"]["family"] = spp["family"]
+    assessment["taxon"]["scientificName"] = spp["scientificName"]
+    assessment["taxon"]["scientificNameWithoutAuthorship"] = spp["scientificNameWithoutAuthorship"]
+    assessment["taxon"]["scientificNameAuthorship"] = spp["scientificNameAuthorship"]
 
-    assessment[:metadata] = {}
-    assessment[:metadata][:creator] = session[:user]["name"]
-    assessment[:metadata][:contributor] = session[:user]["name"]
-    assessment[:metadata][:contact] = session[:user]["email"]
-    assessment[:metadata][:modified] = Time.now.to_i
-    assessment[:metadata][:created] = Time.now.to_i
-    assessment[:metadata][:status] = "open"
-    assessment[:metadata][:type] = "assessment"
-    assessment[:metadata][:identifier]= id
+    assessment["metadata"] = {}
+    assessment["metadata"]["creator"] = session[:user]["name"]
+    assessment["metadata"]["contributor"] = session[:user]["name"]
+    assessment["metadata"]["contact"] = session[:user]["email"]
+    assessment["metadata"]["modified"] = Time.now.to_i
+    assessment["metadata"]["created"] = Time.now.to_i
+    assessment["metadata"]["status"] = "open"
+    assessment["metadata"]["type"] = "assessment"
+    assessment["metadata"]["identifier"]= id
 
-    assessment[:_id]=id;
+    assessment["_id"]=id;
 
     r = http_put("#{settings.couchdb}/#{params[:db]}/#{id}",assessment)
+    index(params[:db],assessment)
 
     redirect to("#{settings.base}/#{params[:db]}/assessment/#{id}")
 end
@@ -117,6 +118,7 @@ post "/:db/assessment/:id" do
     end
 
     r = http_put("#{settings.couchdb}/#{params[:db]}/#{params[:id]}",data)
+    index(params[:db],data)
 
     content_type :json
     JSON.dump(data)

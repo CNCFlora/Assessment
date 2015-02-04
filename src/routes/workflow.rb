@@ -81,6 +81,7 @@ post "/:db/assessment/:id/status/:status" do
     assessment["metadata"]["modified"] = Time.now.to_i
 
     r = http_put("#{settings.couchdb}/#{params[:db]}/#{params[:id]}",assessment)
+    index(params[:db],assessment)
 
     redirect to("#{settings.base}/#{params[:db]}/assessment/#{params[:id]}")
 end
@@ -90,6 +91,7 @@ post "/:db/assessment/:id/change" do
     assessment = http_get("#{settings.couchdb}/#{params[:db]}/#{params[:id]}")
     assessment['metadata']['status'] = params[:status]
     r = http_put("#{settings.couchdb}/#{params[:db]}/#{params[:id]}",assessment)
+    index(params[:db],assessment)
     redirect to("#{settings.base}/#{params[:db]}/assessment/#{assessment[:_id]}")
 end
 

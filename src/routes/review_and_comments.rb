@@ -35,6 +35,7 @@ post "/:db/assessment/:id/review" do
     assessment["metadata"]["contact"] = contacts.join(" ; ")
 
     r = http_put("#{settings.couchdb}/#{params[:db]}/#{params[:id]}",assessment)
+    index(params[:db],assessment)
 
     redirect to("#{settings.base}/#{params[:db]}/assessment/#{params[:id]}")
 end
@@ -67,6 +68,7 @@ post "/:db/assessment/:id/comment" do
     assessment["comments"].push({"creator"=>session[:user]["name"] ,"contact"=>session[:user]["email"] ,"created"=>Time.new.to_i ,"comment"=>params[:comment]})
 
     r = http_put("#{settings.couchdb}/#{params[:db]}/#{params[:id]}",assessment)
+    index(params[:db],assessment)
 
     redirect to("#{settings.base}/#{params[:db]}/assessment/#{params[:id]}")
 end
@@ -79,6 +81,7 @@ get "/:db/assessment/:id/comment/:created/delete" do
     assessment["comments"] = assessment["comments"].select {|c| c["created"] != params[:created].to_i }
 
     r = http_put("#{settings.couchdb}/#{params[:db]}/#{params[:id]}",assessment)
+    index(params[:db],assessment)
 
     redirect to("#{settings.base}/#{params[:db]}/assessment/#{params[:id]}")
 end
