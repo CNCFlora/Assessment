@@ -13,6 +13,10 @@ def app
     Sinatra::Application
 end
 
+RSpec.configure do |config|
+  config.include RSpecHtmlMatchers
+end
+
 def before_each()
     uri = "#{Sinatra::Application.settings.couchdb}/cncflora_test"
     uri2 = "#{ Sinatra::Application.settings.elasticsearch }/cncflora_test"

@@ -1,11 +1,17 @@
 development:
-    etcd: "http://192.168.50.13:4001"
     lang: "pt"
     base: ""
+    couchdb: "http://192.168.50.13:5984"
+    connect: "http://192.168.50.13:8080"
+    connect_url: "http://192.168.50.13:8080"
+    elasticsearch: "http://192.168.50.13:9200"
 test:
-    etcd: "http://192.168.50.13:4001"
     lang: "pt"
     base: ""
+    couchdb: "http://192.168.50.13:5984"
+    connect: "http://192.168.50.13:8080"
+    connect_url: "http://192.168.50.13:8080"
+    elasticsearch: "http://192.168.50.13:9200"
 production:
     etcd: "http://$HOST/etcd"
     lang: "pt"

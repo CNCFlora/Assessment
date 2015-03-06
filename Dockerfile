@@ -6,10 +6,9 @@ RUN mkdir /root/assessment
 ADD Gemfile /root/assessment/Gemfile
 RUN cd /root/assessment && bundle install
 
-ADD supervisord.conf /etc/supervisor/conf.d/proxy.conf
-
-EXPOSE 8080
-EXPOSE 9001
+EXPOSE 80
+WORKDIR /root/assessment
+CMD ["unicorn","-p","80"]
 
 ADD . /root/assessment
 

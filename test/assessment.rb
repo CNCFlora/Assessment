@@ -70,8 +70,6 @@ describe "Test assessment creation and edition" do
 
      post "/cncflora_test/assessment",{:scientificName=>"Justicia clivalis"}
 
-     sleep 2
-
      roles = [{:context=>"cncflora_test",:roles=>[{:role=>'assessor',:entities=>["ACANTHACEAE"]}]}].to_json
      post "/login", { :user => "{\"name\":\"Bruno\", \"email\":\"bruno@cncflora.net\",\"roles\":#{roles}}"}
      get "/cncflora_test/specie/Justicia+clivalis"
@@ -98,8 +96,6 @@ describe "Test assessment creation and edition" do
      post "/cncflora_test/assessment",{:scientificName=>"Justicia clivalis"}
      id = last_response.headers["location"].split("/").last
 
-     sleep 2
-
      get "/cncflora_test/assessment/#{id}/edit"
      expect(last_response.body).to have_tag("button",:text=>"Enviar para revisão")
      expect(last_response.body).to have_tag("button",:text=>"Salvar")
@@ -108,7 +104,6 @@ describe "Test assessment creation and edition" do
      post "/login", { :user => "{\"name\":\"Diogo\", \"email\":\"diogo@cncflora.net\",\"roles\":#{roles}}"}
 
      post "/cncflora_test/assessment/#{id}", {:data=>{:rationale=>"Test assessor"}.to_json}
-     sleep 1
 
      get "/cncflora_test/assessment/#{id}"
      expect(last_response.body).to have_tag("span",:class=>"contributor",:text=>"Diogo ; Bruno")

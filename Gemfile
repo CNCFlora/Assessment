@@ -8,7 +8,7 @@ gem 'sinatra-contrib'
 gem 'sinatra-mustache'
 gem 'sinatra-config-file'
 
-gem 'cncflora_commons', '0.0.38'
+gem 'cncflora_commons', '0.0.39'
 gem 'couchdb_basic'
 
 gem 'rspec'
