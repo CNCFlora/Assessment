@@ -12,6 +12,8 @@
         //var context = '{{context}}';
         var connect = '{{connect_url}}';
         var base = '{{base}}';
+            {{#logged}} var user = {{{user_json}}}; {{/logged}}
+            {{^logged}} var user=null; {{/logged}}
     </script>
     <script src="{{base}}/js/jquery.min.js"></script>
     <script src="{{connect_url}}/js/connect.js"></script>
@@ -23,6 +25,8 @@
     <div class="container">
         <header class='col-md-12'>
             <h1>{{strings.risk-assessments}}</h1>
+            <p> <span class='glyphicon glyphicon-chevron-right'></span> {{strings.user}}: 
+                {{#logged}} {{user.name}} {{/logged}} {{^logged}} {{strings.none}} {{/logged}}.</p>
             {{#db}}
             <p><span class='glyphicon glyphicon-chevron-right'></span><span class='db'>{{strings.checklist}}: {{db_name}}</span>.</p>
             {{/db}}

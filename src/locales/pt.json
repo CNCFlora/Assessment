@@ -91,6 +91,8 @@
     "empty":"Nenhum(a)",
     "checklists":"Recortes",
     "checklist":"Recorte",
-    "reasons-for-change":"Razão da mudança (re-avaliação)"
+    "reasons-for-change":"Razão da mudança (re-avaliação)",
+    "user":"Usuário",
+    "none":"Nenhum"
 
 } 
