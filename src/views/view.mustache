@@ -46,7 +46,9 @@
 
         {{#role-evaluator}}
             {{#status-review}}
-              <a href="{{base}}/{{db}}/assessment/{{_id}}/review" class="btn btn-default">{{strings.review}}</a>
+              {{#can_review}}
+                <a href="{{base}}/{{db}}/assessment/{{_id}}/review" class="btn btn-default">{{strings.review}}</a>
+              {{/can_review}}
             {{/status-review}}
         {{/role-evaluator}}
 

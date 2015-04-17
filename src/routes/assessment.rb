@@ -56,7 +56,7 @@ get "/:db/assessment/:id" do
         r["roles"].each{|role|
           if role["role"].downcase == "assessor" then
             role["entities"].each {|e|
-              if e.downcase == specie["scientificName"].downcase || e.downcase == specie["scientificNameWithoutAuthorship"].downcase || e.downcase == specie["family"].downcase then
+              if e.downcase == specie["scientificName"].downcase || e.downcase == specie["scientificNameWithoutAuthorship"].downcase || e.downcase == specie["family"].downcase || e.downcase == 'all' then
                 can_edit=true;
               end
             }
@@ -65,7 +65,22 @@ get "/:db/assessment/:id" do
       end
     }
 
-    view :view, {:assessment => assessment, :can_edit=>can_edit,:db=>params[:db]}
+    can_review = false
+    session[:user]["roles"].each{|r|
+      if r["context"].downcase==params[:db].downcase then
+        r["roles"].each{|role|
+          if role["role"].downcase == "evaluator" then
+            role["entities"].each {|e|
+              if e.downcase == specie["scientificName"].downcase || e.downcase == specie["scientificNameWithoutAuthorship"].downcase || e.downcase == specie["family"].downcase || e.downcase=='all' then
+                can_review=true;
+              end
+            }
+          end
+        }
+      end
+    }
+
+    view :view, {:assessment => assessment, :can_edit=>can_edit, :can_review=>can_review,:db=>params[:db]}
 end
 
 get "/:db/assessment/:id/edit" do
