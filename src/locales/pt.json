@@ -93,6 +93,8 @@
     "checklist":"Recorte",
     "reasons-for-change":"Razão da mudança (re-avaliação)",
     "user":"Usuário",
-    "none":"Nenhum"
+    "none":"Nenhum",
+    "reasons-for-re-assessment":"Razões para re-avaliação",
+    "cat-crit-changed":"Houve mudança de criterio ou categoria"
 
 } 

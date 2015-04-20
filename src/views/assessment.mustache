@@ -99,6 +99,14 @@
 </p>
 {{/information.severelyFragmented}}
 
+{{#reasonsForReAssessment}}
+<p>
+<strong>{{strings.reasons-for-re-assessment}}</strong>: {{reason}} <br /> 
+{{#change}}<em>{{strings.cat-crit-changed}}</em>.{{/change}} <br />
+{{resume}}
+</p>
+{{/reasonsForReAssessment}}
+
 {{#reasonsForChange}}
 <p>
   <strong>{{strings.reasons-for-change}}</strong>: {{reason}} <br /> {{resume}}
