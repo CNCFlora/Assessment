@@ -5,7 +5,7 @@ get "/:db/families" do
 
     r = search(params[:db],"taxon","taxonomicStatus:\"accepted\"")
     r.each{|taxon|
-        families.push taxon["family"]
+        families.push taxon["family"].upcase
     }
 
     view :families, {:families=>families.uniq.sort,:db=>params[:db]}
@@ -27,6 +27,7 @@ get "/:db/specie/:scientificName" do
     if assessment
         redirect to("#{settings.base}/#{params[:db]}/assessment/#{assessment["id"]}")
     else
+        profile = search(params[:db],"profile","taxon.scientificNameWithoutAuthorship:\"#{params[:scientificName]}\"")[0]
         can_create=false
         session[:user]["roles"].each{|r|
           if r["context"].downcase==params[:db].downcase then
@@ -41,7 +42,7 @@ get "/:db/specie/:scientificName" do
             }
           end
         }
-        view :new, {:specie => specie,:db=>params[:db],:can_create=>can_create}
+        view :new, {:specie => specie,:db=>params[:db],:can_create=>can_create,:profile=>profile}
     end
 end
 

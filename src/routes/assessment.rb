@@ -80,7 +80,28 @@ get "/:db/assessment/:id" do
       end
     }
 
-    view :view, {:assessment => assessment, :can_edit=>can_edit, :can_review=>can_review,:db=>params[:db]}
+    profile = search(params[:db],"profile","taxon.scientificNameWithoutAuthorship:\"#{assessment["taxon"]["scientificNameWithoutAuthorship"]}\"")[0]
+
+    past = []
+
+    got={}
+    http_get("#{ settings.couchdb }/_all_dbs").each {|past_db|
+      if past_db[0] != "_" && !past_db.match('_history') && past_db != params[:db] then
+        past_assessment=  search(past_db,"assessment","taxon.scientificNameWithoutAuthorship:\"#{assessment["taxon"]["scientificNameWithoutAuthorship"]}\"")[0]
+        if past_assessment && !past_assessment.nil? && !got[past_assessment["_id"]] then
+          got[past_assessment["_id"]]=true
+          past_assessment["past_db"] = past_db
+          past_assessment["metadata"]["created_date"] = Time.at(past_assessment["metadata"]["created"]).to_s[0..9]
+          past_assessment["metadata"]["modified_date"] = Time.at(past_assessment["metadata"]["modified"]).to_s[0..9]
+          past.push(past_assessment)
+        end
+      end
+    }
+
+    past = past.sort_by{|a| a["metadata"]["modified_date"] }
+
+
+    view :view, {:assessment => assessment, :can_edit=>can_edit, :can_review=>can_review,:db=>params[:db], :profile=>profile, :past=>past}
 end
 
 get "/:db/assessment/:id/edit" do

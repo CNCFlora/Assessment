@@ -12,6 +12,7 @@
     "total":"Total",
     "no-result":"Sem resultados",
     "not-started":"Não iniciadas",
+    "not-started-no-profile":"Não iniciadas (sem perfil fechado)",
     "open":"Abertas",
     "review":"Revisão",
     "last-review":"Ultima revisão",
@@ -95,6 +96,7 @@
     "user":"Usuário",
     "none":"Nenhum",
     "reasons-for-re-assessment":"Razões para re-avaliação",
-    "cat-crit-changed":"Houve mudança de criterio ou categoria"
+    "cat-crit-changed":"Houve mudança de criterio ou categoria",
+    "other-assessments":"Outras avaliações dessa espécie"
 
 } 

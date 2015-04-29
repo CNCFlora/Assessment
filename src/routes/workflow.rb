@@ -7,7 +7,7 @@ get "/:db/workflow" do
     _families = []
 
     species.each{|spp|
-        _families << spp["family"]
+        _families << spp["family"].upcase
     }
 
     families=[]
@@ -19,17 +19,17 @@ get "/:db/workflow" do
     assessments = search(params[:db],"assessment","*")
 
     assessments.each{ |doc|
-        family = doc["taxon"]["family"]
+        family = doc["taxon"]["family"].upcase
         status = doc["metadata"]["status"]
 
-        element = families.find{ |k| k["family"]==family }
+        element = families.find{ |k| k["family"].upcase==family }
         if element then element[status] += 1 end
     }
 
     families.each {|family|
         family["total"]= search(params[:db],"taxon","family:\"#{family["family"]}\" AND taxonomicStatus:\"accepted\" 
                         AND (taxonRank:\"species\" OR taxonRank:\"variety\" OR taxonRank:\"subspecie\")").length
-        family["not_started"] = family["total"] - (family["open"] + family["review"] + family["published"] + family["comments"])
+        family["not_started"] = family["total"] - (family["open"] + family["review"] + family["published"] + family["comments"]) 
     }
 
     families = families.sort_by{ |k| k["family"]}
@@ -40,11 +40,12 @@ end
 get "/:db/workflow/:family" do
     require_logged_in
 
-    species = search(params[:db],"taxon","taxonomicStatus:\"accepted\" AND taxon.family:\"#{params[:family]}\" AND (taxonRank:\"species\" OR taxonRank:\"variety\" OR taxonRank:\"subspecie\")")
+    species = search(params[:db],"taxon","taxonomicStatus:\"accepted\" AND taxon.family:\"#{params[:family]}\" AND (taxonRank:\"species\" OR taxonRank:\"variety\" OR taxonRank:\"subspecie\")").sort_by { |s| s["scientificName"]}
 
     family = {
         "scientificName"=>params[:family],
         "status"=>{
+            "not_started_no_profile"=>{"species"=>[], "total"=>0,"status"=>'not_started_no_profile'},
             "not_started"=>{"species"=>[], "total"=>0,"status"=>'not_started'},
             "open"=>{"species"=>[], "total"=>0, "status"=>"open"},
             "review"=>{"species"=>[], "total"=>0, "status"=>"review"},
@@ -56,8 +57,17 @@ get "/:db/workflow/:family" do
 
     species.each{ |specie|
         family["total"] += 1
-        _specie = search(params[:db],"assessment","scientificNameWithoutAuthorship:\"#{specie["scientificNameWithoutAuthorship"]}\"")[0]
-        _specie.nil? ? status = "not_started" : status = _specie["metadata"]["status"]
+        assessment = search(params[:db],"assessment","scientificNameWithoutAuthorship:\"#{specie["scientificNameWithoutAuthorship"]}\"")[0]
+        if assessment.nil? then
+          profile = search(params[:db],"profile","scientificNameWithoutAuthorship:\"#{specie["scientificNameWithoutAuthorship"]}\"")[0]
+          if profile.nil? || profile["metadata"]["status"]  != "done" then
+            status = "not_started_no_profile" 
+          else
+            status = "not_started"
+          end
+        else
+            status = assessment["metadata"]["status"]
+        end
         family["status"][status]["species"] << specie["scientificNameWithoutAuthorship"]
         family["status"][status]["total"] += 1 
     }
@@ -92,6 +102,6 @@ post "/:db/assessment/:id/change" do
     assessment['metadata']['status'] = params[:status]
     r = http_put("#{settings.couchdb}/#{params[:db]}/#{params[:id]}",assessment)
     index(params[:db],assessment)
-    redirect to("#{settings.base}/#{params[:db]}/assessment/#{assessment[:_id]}")
+    redirect to("#{settings.base}/#{params[:db]}/assessment/#{params[:id]}")
 end
 

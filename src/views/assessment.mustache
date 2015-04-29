@@ -4,10 +4,12 @@
 
 <p>
     {{#profiles}}
+    {{#profile}}
     <a href="{{profiles_url}}/{{db}}/specie/{{taxon.scientificNameWithoutAuthorship}}" class='btn btn-default'>
         <span class="glyphicon glyphicon-leaf"></span>
         {{strings.see-profile}}
     </a>
+    {{/profile}}
     {{/profiles}}
     {{#occurrences}}
     <a href="{{occurrences_url}}/{{db}}/specie/{{taxon.scientificNameWithoutAuthorship}}" class='btn btn-default'>

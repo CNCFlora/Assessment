@@ -3,6 +3,14 @@
 <div class="col-md-12">
     <h2><a href='{{base}}/{{db}}/family/{{taxon.family}}'>{{taxon.family}}</a></h2>
     <h3><i>{{specie.scientificNameWithoutAuthorship}}</i> {{specie.scientificNameAuthorship}}</h3>
+    {{#profiles}}
+    {{#profile}}
+    <a href="{{profiles_url}}/{{db}}/specie/{{taxon.scientificNameWithoutAuthorship}}" class='btn btn-default'>
+        <span class="glyphicon glyphicon-leaf"></span>
+        {{strings.see-profile}}
+    </a>
+    {{/profile}}
+    {{/profiles}}
     <p>{{strings.no-assessment}}.</p>
     {{#logged}}
     {{#can_create}}

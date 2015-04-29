@@ -25,6 +25,19 @@
     {{> metadata}}
     {{/metadata}}
 
+    <h4>{{strings.other-assessments}}</h4>
+    {{^past}}
+    <p>N/A</p>
+    {{/past}}
+    {{#past}}
+    <p>
+    <a href="{{base}}/{{db}}/assessment/{{_id}}">{{taxon.scientificNameWithoutAuthorship}}</a>
+    <small>
+      ( {{metadata.modified_date}} @ {{past_db}} )
+    </small>
+    </p>
+    {{/past}}
+
     <h4>{{strings.last-review}}</h4>
     {{#review}}
     <p><strong>(<span class='evaluator'>{{evaluator}}</span>) <span class='evaluation'>{{review.status}}</span></strong>: {{review.comment}}</p>
