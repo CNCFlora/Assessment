@@ -86,11 +86,12 @@ get "/:db/assessment/:id" do
 
     got={}
     http_get("#{ settings.couchdb }/_all_dbs").each {|past_db|
-      if past_db[0] != "_" && !past_db.match('_history') && past_db != params[:db] then
+      if past_db[0] != "_" && !past_db.match('_history') && past_db != "public" && past_db != params[:db] then
         past_assessment=  search(past_db,"assessment","taxon.scientificNameWithoutAuthorship:\"#{assessment["taxon"]["scientificNameWithoutAuthorship"]}\"")[0]
-        if past_assessment && !past_assessment.nil? && !got[past_assessment["_id"]] then
-          got[past_assessment["_id"]]=true
+        if past_assessment && !past_assessment.nil? && !got[past_assessment["id"]] then
+          got[past_assessment["id"]]=true
           past_assessment["past_db"] = past_db
+          past_assessment["past_id"] = past_assessment["id"]
           past_assessment["metadata"]["created_date"] = Time.at(past_assessment["metadata"]["created"]).to_s[0..9]
           past_assessment["metadata"]["modified_date"] = Time.at(past_assessment["metadata"]["modified"]).to_s[0..9]
           past.push(past_assessment)
