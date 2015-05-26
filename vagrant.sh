@@ -5,7 +5,7 @@ if [[ ! -e /root/.apt_done ]]; then
     add-apt-repository ppa:brightbox/ruby-ng -y
     apt-get update
     apt-get upgrade -y
-    apt-get install wget curl git ruby2.1 ruby2.1-dev -y
+    apt-get install wget curl git ruby2.1 ruby2.1-dev zlib1g-dev build-essential -y
     touch /root/.apt_done
 fi
 

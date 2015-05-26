@@ -13,6 +13,13 @@ test:
     connect_url: "http://192.168.50.13:8080"
     elasticsearch: "http://192.168.50.13:9200"
 production:
-    etcd: "http://$HOST/etcd"
-    lang: "pt"
+    lang: 'pt'
+    couchdb: 'http://$HOST/couchdb'
+    connect: 'http://$HOST/connect'
+    connect_url: 'http://$HOST/connect'
+    elasticsearch: 'http://$HOST/elasticsearch'
     base: "/assessments"
+    occurrences: "http://$HOST/occurrences"
+    occurrences_url: "http://$HOST/occurrences"
+    profiles: "http://$HOST/profiles"
+    profiles_url: "http://$HOST/profiles"
