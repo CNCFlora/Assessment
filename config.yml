@@ -16,10 +16,10 @@ production:
     lang: 'pt'
     couchdb: 'http://$HOST/couchdb'
     connect: 'http://$HOST/connect'
-    connect_url: 'http://$HOST/connect'
+    connect_url: 'http://cncflora.jbrj.gov.br/connect'
     elasticsearch: 'http://$HOST/elasticsearch'
     base: "/assessments"
     occurrences: "http://$HOST/occurrences"
-    occurrences_url: "http://$HOST/occurrences"
+    occurrences_url: "http://cncflora.jbrj.gov.br/occurrences"
     profiles: "http://$HOST/profiles"
-    profiles_url: "http://$HOST/profiles"
+    profiles_url: "http://cncflora.jbrj.gov.br/profiles"
