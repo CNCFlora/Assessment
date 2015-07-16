@@ -1,25 +1,23 @@
 development:
     lang: "pt"
     base: ""
-    couchdb: "http://192.168.50.13:5984"
-    connect: "http://192.168.50.13:8080"
-    connect_url: "http://192.168.50.13:8080"
-    elasticsearch: "http://192.168.50.13:9200"
+    couchdb: "http://couchdb:5984"
+    connect: "http://connect:80"
+    connect_url: "http://localhost:8080"
+    elasticsearch: "http://elasticsearch:9200"
 test:
     lang: "pt"
     base: ""
-    couchdb: "http://192.168.50.13:5984"
-    connect: "http://192.168.50.13:8080"
-    connect_url: "http://192.168.50.13:8080"
-    elasticsearch: "http://192.168.50.13:9200"
+    couchdb: "http://couchdb:5984"
+    connect: "http://connect:80"
+    connect_url: "http://localhost:8080"
+    elasticsearch: "http://elasticsearch:9200"
 production:
     lang: 'pt'
-    couchdb: 'http://$HOST/couchdb'
-    connect: 'http://$HOST/connect'
-    connect_url: 'http://cncflora.jbrj.gov.br/connect'
-    elasticsearch: 'http://$HOST/elasticsearch'
+    couchdb: 'http://jb049:5984'
+    connect: 'http://jb049/connect'
+    connect_url: 'http://$HOST/connect'
+    elasticsearch: 'http://jb049:9200'
     base: "/assessments"
-    occurrences: "http://$HOST/occurrences"
-    occurrences_url: "http://cncflora.jbrj.gov.br/occurrences"
-    profiles: "http://$HOST/profiles"
-    profiles_url: "http://cncflora.jbrj.gov.br/profiles"
+    occurrences_url: "http://$HOST/occurrences"
+    profiles_url: "http://$HOST/profiles"

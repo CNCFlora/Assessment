@@ -1,0 +1,47 @@
+assessments:
+    build: .
+    ports:
+        - 8081:80
+    volumes:
+        - .:/opt/app
+    links:
+        - elasticsearch:elasticsearch
+        - couchdb:couchdb
+        - connect:connect
+    environment:
+        - RACK_ENV=development
+elasticsearch:
+    image: cncflora/elasticsearch
+    ports:
+        - 9200
+    volumes:
+        - /var/data/elasticsearch/data:/usr/share/elasticsearch/data:rw
+couchdb:
+    image: cncflora/couchdb
+    ports:
+        - 5984:5984
+    volumes:
+        - /var/data/couchdb:/var/lib/couchdb:rw
+    links:
+        - elasticsearch:elasticsearch
+connect:
+    image: cncflora/connect
+    ports:
+        - 8080:80
+    volumes:
+        - /var/data/connect:/var/floraconnect:rw
+floradata:
+    image: cncflora/floradata
+    ports:
+        - 8181:80
+checklist:
+    image: cncflora/checklist
+    ports:
+        - 8000:80
+    links:
+        - elasticsearch:elasticsearch
+        - couchdb:couchdb
+        - connect:connect
+        - floradata:floradata
+    environment:
+        RACK_ENV: development
