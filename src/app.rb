@@ -8,7 +8,7 @@ require "sinatra/reloader" if development?
 
 require 'securerandom'
 
-require 'cncflora_commons'
+require_relative 'commons'
 
 if development? then
     also_reload "routes/*"
