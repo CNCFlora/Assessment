@@ -5,7 +5,6 @@ require_relative '../src/app'
 require 'rspec'
 require 'rack/test'
 require 'rspec-html-matchers'
-require 'cncflora_commons'
 
 include Rack::Test::Methods
 

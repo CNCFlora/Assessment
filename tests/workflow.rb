@@ -38,14 +38,15 @@ describe "Test assessment creation and edition" do
       expect( last_response.body ).to have_tag("h2","ACANTHACEAE (2)")
       expect( last_response.body ).to have_tag("li"){
           # Catch contain text rather than text.
-          with_tag "a", :with=>{ :href=>"#not_started" }, :text=>"Não iniciadas (1)"
+          with_tag "a", :with=>{ :href=>"#not_started_no_profile" }, :text=>"Não iniciadas (sem perfil fechado) (1)"
+          with_tag "a", :with=>{ :href=>"#not_started" }, :text=>"Não iniciadas (0)"
           with_tag "a", :with=>{ :href=>"#open" }, :text=>"Abertas (1)"
           with_tag "a", :with=>{ :href=>"#review" }, :text=>"Revisão (0)"
           with_tag "a", :with=>{ :href=>"#published" }, :text=>"Publicadas (0)"
           with_tag "a", :with=>{ :href=>"#comments" }, :text=>"Comentários (0)"
       }
 
-      expect( last_response.body ).to have_tag( "div#not_started ul li", :text=>"Justicia clivalis")
+      expect( last_response.body ).to have_tag( "div#not_started_no_profile ul li", :text=>"Justicia clivalis")
       expect( last_response.body ).to have_tag( "div#open ul li", :text=>"Aphelandra longiflora")
    end
 
