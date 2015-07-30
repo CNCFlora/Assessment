@@ -19,6 +19,9 @@ end
 def before_each()
     uri = "#{Sinatra::Application.settings.couchdb}/cncflora_test"
     uri2 = "#{ Sinatra::Application.settings.elasticsearch }/cncflora_test"
+    http_put(uri, {})
+    http_put(uri2, {})
+
     docs = http_get("#{uri}/_all_docs?include_docs=true")["rows"]
     docs.each{ |e|
       deleted = http_delete( "#{uri}/#{e["id"]}?rev=#{e["value"]["rev"]}")
@@ -73,5 +76,9 @@ def before_each()
 end
 
 def after_each()
+    uri = "#{Sinatra::Application.settings.couchdb}/cncflora_test"
+    uri2 = "#{ Sinatra::Application.settings.elasticsearch }/cncflora_test"
+    http_delete(uri)
+    http_delete(uri2)
 end
 

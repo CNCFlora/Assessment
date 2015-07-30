@@ -5,6 +5,8 @@ describe "Test families and species listing" do
 
   before(:each) do before_each() end
 
+  after (:each) do after_each() end
+
   it "Can list families and species" do
       post "/login", { :user => '{"name":"Bruno", "email":"bruno@cncflora.net","roles":[] }' }
 

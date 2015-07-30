@@ -7,7 +7,7 @@ describe "Review and comments system" do
       before_each() 
     end
 
-   #after (:each) do after_each() end
+   after (:each) do after_each() end
    
     it "Can put assessment on review" do        
         roles = [{:context=>"cncflora_test",:roles=>[{:role=>'assessor',:entities=>["ACANTHACEAE"]}]}].to_json

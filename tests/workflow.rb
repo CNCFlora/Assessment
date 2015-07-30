@@ -4,7 +4,7 @@ describe "Test assessment creation and edition" do
 
    before (:each) do before_each() end
 
-   #after (:each) do after_each() end
+   after (:each) do after_each() end
    
    it "Show right numbers in workflow" do
       post "/login", { :user => '{"name":"Bruno", "email":"bruno@cncflora.net","roles":[] }' }

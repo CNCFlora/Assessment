@@ -12,21 +12,12 @@ test:
     connect: "http://connect:80"
     connect_url: "http://localhost:8080"
     elasticsearch: "http://elasticsearch:9200"
-homolog:
-    lang: 'pt'
-    couchdb: 'http://jb048.jbrj.gov.br:5984'
-    connect: 'http://jb048.jbrj.gov.br/connect'
-    connect_url: 'http://$HOST/connect'
-    elasticsearch: 'http://jb048.jbrj.gov.br:9200'
-    base: "/assessments"
-    occurrences_url: "http://$HOST/occurrences"
-    profiles_url: "http://$HOST/profiles"
 production:
     lang: 'pt'
-    couchdb: 'http://jb049.jbrj.gov.br:5984'
-    connect: 'http://$HOST/connect'
+    couchdb: 'http://couchdb:5984'
+    connect: 'http://connect'
     connect_url: 'http://$HOST/connect'
-    elasticsearch: 'http://jb049.jbrj.gov.br:9200'
+    elasticsearch: 'http://elasticsearch:9200'
     base: "/assessments"
     occurrences_url: "http://$HOST/occurrences"
     profiles_url: "http://$HOST/profiles"

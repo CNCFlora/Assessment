@@ -5,7 +5,7 @@ describe "Test assessment creation and edition" do
 
    before (:each) do before_each() end
 
-   #after (:each) do after_each() end
+   after (:each) do after_each() end
    
    it "Restrict assessment creation" do
      get "/cncflora_test/specie/Justicia+clivalis"

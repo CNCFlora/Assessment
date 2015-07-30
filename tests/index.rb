@@ -3,9 +3,9 @@ require_relative 'base.rb'
 
 describe "Test checklist switch and login/logout" do
 
-   # before (:each) do before_each() end
+    before (:each) do before_each(); sleep 1 end
 
-   # after (:each) do after_each() end
+    after (:each) do after_each() end
 
     it "Restrict login at home" do
       get "/"
