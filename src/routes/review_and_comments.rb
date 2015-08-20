@@ -11,8 +11,17 @@ get "/:db/assessment/:id/review" do
         assessment["review"]["status-#{assessment["review"]["status"]}"] = true
     end
 
-    if assessment["review"] && assessment["review"]["rationale"].length >=1 
-        assessment["rationale"] = assessment["review"]["rationale"]
+    if assessment["review"] 
+      if assessment["review"]["rationale"].length >=1 
+        if assessment["review"].has_key?("rewrite") 
+          if assessment["review"]["rewrite"] 
+          end
+        else
+          assessment["review"]["rewrite"]=true
+        end
+      else
+          assessment["review"]["rewrite"]=false
+      end
     end
 
     view :review, {:assessment => assessment, :db=>params[:db]}
@@ -24,6 +33,13 @@ post "/:db/assessment/:id/review" do
     assessment = http_get("#{settings.couchdb}/#{params[:db]}/#{params[:id]}")
 
     assessment["review"] = {"status"=>params[:status],"comment"=>params[:comment],"rationale"=>params[:rationale]}
+    
+    if params.has_key?("rewrite") && params["rewrite"]=="yes"
+      assessment["review"]["rewrite"] = true
+    else
+      assessment["review"]["rewrite"] = false
+    end
+
     assessment["evaluator"] = session["user"]["name"]
 
     contributors = assessment["metadata"]["contributor"].split(" ; ")

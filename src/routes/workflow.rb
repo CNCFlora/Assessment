@@ -3,11 +3,13 @@ get "/:db/workflow" do
     require_logged_in
 
     species = search(params[:db],"taxon","taxonomicStatus:\"accepted\" AND (taxonRank:\"species\" OR taxonRank:\"variety\" OR taxonRank:\"subspecie\")")
+    got_species = {}
 
     _families = []
 
     species.each{|spp|
-        _families << spp["family"].upcase
+        _families << spp["family"].upcase.strip
+        got_species[spp["scientificNameWithoutAuthorship"]]=true
     }
 
     families=[]
@@ -18,13 +20,20 @@ get "/:db/workflow" do
 
     assessments = search(params[:db],"assessment","*")
 
-    assessments.each{ |doc|
-        family = doc["taxon"]["family"].upcase
-        status = doc["metadata"]["status"]
+    got={}
+    assessments.sort_by {|doc| doc["metadata"]["created"] }.each{ |doc|
+        who = doc["taxon"]["scientificNameWithoutAuthorship"]
+        if got_species.has_key?(who) && !got.has_key?(who)
+          got[who]=true
 
-        element = families.find{ |k| k["family"].upcase==family }
-        if element then element[status] += 1 end
+          family = doc["taxon"]["family"].upcase
+          status = doc["metadata"]["status"]
+
+          element = families.find{ |k| k["family"].upcase.strip==family }
+          if element then element[status] += 1 end
+        end
     }
+    puts got
 
     families.each {|family|
         family["total"]= search(params[:db],"taxon","family:\"#{family["family"]}\" AND taxonomicStatus:\"accepted\" 

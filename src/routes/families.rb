@@ -5,7 +5,7 @@ get "/:db/families" do
 
     r = search(params[:db],"taxon","taxonomicStatus:\"accepted\"")
     r.each{|taxon|
-        families.push taxon["family"].upcase
+        families.push taxon["family"].upcase.strip
     }
 
     view :families, {:families=>families.uniq.sort,:db=>params[:db]}
@@ -34,7 +34,7 @@ get "/:db/specie/:scientificName" do
             r["roles"].each{|role|
               if role["role"].downcase == "assessor" then
                 role["entities"].each {|e|
-                  if e.downcase == specie["scientificName"].downcase || e.downcase == specie["scientificNameWithoutAuthorship"].downcase || e.downcase == specie["family"].downcase then
+                  if e.downcase == specie["scientificName"].downcase || e.downcase == specie["scientificNameWithoutAuthorship"].downcase || e.downcase == specie["family"].downcase || e.downcase == "all" then
                     can_create=true;
                   end
                 }

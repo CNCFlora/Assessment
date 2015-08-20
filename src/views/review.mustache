@@ -19,7 +19,10 @@
                 <textarea name="comment" rows="10" cols="30" class='form-control'>{{review.comment}}</textarea>
             </p>
             <p>
-                <label for="rationale">{{strings.rewrite-rationale}}</label>
+                <label for="rationale">
+                  {{strings.rewrite-rationale}}
+                  <input id="rewrite" name="rewrite" type="checkbox" {{#review.rewrite}}checked{{/review.rewrite}} value="yes" />
+                </label>
                 <textarea name="rationale" rows="10" cols="30" class='form-control'>{{review.rationale}}</textarea>
             </p>
             <p>

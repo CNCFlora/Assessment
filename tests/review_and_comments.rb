@@ -57,12 +57,21 @@ describe "Review and comments system" do
 
         post "/cncflora_test/assessment/#{id}/status/review", {}
 
-        post "/cncflora_test/assessment/#{id}/review", {:status=>"inconsistent",:comment=>"what?",:rationale=>"re rationale"}
+        post "/cncflora_test/assessment/#{id}/review", {:status=>"inconsistent",:comment=>"what?",:rationale=>"re rationale",:rewrite=>""}
 
         get "/cncflora_test/assessment/#{id}"
         expect(last_response.body).to have_tag(".evaluator","Bruno")
         expect(last_response.body).to have_tag(".evaluation","inconsistent")
-        expect(last_response.body).to have_tag("span.rationale",:text=>"re rationale")
+        expect(last_response.body).to have_tag("span.rationale",:text=>"")
+
+        post "/cncflora_test/assessment/#{id}/review", {:status=>"inconsistent",:comment=>"what?",:rationale=>"re rationale2",:rewrite=>"yes"}
+
+        get "/cncflora_test/assessment/#{id}"
+        expect(last_response.body).to have_tag("span.rationale",:text=>"re rationale2")
+
+        post "/cncflora_test/assessment/#{id}", {:data=>{:rationale=>"Test rational"}.to_json}
+        get "/cncflora_test/assessment/#{id}"
+        expect(last_response.body).to have_tag("span.rationale",:text=>"Test rational")
     end
 
     it "Can comment an assessment" do

@@ -3,20 +3,18 @@
 <h3><i>{{taxon.scientificNameWithoutAuthorship}}</i> {{taxon.scientificNameAuthorship}}</h3>
 
 <p>
-    {{#profiles}}
-    {{#profile}}
+    {{#profiles_url}}
     <a href="{{profiles_url}}/{{db}}/specie/{{taxon.scientificNameWithoutAuthorship}}" class='btn btn-default'>
         <span class="glyphicon glyphicon-leaf"></span>
         {{strings.see-profile}}
     </a>
-    {{/profile}}
-    {{/profiles}}
-    {{#occurrences}}
+    {{/profiles_url}}
+    {{#occurrences_url}}
     <a href="{{occurrences_url}}/{{db}}/specie/{{taxon.scientificNameWithoutAuthorship}}" class='btn btn-default'>
         <span class='glyphicon glyphicon-globe'></span>
         {{strings.occurrence-map}}
     </a>
-    {{/occurrences}}
+    {{/occurrences_url}}
 </p>
 
 <p>

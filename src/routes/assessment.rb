@@ -43,7 +43,27 @@ get "/:db/assessment/:id" do
     assessment["metadata"]["modified_date"] = Time.at(assessment["metadata"]["modified"]).to_s[0..9]
 
     if assessment["review"] && assessment["review"]["rationale"].length >=1 
+      if assessment["review"].has_key?("rewrite") 
+        if assessment["review"]["rewrite"] 
+          assessment["rationale"] = assessment["review"]["rationale"]
+        end
+      else
         assessment["rationale"] = assessment["review"]["rationale"]
+      end
+    end
+    if assessment["review"] 
+      if assessment["review"]["rationale"].length >=1 
+        if assessment["review"].has_key?("rewrite") 
+          if assessment["review"]["rewrite"] 
+            assessment["rationale"] = assessment["review"]["rationale"]
+          end
+        else
+          assessment["review"]["rewrite"]=true
+          assessment["rationale"] = assessment["review"]["rationale"]
+        end
+      else
+          assessment["review"]["rewrite"]=false
+      end
     end
 
     assessment["status-#{assessment["metadata"]["status"]}"] = true
@@ -150,6 +170,9 @@ post "/:db/assessment/:id" do
 
     if assessment["review"]
         data["review"] = assessment["review"]
+        if assessment["rationale"] != data["rationale"]
+          data["review"]["rewrite"]=false
+        end
     end
 
     if assessment["comments"]
