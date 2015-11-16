@@ -97,6 +97,7 @@
     "none":"Nenhum",
     "reasons-for-re-assessment":"Razões para re-avaliação",
     "cat-crit-changed":"Houve mudança de criterio ou categoria",
-    "other-assessments":"Outras avaliações dessa espécie"
+    "other-assessments":"Outras avaliações dessa espécie",
+    "assessments-history":"Histórico de avaliações da espécie"
 
-} 
+}

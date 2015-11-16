@@ -119,4 +119,14 @@
     {{/references}}
 </ul>
 
-
+<h4>{{strings.assessments-history}}</h4>
+{{^past}}
+    <p>N/A</p>
+{{/past}}
+<ul>
+    {{#past}}
+        <li> <a href="{{base}}/{{past_db}}/assessment/{{past_id}}">
+            {{metadata.modified_year}}:</a> {{criteria}} ({{title}}) 
+        </li> 
+    {{/past}}
+</ul>

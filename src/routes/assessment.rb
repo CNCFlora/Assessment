@@ -114,6 +114,8 @@ get "/:db/assessment/:id" do
           past_assessment["past_id"] = past_assessment["id"]
           past_assessment["metadata"]["created_date"] = Time.at(past_assessment["metadata"]["created"]).to_s[0..9]
           past_assessment["metadata"]["modified_date"] = Time.at(past_assessment["metadata"]["modified"]).to_s[0..9]
+          past_assessment["metadata"]["modified_year"] = Time.at(past_assessment["metadata"]["modified"]).strftime("%Y")
+          past_assessment["title"] = past_db.split("_").map(&:capitalize).join(" ")
           past.push(past_assessment)
         end
       end
