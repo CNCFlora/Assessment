@@ -100,6 +100,11 @@ get "/:db/assessment/:id" do
       end
     }
 
+    can_see_review = false
+    if (assessment["assessor"] == session["user"]["name"] or assessment["evaluator"] == session["user"]["name"]) then
+      can_see_review = true
+    end
+
     profile = search(params[:db],"profile","taxon.scientificNameWithoutAuthorship:\"#{assessment["taxon"]["scientificNameWithoutAuthorship"]}\"")[0]
 
     past = []
@@ -124,7 +129,7 @@ get "/:db/assessment/:id" do
     past = past.sort_by{|a| a["metadata"]["modified_date"] }
 
 
-    view :view, {:assessment => assessment, :can_edit=>can_edit, :can_review=>can_review,:db=>params[:db], :profile=>profile, :past=>past}
+    view :view, {:assessment => assessment, :can_edit=>can_edit, :can_review=>can_review,:db=>params[:db], :profile=>profile, :past=>past, :can_see_review=>can_see_review}
 end
 
 get "/:db/assessment/:id/edit" do

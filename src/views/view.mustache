@@ -38,14 +38,15 @@
     </p>
     {{/past}}
 
-    <h4>{{strings.last-review}}</h4>
-    {{#review}}
-    <p><strong>(<span class='evaluator'>{{evaluator}}</span>) <span class='evaluation'>{{review.status}}</span></strong>: {{review.comment}}</p>
-    {{/review}}
-
-    {{^review}}
-    <p>{{strings.no-review}}</p>
-    {{/review}}
+    {{#can_see_review}}
+        <h4>{{strings.last-review}}</h4>
+        {{#review}}
+            <p><strong>(<span class='evaluator'>{{evaluator}}</span>) <span class='evaluation'>{{review.status}}</span></strong>: {{review.comment}}</p>
+        {{/review}}
+        {{^review}}
+            <p>{{strings.no-review}}</p>
+        {{/review}}
+    {{/can_see_review}}
 
     {{#logged}}
 
