@@ -127,7 +127,7 @@ get "/:db/assessment/:id" do
     if currentTaxon.nil? then
       currentTaxon={"not_found"=>true}
     elsif currentTaxon["scientificNameWithoutAuthorship"] != assessment['taxon']['scientificNameWithoutAuthorship'] then
-      currentTaxon={"changed"=>true}
+      currentTaxon["changed"]=true
     else
       syns = search(params[:db],"taxon","taxonomicStatus:synonym AND acceptedNameUsage:\"#{assessment['taxon']['scientificNameWithoutAuthorship']}\"").map {|s| s["scientificNameWithoutAuthorship"]} .sort().join(",")
       fsyns = currentTaxon["synonyms"].map {|s| s["scientificNameWithoutAuthorship"]} .sort().join(",")
