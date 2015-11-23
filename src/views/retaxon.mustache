@@ -1,0 +1,21 @@
+{{#currentTaxon}}
+  <h4>{{strings.current-taxon}}</h4>
+  {{#not_found}}
+  <p class='taxon-changed'><strong>{{strings.not-found}}</strong></p>
+  {{/not_found}}
+  {{^not_found}}
+  {{#changed}}
+  <p class='taxon-changed'><strong>{{strings.taxonomy-different}}</strong></p>
+  {{/changed}}
+  <p><strong>{{strings.acceptedNameUsage}}</strong>: {{acceptedNameUsage}}</p>
+  <p><strong>{{strings.synonyms}}</strong>:
+  {{^synonyms}}
+  N/A
+  {{/synonyms}}
+    {{#synonyms}}
+      {{scientificName}} ;
+    {{/synonyms}}
+  </p>
+  {{/not_found}}
+{{/currentTaxon}}
+

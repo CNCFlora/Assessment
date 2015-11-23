@@ -98,6 +98,10 @@
     "reasons-for-re-assessment":"Razões para re-avaliação",
     "cat-crit-changed":"Houve mudança de criterio ou categoria",
     "other-assessments":"Outras avaliações dessa espécie",
-    "assessments-history":"Histórico de avaliações da espécie"
-
+    "assessments-history":"Histórico de avaliações da espécie",
+    "current-taxon":"Taxonomia atual",
+    "acceptedNameUsage":"Nome aceito",
+    "taxonomy-different":"Diferente!",
+    "synonyms":"Sinônimos",
+    "not-found":"Não encontrada!"
 }

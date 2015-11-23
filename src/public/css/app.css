@@ -12,3 +12,7 @@ li {
     border-right: 1px solid #ddd;
     padding: 10px;
 }
+
+.taxon-changed {
+  color:red;
+}

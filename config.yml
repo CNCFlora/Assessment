@@ -5,6 +5,7 @@ development:
     connect: "http://connect:80"
     connect_url: "http://localhost:8080"
     elasticsearch: "http://elasticsearch:9200"
+    floradata: "http://floradata:80"
 test:
     lang: "pt"
     base: ""
@@ -12,12 +13,14 @@ test:
     connect: "http://connect:80"
     connect_url: "http://localhost:8080"
     elasticsearch: "http://elasticsearch:9200"
+    floradata: "http://floradata:80"
 production:
     lang: 'pt'
     couchdb: 'http://couchdb:5984'
     connect: 'http://connect'
     connect_url: 'http://$HOST/connect'
     elasticsearch: 'http://elasticsearch:9200'
+    floradata: "http://floradata:80"
     base: "/assessments"
     occurrences_url: "http://$HOST/occurrences"
     profiles_url: "http://$HOST/profiles"

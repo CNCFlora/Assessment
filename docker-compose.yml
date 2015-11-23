@@ -8,6 +8,7 @@ assessments:
         - elasticsearch:elasticsearch
         - couchdb:couchdb
         - connect:connect
+        - floradata:floradata
     environment:
         - RACK_ENV=development
 elasticsearch:

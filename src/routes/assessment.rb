@@ -123,8 +123,22 @@ get "/:db/assessment/:id" do
 
     past = past.sort_by{|a| a["metadata"]["modified_date"] }
 
+    currentTaxon = http_get("#{settings.floradata}/api/v1/specie?scientificName=#{assessment["taxon"]["scientificNameWithoutAuthorship"]}")["result"]
+    if currentTaxon.nil? then
+      currentTaxon={"not_found"=>true}
+      puts "so?"
+    elsif currentTaxon["scientificNameWithoutAuthorship"] != assessment['taxon']['scientificNameWithoutAuthorship'] then
+      puts "=>chagned"
+      currentTaxon={"changed"=>true}
+    else
+      syns = search(params[:db],"taxon","taxonomicStatus:synonym AND acceptedNameUsage:\"#{assessment['taxon']['scientificNameWithoutAuthorship']}\"").map {|s| s["scientificNameWithoutAuthorship"]} .sort().join(",")
+      fsyns = currentTaxon["synonyms"].map {|s| s["scientificNameWithoutAuthorship"]} .sort().join(",")
+      if syns != fsyns then
+        currentTaxon['changed']=true
+      end
+    end
 
-    view :view, {:assessment => assessment, :can_edit=>can_edit, :can_review=>can_review,:db=>params[:db], :profile=>profile, :past=>past}
+    view :view, {:assessment => assessment, :can_edit=>can_edit, :can_review=>can_review,:db=>params[:db], :profile=>profile, :past=>past, :currentTaxon=>currentTaxon}
 end
 
 get "/:db/assessment/:id/edit" do
