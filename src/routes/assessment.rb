@@ -164,13 +164,7 @@ get "/:db/assessment/:id/edit" do
           past_assessment["metadata"]["modified_date"] = Time.at(past_assessment["metadata"]["modified"]).to_s[0..9]
           past_assessment["metadata"]["modified_year"] = Time.at(past_assessment["metadata"]["modified"]).strftime("%Y")
           past_assessment["title"] = past_db.split("_").map(&:capitalize).join(" ")
-          if not past_assessment.has_key?("criteria") 
-            past_assessment["criteria"] = ""
-          end
-          if not past_assessment.has_key?("category") 
-            past_assessment["category"] = ""
-          end
-          past.push("<a href=\"/"+ past_db+ "/assessment/" + past_assessment["past_id"] + "\" class=\"year\">" + past_assessment["metadata"]["modified_year"] + ":</a> " + past_assessment["criteria"] + " - <b>" + past_assessment["category"] + "</b> - (" + past_assessment["title"] + ")")
+          past.push("<a href=\"#{ settings.base }/#{past_db}/assessment/#{past_assessment["past_id"]}\" class=\"year\">#{past_assessment["metadata"]["modified_year"]}:</a>#{past_assessment["criteria"]} - <b>#{past_assessment["category"]}</b> - (#{past_assessment["title"]})")
         end
       end
     }
