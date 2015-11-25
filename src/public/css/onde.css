@@ -21,6 +21,9 @@
     background-color: #ffffff;
 }
 
+.onde-panel a.year {
+    color: #428bca; 
+}
 .onde-panel a {
 /*    color: #00970b; */
     color: #999;
