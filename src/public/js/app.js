@@ -46,7 +46,7 @@ $(function(){
         }
         return false;
     });
-    
+
     if (typeof schema == "object") {
         form = new onde.Onde($("#data"));
         form.render(schema,data,{collapsedCollapsibles: true});
@@ -55,6 +55,7 @@ $(function(){
         $("input[id*='-evaluator']").attr("readonly",true);
         $("input[id*='-criteria']").attr("readonly",true);
         $("input[id*='-criteria']").click(function(evt){ $("#btn-criteria").click() });
+        $("input[id*='-past']").attr("readonly",true);
 
         $("#data").submit(function(e){
             e.preventDefault();

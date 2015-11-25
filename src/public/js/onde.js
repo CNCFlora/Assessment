@@ -1,7 +1,7 @@
 ; // Don't remove this lonely semi-colon
 
 /* NOTES:
- * 
+ *
  * - Don't forget to escape.
  *   Use jQuery.fn.text and jQuery.fn.attr rather than string concatenation where possible.
  */
@@ -134,7 +134,7 @@ onde.Onde.prototype.render = function (schema, data, opts) {
     this.panelElement.empty();
     this.instanceId = this._generateFieldId();
     this.initialRendering = true;
-    this.renderObject(this.documentSchema, this.panelElement, this.instanceId, 
+    this.renderObject(this.documentSchema, this.panelElement, this.instanceId,
         this.documentInstance);
     this.initialRendering = false;
     if (opts.renderFinished) {
@@ -153,8 +153,8 @@ onde.Onde.prototype.renderObject = function (schema, parentNode, namespace, data
     var props = schema.properties || {};
     var sortedKeys = [];
     for (var propName in props) {
-        if (props.hasOwnProperty(propName) && 
-          (!schema.primaryProperty || propName != schema.primaryProperty) && 
+        if (props.hasOwnProperty(propName) &&
+          (!schema.primaryProperty || propName != schema.primaryProperty) &&
           sortedKeys.indexOf(propName) < 0) {
             sortedKeys.push(propName);
         }
@@ -189,7 +189,7 @@ onde.Onde.prototype.renderObject = function (schema, parentNode, namespace, data
     for (var ik = 0; ik < sortedKeys.length; ik++) {
         var propName = sortedKeys[ik];
         var valueData = data ? data[propName] : null;
-        var rowN = this.renderObjectPropertyField(namespace, fieldId, 
+        var rowN = this.renderObjectPropertyField(namespace, fieldId,
             props[propName], propName, valueData);
         if (ik == 0) {
             rowN.addClass('first');
@@ -204,7 +204,7 @@ onde.Onde.prototype.renderObject = function (schema, parentNode, namespace, data
     var showEditBar = false;
     // Now check if the object has additional properties
     if (schema.additionalProperties) {
-        //NOTE: additionalProperties could have 4 types of value: boolean, 
+        //NOTE: additionalProperties could have 4 types of value: boolean,
         // string (the name of the type), object (type info), array of types.
         var firstItem = rowN ? false : true;
         if (schema.additionalProperties === true) {
@@ -212,8 +212,8 @@ onde.Onde.prototype.renderObject = function (schema, parentNode, namespace, data
                 //NOTE: No need to check the types. Will be done by the inner renderers.
                 // Take only additional items
                 if (sortedKeys.indexOf(dKey) === -1) {
-                    rowN = this.renderObjectPropertyField(namespace, fieldId, 
-                        { type: typeof data[dKey], additionalProperties: true, _deletable: true }, 
+                    rowN = this.renderObjectPropertyField(namespace, fieldId,
+                        { type: typeof data[dKey], additionalProperties: true, _deletable: true },
                         dKey, data[dKey]);
                     if (firstItem) {
                         rowN.addClass('first');
@@ -304,9 +304,9 @@ onde.Onde.prototype.renderEnumField = function (fieldName, fieldInfo, valueData)
         selectedValue = valueData;
         hasSelected = true;
     }
-    // If there's no data provided, or the data is not valid, 
+    // If there's no data provided, or the data is not valid,
     // try to get selected value from the default.
-    if (!hasSelected && typeof fieldInfo['default'] === fieldInfo.type && 
+    if (!hasSelected && typeof fieldInfo['default'] === fieldInfo.type &&
       fieldInfo.enum.indexOf(fieldInfo['default']) >= 0) {
         selectedValue = fieldInfo['default'];
         hasSelected = true;
@@ -559,7 +559,7 @@ onde.Onde.prototype.renderFieldValue = function (fieldName, fieldInfo, parentNod
             attr('id', fieldValueId).
             attr('name', fieldName).
             addClass('value-input');
-        if (valueData === 'on' || valueData === 'true' || valueData === 'checked' || 
+        if (valueData === 'on' || valueData === 'true' || valueData === 'checked' ||
           valueData === '1' || valueData === 1 || valueData === true) {
             fieldValueNode.attr('checked', 'checked');
         }
@@ -612,7 +612,7 @@ onde.Onde.prototype.renderFieldValue = function (fieldName, fieldInfo, parentNod
         if (valueData) {
             for (var idat = 0; idat < valueData.length; idat++) {
                 lastIndex++;
-                var chRowN = this.renderListItemField(fieldName, itemSchema, 
+                var chRowN = this.renderListItemField(fieldName, itemSchema,
                     lastIndex, valueData[idat]);
                 if (idat == 0) {
                     chRowN.addClass('first');
@@ -624,24 +624,30 @@ onde.Onde.prototype.renderFieldValue = function (fieldName, fieldInfo, parentNod
             }
         }
         parentNode.append(contN);
-        var editBar = $('<div></div>').
-            attr('id', fieldValueId + '-edit-bar').
-            addClass('edit-bar').
-            addClass('array');
-        var inner = $('<small></small>');
-        inner.append(this.tr("Add item: "));
-        var addBtn = $('<button></button>').
-            addClass('field-add').
-            addClass('item-add').
-            attr('data-field-id', fieldValueId).
-            attr('data-object-namespace', fieldName).
-            attr('data-last-index', lastIndex).
-            text(this.tr("Add"));
-        this.renderEditBarContent(itemTypes, fieldValueId, inner, addBtn);
-        inner.append(' ').append(addBtn);
-        editBar.append(inner);
-        parentNode.append(editBar);
+        if (fieldInfo.format != "readonly") {
+            var editBar = $('<div></div>').
+                attr('id', fieldValueId + '-edit-bar').
+                addClass('edit-bar').
+                addClass('array');
+            var inner = $('<small></small>');
+            inner.append(this.tr("Add item: "));
+            var addBtn = $('<button></button>').
+                addClass('field-add').
+                addClass('item-add').
+                attr('data-field-id', fieldValueId).
+                attr('data-object-namespace', fieldName).
+                attr('data-last-index', lastIndex).
+                text(this.tr("Add"));
+            this.renderEditBarContent(itemTypes, fieldValueId, inner, addBtn);
+            inner.append(' ').append(addBtn);
+            editBar.append(inner);
+            parentNode.append(editBar);
+        }
         return;
+    } else if (fieldInfo.type == 'readonly') {
+        var valueContainer = $('<span></span>').addClass('value').
+            append(this.tr(valueData));
+        parentNode.append(valueContainer);
     } else {
         var valueContainer = $('<span></span>').addClass('value').
             append(this.tr("InternalError: Unsupported property type: ")).
@@ -714,8 +720,8 @@ onde.Onde.prototype.renderObjectPropertyField = function (namespace, baseId, fie
     // Use the label if provided. Otherwise, use property name.
     var labelText = fieldInfo.label || propName;
     //TODO: Not only the root
-    if ((namespace === '' || namespace.indexOf('.') < 0) && 
-      this.documentSchema.primaryProperty && 
+    if ((namespace === '' || namespace.indexOf('.') < 0) &&
+      this.documentSchema.primaryProperty &&
       this.documentSchema.primaryProperty == propName) {
         // Primary property
         rowN.addClass('primary');
@@ -833,7 +839,7 @@ onde.Onde.prototype.renderListItemField = function (namespace, fieldInfo, index,
         labelN.attr('data-fieldvalue-container-id', 'fieldvalue-container-' + fieldBaseId);
     }
     this.renderFieldValue(fieldName, fieldInfo, valN, valueData);
-    if (!deleterShown) {
+    if (!deleterShown && fieldInfo.type != 'readonly') {
         valN.append($('<small></small>').append(' ').append($('<button></button>').
             attr('title', this.tr("Delete item")).
             attr('data-id', fieldId).
@@ -1003,7 +1009,7 @@ onde.Onde.prototype._buildProperty = function (propName, propInfo, path, formDat
         var lsErrCount = 0;
         var lsErrData = [];
         for (var iidx = 0; iidx < itemIndices.length; ++iidx) {
-            var cRes = this._buildProperty(propName + '[' + itemIndices[iidx] + ']', 
+            var cRes = this._buildProperty(propName + '[' + itemIndices[iidx] + ']',
                 propInfo ? propInfo.items : null, path, formData);
             lsData.push(cRes.data);
             if (cRes.errorCount) {
@@ -1029,8 +1035,8 @@ onde.Onde.prototype._buildProperty = function (propName, propInfo, path, formDat
         }
         if (dataType == 'boolean') {
             //NOTE: This makes boolean property always present
-            result.data = (valData === 'on' || 
-                valData === 'true' || valData === 'checked' || 
+            result.data = (valData === 'on' ||
+                valData === 'true' || valData === 'checked' ||
                 valData === '1' || valData === 1 || valData === true);
             result.noData = false;
         } else if (valData) {
@@ -1120,7 +1126,7 @@ onde.Onde.prototype._buildObject = function (schema, path, formData) {
                 if (dataType === 'object') {
                     var bPropName = propName.split(this.fieldNamespaceSeparator, 1)[0];
                     if (!(bPropName in result.data)) {
-                        var cRes = this._buildProperty(bPropName, 
+                        var cRes = this._buildProperty(bPropName,
                             { type: 'object', additionalProperties: true }, path, formData);
                         if (!cRes.noData) {
                             result.data[bPropName] = cRes.data;
@@ -1162,8 +1168,8 @@ onde.Onde.prototype._buildObject = function (schema, path, formData) {
                             result.data[propName] = dVal;
                         }
                     } else if (dataType == 'boolean') {
-                        result.data[propName] = (valData === 'on' || 
-                            valData === 'true' || valData === 'checked' || 
+                        result.data[propName] = (valData === 'on' ||
+                            valData === 'true' || valData === 'checked' ||
                             valData === '1' || valData === 1 || valData === true);
                     } else if (dataType == 'string') {
                         result.data[propName] = valData;

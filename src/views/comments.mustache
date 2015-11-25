@@ -33,13 +33,15 @@
     {{> metadata}}
     {{/metadata}}
 
-    <h4>{{strings.last-review}}</h4>
-    {{#review}}
-    <p><strong>({{evaluator}}) {{review.status}}</strong>: {{review.comment}}</p>
-    {{/review}}
-    {{^review}}
-    <p>{{strings.no-review}}</p>
-    {{/review}}
+    {{#can_see_review}}
+        <h4>{{strings.last-review}}</h4>
+        {{#review}}
+        <p><strong>({{evaluator}}) {{review.status}}</strong>: {{review.comment}}</p>
+        {{/review}}
+        {{^review}}
+        <p>{{strings.no-review}}</p>
+        {{/review}}
+    {{/can_see_review}}
 
     {{#role-assessor}}
     {{#owner}}

@@ -68,8 +68,13 @@ get "/:db/assessment/:id/comment" do
         assessment["rationale"] = assessment["review"]["rationale"]
     end
 
+    can_see_review = false
+    if (assessment["assessor"] == session["user"]["name"] or assessment["evaluator"] == session["user"]["name"]) then
+      can_see_review = true
+    end
+
     owner = assessment["metadata"]["creator"] == session["user"]["name"]
-    view :comments, {:assessment => assessment,:owner=>owner ,:db=>params[:db]}
+    view :comments, {:assessment => assessment,:owner=>owner ,:db=>params[:db], :can_see_review=>can_see_review}
 end
 
 post "/:db/assessment/:id/comment" do

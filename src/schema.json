@@ -105,7 +105,7 @@
 			"type":"number",
             "label":"Date of assessment",
 			"description": "Timestamp of the assessment"
-		},        
+		},
     "information": {
         "type":"object",
         "label":"More information",
@@ -201,6 +201,14 @@
           "format":"multiline"
         }
       }
+    },
+    "past": {
+        "type": "array",
+        "label": "Histórico de avaliação da espécie",
+        "format": "readonly",
+        "items": {
+            "type": "readonly"
+        }
     },
 		"notes": {
 			"type":"string",
