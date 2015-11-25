@@ -164,7 +164,12 @@ get "/:db/assessment/:id/edit" do
           past_assessment["metadata"]["modified_date"] = Time.at(past_assessment["metadata"]["modified"]).to_s[0..9]
           past_assessment["metadata"]["modified_year"] = Time.at(past_assessment["metadata"]["modified"]).strftime("%Y")
           past_assessment["title"] = past_db.split("_").map(&:capitalize).join(" ")
-          past.push("<a href=\"#{ settings.base }/#{past_db}/assessment/#{past_assessment["past_id"]}\" class=\"year\">#{past_assessment["metadata"]["modified_year"]}:</a>#{past_assessment["criteria"]} - <b>#{past_assessment["category"]}</b> - (#{past_assessment["title"]})")
+          past_string = "<a href=\"#{ settings.base }/#{past_db}/assessment/#{past_assessment["past_id"]}\" class=\"year\">"\
+                        "#{past_assessment["metadata"]["modified_year"]} - #{past_assessment["title"]}:</a></ul>"\
+                        "<li style=\"padding-left:3em\"><b>#{settings.strings["category"]}:</b> #{past_assessment["category"]}</li>"\
+                        "<li style=\"padding-left:3em\"><b>#{settings.strings["criteria"]}:</b> #{past_assessment["criteria"]}</li>"\
+                        "</ul>"
+          past.push(past_string)
         end
       end
     }
