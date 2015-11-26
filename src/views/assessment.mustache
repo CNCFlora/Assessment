@@ -126,7 +126,10 @@
 <ul>
     {{#past}}
         <li> <a href="{{base}}/{{past_db}}/assessment/{{past_id}}">
-            {{metadata.modified_year}}:</a> {{criteria}} ({{title}}) 
+{{metadata.modified_year}} - {{title}}:</a><ul>
+{{#category}}<li><b>{{strings.category}}:</b> {{category}}{{/category}}</li>
+{{#criteria}}<li><b>{{strings.criteria}}:</b> {{criteria}}{{/criteria}}</li>
+</ul>
         </li> 
     {{/past}}
 </ul>

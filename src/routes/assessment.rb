@@ -100,6 +100,11 @@ get "/:db/assessment/:id" do
       end
     }
 
+    can_see_review = false
+    if (assessment["assessor"] == session["user"]["name"] or assessment["evaluator"] == session["user"]["name"]) then
+      can_see_review = true
+    end
+
     profile = search(params[:db],"profile","taxon.scientificNameWithoutAuthorship:\"#{assessment["taxon"]["scientificNameWithoutAuthorship"]}\"")[0]
 
     past = []
@@ -136,7 +141,17 @@ get "/:db/assessment/:id" do
       end
     end
 
-    view :view, {:assessment => assessment, :can_edit=>can_edit, :can_review=>can_review,:db=>params[:db], :profile=>profile, :past=>past, :currentTaxon=>currentTaxon}
+    view :view, 
+      {
+      :assessment => assessment,
+      :can_edit=>can_edit,
+      :can_review=>can_review,
+      :db=>params[:db],
+      :profile=>profile, 
+      :past=>past, 
+      :can_see_review=>can_see_review,
+      :currentTaxon=>currentTaxon
+    }
 end
 
 get "/:db/assessment/:id/edit" do
@@ -155,6 +170,32 @@ get "/:db/assessment/:id/edit" do
     schema["properties"].delete("dateOfAssessment")
     schema["properties"].delete("review")
     schema["properties"].delete("comments")
+
+    #Get past assessments
+    past = []
+
+    got={}
+    http_get("#{ settings.couchdb }/_all_dbs").each {|past_db|
+      if past_db[0] != "_" && !past_db.match('_history') && past_db != "public" && past_db != params[:db] then
+        past_assessment=  search(past_db,"assessment","taxon.scientificNameWithoutAuthorship:\"#{assessment["taxon"]["scientificNameWithoutAuthorship"]}\"")[0]
+        if past_assessment && !past_assessment.nil? && !got[past_assessment["id"]] then
+          got[past_assessment["id"]]=true
+          past_assessment["past_db"] = past_db
+          past_assessment["past_id"] = past_assessment["id"]
+          past_assessment["metadata"]["created_date"] = Time.at(past_assessment["metadata"]["created"]).to_s[0..9]
+          past_assessment["metadata"]["modified_date"] = Time.at(past_assessment["metadata"]["modified"]).to_s[0..9]
+          past_assessment["metadata"]["modified_year"] = Time.at(past_assessment["metadata"]["modified"]).strftime("%Y")
+          past_assessment["title"] = past_db.split("_").map(&:capitalize).join(" ")
+          past_string = "<a href=\"#{ settings.base }/#{past_db}/assessment/#{past_assessment["past_id"]}\" class=\"year\">"\
+                        "#{past_assessment["metadata"]["modified_year"]} - #{past_assessment["title"]}:</a></ul>"\
+                        "<li style=\"padding-left:3em\"><b>#{settings.strings["category"]}:</b> #{past_assessment["category"]}</li>"\
+                        "<li style=\"padding-left:3em\"><b>#{settings.strings["criteria"]}:</b> #{past_assessment["criteria"]}</li>"\
+                        "</ul>"
+          past.push(past_string)
+        end
+      end
+    }
+    assessment["past"] = past
     view :edit, {:assessment => assessment,:schema=> JSON.dump(schema),:data => JSON.dump(assessment),:db=>params[:db]}
 end
 
