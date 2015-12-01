@@ -105,14 +105,44 @@ get "/:db/assessment/:id" do
       can_see_review = true
     end
 
+    # Get profile
     profile = search(params[:db],"profile","taxon.scientificNameWithoutAuthorship:\"#{assessment["taxon"]["scientificNameWithoutAuthorship"]}\"")[0]
 
-    past = []
+    # Get current taxonomy
+    currentTaxon = http_get("#{settings.floradata}/api/v1/specie?scientificName=#{assessment["taxon"]["scientificNameWithoutAuthorship"]}")["result"]
+    if currentTaxon.nil? then
+      currentTaxon={"not_found"=>true}
+    elsif currentTaxon["scientificNameWithoutAuthorship"] != assessment['taxon']['scientificNameWithoutAuthorship'] then
+      currentTaxon["changed"]=true
+    else
+      syns = search(params[:db],"taxon","taxonomicStatus:synonym AND acceptedNameUsage:\"#{assessment['taxon']['scientificNameWithoutAuthorship']}\"").map {|s| s["scientificNameWithoutAuthorship"]} .sort().join(",")
+      fsyns = currentTaxon["synonyms"].map {|s| s["scientificNameWithoutAuthorship"]} .sort().join(",")
+      if syns != fsyns then
+        currentTaxon['changed']=true
+      end
+    end
 
+    # Get past assessments
+    past = []
     got={}
     http_get("#{ settings.couchdb }/_all_dbs").each {|past_db|
       if past_db[0] != "_" && !past_db.match('_history') && past_db != "public" && past_db != params[:db] then
-        past_assessment=  search(past_db,"assessment","taxon.scientificNameWithoutAuthorship:\"#{assessment["taxon"]["scientificNameWithoutAuthorship"]}\"")[0]
+        # Get accepted name
+        names = [assessment["taxon"]["scientificNameWithoutAuthorship"]]
+        # Get current taxonomy
+        if not currentTaxon.nil? then
+          names.push(currentTaxon["scientificNameWithoutAuthorship"])
+        end
+        # Add synonyms already registered in our database
+        syns = search(params[:db],"taxon","taxonomicStatus:synonym AND acceptedNameUsage:\"#{assessment['taxon']['scientificNameWithoutAuthorship']}\"").map {|s| s["scientificNameWithoutAuthorship"]}
+        # Add new synonyms from FloraData
+        fsyns = currentTaxon["synonyms"].map {|s| s["scientificNameWithoutAuthorship"]}
+        # Combine arrays
+        names = (names | syns | fsyns)
+        query = "taxon.scientificNameWithoutAuthorship:\"" + names.join("\" OR taxon.scientificNameWithoutAuthorship:\"") + "\""
+
+        # Get past assessments
+        past_assessment=  search(past_db,"assessment", query)[0]
         if past_assessment && !past_assessment.nil? && !got[past_assessment["id"]] then
           got[past_assessment["id"]]=true
           past_assessment["past_db"] = past_db
@@ -127,19 +157,6 @@ get "/:db/assessment/:id" do
     }
 
     past = past.sort_by{|a| a["metadata"]["modified_date"] }
-
-    currentTaxon = http_get("#{settings.floradata}/api/v1/specie?scientificName=#{assessment["taxon"]["scientificNameWithoutAuthorship"]}")["result"]
-    if currentTaxon.nil? then
-      currentTaxon={"not_found"=>true}
-    elsif currentTaxon["scientificNameWithoutAuthorship"] != assessment['taxon']['scientificNameWithoutAuthorship'] then
-      currentTaxon["changed"]=true
-    else
-      syns = search(params[:db],"taxon","taxonomicStatus:synonym AND acceptedNameUsage:\"#{assessment['taxon']['scientificNameWithoutAuthorship']}\"").map {|s| s["scientificNameWithoutAuthorship"]} .sort().join(",")
-      fsyns = currentTaxon["synonyms"].map {|s| s["scientificNameWithoutAuthorship"]} .sort().join(",")
-      if syns != fsyns then
-        currentTaxon['changed']=true
-      end
-    end
 
     view :view, 
       {
@@ -171,13 +188,31 @@ get "/:db/assessment/:id/edit" do
     schema["properties"].delete("review")
     schema["properties"].delete("comments")
 
+    # Get current taxonomy
+    currentTaxon = http_get("#{settings.floradata}/api/v1/specie?scientificName=#{assessment["taxon"]["scientificNameWithoutAuthorship"]}")["result"]
+
     #Get past assessments
     past = []
 
     got={}
     http_get("#{ settings.couchdb }/_all_dbs").each {|past_db|
       if past_db[0] != "_" && !past_db.match('_history') && past_db != "public" && past_db != params[:db] then
-        past_assessment=  search(past_db,"assessment","taxon.scientificNameWithoutAuthorship:\"#{assessment["taxon"]["scientificNameWithoutAuthorship"]}\"")[0]
+        # Get accepted name
+        names = [assessment["taxon"]["scientificNameWithoutAuthorship"]]
+        # Get current taxonomy
+        if not currentTaxon.nil? then
+          names.push(currentTaxon["scientificNameWithoutAuthorship"])
+        end
+        # Add synonyms already registered in our database
+        syns = search(params[:db],"taxon","taxonomicStatus:synonym AND acceptedNameUsage:\"#{assessment['taxon']['scientificNameWithoutAuthorship']}\"").map {|s| s["scientificNameWithoutAuthorship"]}
+        # Add new synonyms from FloraData
+        fsyns = currentTaxon["synonyms"].map {|s| s["scientificNameWithoutAuthorship"]}
+        # Combine arrays
+        names = (names | syns | fsyns)
+        query = "taxon.scientificNameWithoutAuthorship:\"" + names.join("\" OR taxon.scientificNameWithoutAuthorship:\"") + "\""
+
+        # Get past assessments
+        past_assessment=  search(past_db,"assessment", query)[0]
         if past_assessment && !past_assessment.nil? && !got[past_assessment["id"]] then
           got[past_assessment["id"]]=true
           past_assessment["past_db"] = past_db
