@@ -190,6 +190,9 @@ get "/:db/assessment/:id/edit" do
 
     # Get current taxonomy
     currentTaxon = http_get("#{settings.floradata}/api/v1/specie?scientificName=#{assessment["taxon"]["scientificNameWithoutAuthorship"]}")["result"]
+    if currentTaxon.nil? then
+      currentTaxon={"not_found"=>true,"synonyms"=>[]}
+    end
 
     #Get past assessments
     past = []
