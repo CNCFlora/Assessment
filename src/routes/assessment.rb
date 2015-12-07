@@ -111,7 +111,7 @@ get "/:db/assessment/:id" do
     # Get current taxonomy
     currentTaxon = http_get("#{settings.floradata}/api/v1/specie?scientificName=#{assessment["taxon"]["scientificNameWithoutAuthorship"]}")["result"]
     if currentTaxon.nil? then
-      currentTaxon={"not_found"=>true}
+      currentTaxon={"not_found"=>true,"synonyms"=>[]}
     elsif currentTaxon["scientificNameWithoutAuthorship"] != assessment['taxon']['scientificNameWithoutAuthorship'] then
       currentTaxon["changed"]=true
     else
