@@ -108,6 +108,8 @@ get "/:db/assessment/:id" do
     # Get profile
     profile = search(params[:db],"profile","taxon.scientificNameWithoutAuthorship:\"#{assessment["taxon"]["scientificNameWithoutAuthorship"]}\"")[0]
 
+    #trim
+    assessment["taxon"]["scientificNameWithoutAuthorship"].strip!
     # Get current taxonomy
     currentTaxon = http_get("#{settings.floradata}/api/v1/specie?scientificName=#{assessment["taxon"]["scientificNameWithoutAuthorship"]}")["result"]
     if currentTaxon.nil? then
@@ -187,6 +189,9 @@ get "/:db/assessment/:id/edit" do
     schema["properties"].delete("dateOfAssessment")
     schema["properties"].delete("review")
     schema["properties"].delete("comments")
+
+    #trim
+    assessment["taxon"]["scientificNameWithoutAuthorship"].strip!
 
     # Get current taxonomy
     currentTaxon = http_get("#{settings.floradata}/api/v1/specie?scientificName=#{assessment["taxon"]["scientificNameWithoutAuthorship"]}")["result"]
