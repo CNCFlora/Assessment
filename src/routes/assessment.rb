@@ -118,7 +118,7 @@ get "/:db/assessment/:id" do
       syns = search(params[:db],"taxon","taxonomicStatus:synonym AND acceptedNameUsage:\"#{assessment['taxon']['scientificNameWithoutAuthorship']}\"").map {|s| s["scientificNameWithoutAuthorship"]} .sort().join(",")
       fsyns = currentTaxon["synonyms"].map {|s| s["scientificNameWithoutAuthorship"]} .sort().join(",")
       if syns != fsyns then
-        currentTaxon['changed']=true
+        currentTaxon['synonym_changed']=true
       end
     end
 

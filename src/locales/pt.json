@@ -101,7 +101,8 @@
     "assessments-history":"Histórico de avaliações da espécie",
     "current-taxon":"Taxonomia atual",
     "acceptedNameUsage":"Nome aceito",
-    "taxonomy-different":"Diferente!",
+    "taxonomy-different":"Taxonomia diferente!",
+    "taxonomy-synonym-different":"Sinônimos diferentes!",
     "synonyms":"Sinônimos",
     "not-found":"Não encontrada!"
 }
