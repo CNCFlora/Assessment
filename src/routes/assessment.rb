@@ -247,6 +247,13 @@ post "/:db/assessment/:id" do
 
     assessment = http_get("#{settings.couchdb}/#{params[:db]}/#{params[:id]}")
 
+    if assessment["metadata"]["contact"].nil?
+      assessment["metadata"]["contact"] = ""
+    end
+    if assessment["metadata"]["contributor"].nil?
+      assessment["metadata"]["contributor"] = ""
+    end
+
     contributors = assessment["metadata"]["contributor"].split(" ; ")
     contributors = [session[:user]["name"]].concat(contributors).uniq().select {|c| c != nil && c.length >= 2} 
     assessment["metadata"]["contributor"] = contributors.join(" ; ")
