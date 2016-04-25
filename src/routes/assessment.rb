@@ -256,7 +256,7 @@ post "/:db/assessment/:id" do
     assessment["metadata"]["contact"] = contacts.join(" ; ")
 
     assessment["metadata"]["modified"] = Time.now.to_i
-    #assessment["assessor"] = session[:user]["name"]
+    assessment["assessor"] = session[:user]["name"]
 
     data = JSON.parse(params["data"])
     data["_rev"] = assessment["_rev"]
@@ -264,7 +264,7 @@ post "/:db/assessment/:id" do
     data["metadata"] = assessment["metadata"]
     data["taxon"] = assessment["taxon"]
     data["profile"] = assessment["profile"]
-    #data["assessor"] = session[:user]["name"]
+    data["assessor"] = session[:user]["name"]
 
     if assessment["review"]
         data["review"] = assessment["review"]
