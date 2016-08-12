@@ -1,5 +1,5 @@
 
-get "/:db/assessment/:id/review" do 
+get "/:db/assessment/:id/review" do
     require_logged_in
 
     assessment = http_get("#{settings.couchdb}/#{params[:db]}/#{params[:id]}")
@@ -7,14 +7,14 @@ get "/:db/assessment/:id/review" do
     assessment["metadata"]["created_date"] = Time.at(assessment["metadata"]["created"]).to_s[0..9]
     assessment["metadata"]["modified_date"] = Time.at(assessment["metadata"]["modified"]).to_s[0..9]
 
-    if assessment["review"] && assessment["review"]["status"] 
+    if assessment["review"] && assessment["review"]["status"]
         assessment["review"]["status-#{assessment["review"]["status"]}"] = true
     end
 
-    if assessment["review"] 
-      if assessment["review"]["rationale"].length >=1 
-        if assessment["review"].has_key?("rewrite") 
-          if assessment["review"]["rewrite"] 
+    if assessment["review"]
+      if assessment["review"]["rationale"].length >=1
+        if assessment["review"].has_key?("rewrite")
+          if assessment["review"]["rewrite"]
           end
         else
           assessment["review"]["rewrite"]=true
@@ -33,17 +33,19 @@ post "/:db/assessment/:id/review" do
     assessment = http_get("#{settings.couchdb}/#{params[:db]}/#{params[:id]}")
 
     assessment["review"] = {"status"=>params[:status],"comment"=>params[:comment],"rationale"=>params[:rationale]}
-    
+
     if params.has_key?("rewrite") && params["rewrite"]=="yes"
       assessment["review"]["rewrite"] = true
     else
       assessment["review"]["rewrite"] = false
     end
 
-    assessment["evaluator"] = session["user"]["name"]
+    if assessment["evaluator"].nil? || assessment["evaluator"] == ""
+      assessment["evaluator"] = session["user"]["name"]
+    end
 
     contributors = assessment["metadata"]["contributor"].split(" ; ")
-    contributors = [session["user"]["name"]].concat(contributors).uniq().select {|c| c != nil && c.length >= 2} 
+    contributors = [session["user"]["name"]].concat(contributors).uniq().select {|c| c != nil && c.length >= 2}
     assessment["metadata"]["contributor"] = contributors.join(" ; ")
 
     contacts = assessment["metadata"]["contact"].split(" ; ")
@@ -64,7 +66,7 @@ get "/:db/assessment/:id/comment" do
     assessment["metadata"]["created_date"] = Time.at(assessment["metadata"]["created"]).to_s[0..9]
     assessment["metadata"]["modified_date"] = Time.at(assessment["metadata"]["modified"]).to_s[0..9]
 
-    if assessment["review"] && assessment["review"]["rationale"].length >=1 
+    if assessment["review"] && assessment["review"]["rationale"].length >=1
         assessment["rationale"] = assessment["review"]["rationale"]
     end
 
@@ -82,7 +84,7 @@ post "/:db/assessment/:id/comment" do
 
     assessment = http_get("#{settings.couchdb}/#{params[:db]}/#{params[:id]}")
 
-    if assessment["comments"] == nil 
+    if assessment["comments"] == nil
         assessment["comments"] = []
     end
 
@@ -106,4 +108,3 @@ get "/:db/assessment/:id/comment/:created/delete" do
 
     redirect to("#{settings.base}/#{params[:db]}/assessment/#{params[:id]}")
 end
-
