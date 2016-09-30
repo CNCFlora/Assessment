@@ -88,7 +88,7 @@
 			"type":"string",
 			"label": "Category",
 			"description": "The category of theaten.",
-            "enum":[null,"","LC","NT","VU","EN","CR","EW","EX","DD"]
+            "enum":[null,"","LC","NT","NT, quase chegando à VU","VU","EN","CR","EW","EX","DD"]
 		},
 		"criteria": {
 			"type":"string",
@@ -225,4 +225,3 @@
         }
 	}
 }
-
