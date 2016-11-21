@@ -1,5 +1,5 @@
 
-post "/:db/assessment" do    
+post "/:db/assessment" do
     require_logged_in
     spp = search(params[:db],"taxon","scientificNameWithoutAuthorship:\"#{params[:scientificName]}\"")[0]
 
@@ -42,19 +42,19 @@ get "/:db/assessment/:id" do
     assessment["metadata"]["created_date"] = Time.at(assessment["metadata"]["created"]).to_s[0..9]
     assessment["metadata"]["modified_date"] = Time.at(assessment["metadata"]["modified"]).to_s[0..9]
 
-    if assessment["review"] && assessment["review"]["rationale"].length >=1 
-      if assessment["review"].has_key?("rewrite") 
-        if assessment["review"]["rewrite"] 
+    if assessment["review"] && assessment["review"]["rationale"].length >=1
+      if assessment["review"].has_key?("rewrite")
+        if assessment["review"]["rewrite"]
           assessment["rationale"] = assessment["review"]["rationale"]
         end
       else
         assessment["rationale"] = assessment["review"]["rationale"]
       end
     end
-    if assessment["review"] 
-      if assessment["review"]["rationale"].length >=1 
-        if assessment["review"].has_key?("rewrite") 
-          if assessment["review"]["rewrite"] 
+    if assessment["review"]
+      if assessment["review"]["rationale"].length >=1
+        if assessment["review"].has_key?("rewrite")
+          if assessment["review"]["rewrite"]
             assessment["rationale"] = assessment["review"]["rationale"]
           end
         else
@@ -160,14 +160,14 @@ get "/:db/assessment/:id" do
 
     past = past.sort_by{|a| a["metadata"]["modified_date"] }
 
-    view :view, 
+    view :view,
       {
       :assessment => assessment,
       :can_edit=>can_edit,
       :can_review=>can_review,
       :db=>params[:db],
-      :profile=>profile, 
-      :past=>past, 
+      :profile=>profile,
+      :past=>past,
       :can_see_review=>can_see_review,
       :currentTaxon=>currentTaxon
     }
@@ -242,7 +242,7 @@ get "/:db/assessment/:id/edit" do
     view :edit, {:assessment => assessment,:schema=> JSON.dump(schema),:data => JSON.dump(assessment),:db=>params[:db]}
 end
 
-post "/:db/assessment/:id" do    
+post "/:db/assessment/:id" do
     require_logged_in
 
     assessment = http_get("#{settings.couchdb}/#{params[:db]}/#{params[:id]}")
@@ -255,7 +255,7 @@ post "/:db/assessment/:id" do
     end
 
     contributors = assessment["metadata"]["contributor"].split(" ; ")
-    contributors = [session[:user]["name"]].concat(contributors).uniq().select {|c| c != nil && c.length >= 2} 
+    contributors = [session[:user]["name"]].concat(contributors).uniq().select {|c| c != nil && c.length >= 2}
     assessment["metadata"]["contributor"] = contributors.join(" ; ")
 
     contacts = assessment["metadata"]["contact"].split(" ; ")
@@ -263,7 +263,6 @@ post "/:db/assessment/:id" do
     assessment["metadata"]["contact"] = contacts.join(" ; ")
 
     assessment["metadata"]["modified"] = Time.now.to_i
-    assessment["assessor"] = session[:user]["name"]
 
     data = JSON.parse(params["data"])
     data["_rev"] = assessment["_rev"]
@@ -271,7 +270,11 @@ post "/:db/assessment/:id" do
     data["metadata"] = assessment["metadata"]
     data["taxon"] = assessment["taxon"]
     data["profile"] = assessment["profile"]
-    data["assessor"] = session[:user]["name"]
+
+    if assessment["assessor"].nil? || assessment["assessor"] == ""
+      assessment["assessor"] = session[:user]["name"]
+    end
+    data["assessor"] = assessment["assessor"]
 
     if assessment["review"]
         data["review"] = assessment["review"]
@@ -290,4 +293,3 @@ post "/:db/assessment/:id" do
     content_type :json
     JSON.dump(data)
 end
-
