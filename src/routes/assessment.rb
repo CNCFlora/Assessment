@@ -271,7 +271,7 @@ post "/:db/assessment/:id" do
     data["taxon"] = assessment["taxon"]
     data["profile"] = assessment["profile"]
 
-    if assessment["assessor"].nil? || assessment["assessor"] == ""
+    if assessment["assessor"].nil? || assessment["assessor"] == "" || assessment["metadata"]["status"] == "open"
       assessment["assessor"] = session[:user]["name"]
     end
     data["assessor"] = assessment["assessor"]
