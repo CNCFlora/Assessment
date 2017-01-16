@@ -174,14 +174,14 @@
           "label":"Reason for re-assessment",
           "enum":[null,"Criteria revision","New information","Taxonomy","Mistake","Incorrect data","Other"]
         },
-        "change": {
-          "type":"boolean",
-          "label":"Category or criteria changed?"
-        },
-        "resume":{
+				"resume":{
           "type":"string",
           "label":"Description of reason",
           "format":"multiline"
+        },
+        "change": {
+          "type":"boolean",
+          "label":"Category or criteria changed?"
         }
       }
     },
