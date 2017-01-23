@@ -101,9 +101,9 @@
 
 {{#reasonsForReAssessment}}
 <p>
-<strong>{{strings.reasons-for-re-assessment}}</strong>: {{reason}} <br /> 
-{{#change}}<em>{{strings.cat-crit-changed}}</em>.{{/change}} <br />
-{{resume}}
+<strong>{{strings.reasons-for-re-assessment}}</strong>: {{reason}} <br />
+{{resume}}<br />
+{{#change}}<em>{{strings.cat-crit-changed}}</em>.{{/change}}
 </p>
 {{/reasonsForReAssessment}}
 
@@ -130,6 +130,6 @@
 {{#category}}<li><b>{{strings.category}}:</b> {{category}}{{/category}}</li>
 {{#criteria}}<li><b>{{strings.criteria}}:</b> {{criteria}}{{/criteria}}</li>
 </ul>
-        </li> 
+        </li>
     {{/past}}
 </ul>
