@@ -20,7 +20,7 @@ production:
     connect: 'http://connect'
     connect_url: 'http://$HOST/connect'
     elasticsearch: 'http://elasticsearch:9200'
-    floradata: "http://floradata:80"
+    floradata: "http://$HOST/floradata"
     base: "/assessments"
     occurrences_url: "http://$HOST/occurrences"
     profiles_url: "http://$HOST/profiles"
